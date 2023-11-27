@@ -1,0 +1,26 @@
+﻿@page "/counter"
+@using AlmostList.Client
+@using AlmostList.Client.Anime
+@using System.Text.Json;
+@using AlmostList.Client.Models
+
+<h2>Title</h2>
+<hr />
+<p>
+    @data.
+</p>
+
+@code {
+    string value = "";
+    string data = "";
+    public async Task GetDataAsync()
+    {
+        var test = await new BaseClient(Queries.MediaQuery, new { id = 154587 }).GetData<MediaResponse>();
+        data = JsonSerializer.Serialize(test.Data.Media, new JsonSerializerOptions { WriteIndented = true });
+ 
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await GetDataAsync();
+    }
+}
