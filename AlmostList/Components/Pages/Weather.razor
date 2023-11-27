@@ -3,6 +3,7 @@
 @using AlmostList.Client.Anime
 @using System.Text.Json;
 @using AlmostList.Client.Models
+@inject BaseClient baseClient
 
 <h2>Title</h2>
 <hr />
@@ -15,7 +16,7 @@
     string data = "";
     public async Task GetDataAsync()
     {
-        var test = await new BaseClient(Queries.ListMedia, new { page = 1 }).GetData<PagesMediaResponse>();
+        var test = await baseClient.GetData<PagesMediaResponse>(Queries.ListMedia, new { page = 1 });
         data = JsonSerializer.Serialize(test.Data.Page, new JsonSerializerOptions { WriteIndented = true });
 
     }

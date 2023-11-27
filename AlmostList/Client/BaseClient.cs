@@ -7,17 +7,13 @@ namespace AlmostList.Client
     public class BaseClient
     {
         private GraphQLHttpClient _graphQLClient = new GraphQLHttpClient("https://graphql.anilist.co", new NewtonsoftJsonSerializer());
-        private GraphQLRequest _request = new GraphQLRequest();
-        public BaseClient(string query, object variables)
-        {
-            _request.Query = query;
-            _request.Variables = variables;
-        }
 
-        public async Task<GraphQLResponse<T>> GetData<T>()
+        public async Task<GraphQLResponse<T>> GetData<T>(string query, object variables)
         {
-            GraphQLResponse<T> graphQLResponse = await _graphQLClient.SendQueryAsync<T>(_request);
-            return graphQLResponse;
+            var request = new GraphQLRequest();
+            request.Query = query;
+            request.Variables = variables;
+            return await _graphQLClient.SendQueryAsync<T>(request);
         }
     }
 }

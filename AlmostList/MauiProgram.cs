@@ -1,4 +1,4 @@
-﻿using GraphQL.Client.Http;
+﻿using AlmostList.Client;
 using Microsoft.Extensions.Logging;
 
 namespace AlmostList
@@ -16,13 +16,12 @@ namespace AlmostList
 				});
 
 			builder.Services.AddMauiBlazorWebView();
-			//builder.Services.AddSingleton<GraphQLHttpClient>();
+			builder.Services.AddSingleton<BaseClient>();
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
 			builder.Logging.AddDebug();
 #endif
-
 			return builder.Build();
-		}
+        }
 	}
 }

@@ -13,8 +13,7 @@ namespace AlmostList.Client.Anime
     {
         public async Task GetDataAsync()
         {
-            var test = await new BaseClient(Queries.MediaQuery, new {Id = 154587 }.ToString()).GetData<Response<Media>>();
-            Console.WriteLine(JsonSerializer.Serialize(test.Data.Media, new JsonSerializerOptions { WriteIndented = true }));
+
         }
     }
 }
