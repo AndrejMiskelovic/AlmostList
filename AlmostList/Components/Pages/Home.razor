@@ -1,5 +1,56 @@
 ﻿@page "/"
+@using AlmostList.Client
+@inject NavigationManager UriHelper
+@inject BaseClient baseClient
 
-<h1>Hello, world!</h1>
+<h3>Click button to pass the value to other page.</h3>
+<button class="btn btn-primary" @onclick="OnClick">Pass Value</button>
+<button class="btn btn-primary" @onclick="OnClick2">Pass Value</button>
+<button class="btn btn-primary" @onclick="Login">Login with AniList</button>
+@code {
+    string url = "https://anilist.co/api/v2/oauth/authorize";
+    int clientId = 15602;
 
-Welcome to your new app.
+    private void OnClick()
+    {
+        UriHelper.NavigateTo($"/Media/{10408}");
+    }
+    private void OnClick2()
+    {
+        UriHelper.NavigateTo($"/PageMedia");
+    }  
+    private async void Login()
+    {
+        try
+        {
+            Uri uri = new Uri($@"https:anilist.co/api/v2/oauth/authorize?client_id={clientId}&response_type=token");
+            BrowserLaunchOptions options = new BrowserLaunchOptions()
+                {
+                    LaunchMode = BrowserLaunchMode.SystemPreferred,
+                    TitleMode = BrowserTitleMode.Show,
+                    PreferredToolbarColor = Colors.Black,
+                    PreferredControlColor = Colors.SandyBrown
+                };
+
+            await Browser.Default.OpenAsync(uri, options);
+            var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImZjYmExMjBkMTJmZDA2Y2I1ODllYWU0NzU3MjBiNjg3ODk4NjBjODI4MzgwMGYyMWNjYmEzY2JlOWM3NmQ0ZDA4YWRjMzg1NDkwOWUwZWIzIn0.eyJhdWQiOiIxNTYwMiIsImp0aSI6ImZjYmExMjBkMTJmZDA2Y2I1ODllYWU0NzU3MjBiNjg3ODk4NjBjODI4MzgwMGYyMWNjYmEzY2JlOWM3NmQ0ZDA4YWRjMzg1NDkwOWUwZWIzIiwiaWF0IjoxNzAxNjMwMzQyLCJuYmYiOjE3MDE2MzAzNDIsImV4cCI6MTczMzI1Mjc0Miwic3ViIjoiNjUwMjQ3MSIsInNjb3BlcyI6W119.jWnnAP0Da58MnNETbTFEGJgnqN06FPXscNkz-GVINeFwgpxG3tSt-oXY61tpTmz3VWUpj5tcRgt9gDBDFh45SAwuA-WV4YCiuEHwfqfoPfIHawMpjztSIiJs8ok-gjxEf3TYZaraDHEsv_hMAI-TJ5_Zeur0N5TC5O8l5CpeLVxmmai1vUbij-0qtK3Yb3-egl7ny51jH641G74Hs77FNwbnEhIpvH5EN9_IzbEMwjBmeb7C6pQEAnd_bOzsdipd37VCkYqfSA1xoTL1wZIb0Z6hKhB9mHWv4YEZlX6KrfgYhi659UW4v1B-OQT569BnONAD2LbBhHwlLdR5gt1pAfLdf8xcuSe8XGRKn4m28eQWQEchZzK-tVXl2J5vSkuHPyyU3HO-goH5Wx_O5QK267Hd1EQdGoNa4nnzTn7YVPvZJG03bJQ7rB61aD-WKpeq6dqGQvk_QjJsfwUuX-sNVxMu6FAwpE3cVglXfQm588V967wIdqEyjP_blMwhyfbZYyvHaXXbGEiNcXRdruzu2iNw0uoCcs71xR7gjaiglFjDqDU3IbaVEF4u2_CH11Uodon-pSTS1PaHK4PAR_DpkeP3bjWmM7vUfbIiGrBdbQlLIEtKyqFvtSE3T_Z3QguZbCuOkz4z6PPBtEd-WojUmCeTPebI_auqJsbUFBt6PaU";
+            baseClient.SetToken(token);
+            // Auth auth = new Auth();
+            // var token = auth.GetToken();
+            //         WebAuthenticatorResult authResult = await WebAuthenticator.Default.AuthenticateAsync(
+    // new WebAuthenticatorOptions()
+    //     {
+    //         Url = new Uri($@"https://anilist.co/api/v2/oauth/authorize?client_id={clientId}&response_type=token"),
+    //         CallbackUrl = new Uri("myapp://"),
+    //         PrefersEphemeralWebBrowserSession = true
+    //     });
+
+            //         string accessToken = authResult?.AccessToken;
+            //     }
+    }
+        catch (Exception ex)
+        {
+            // An unexpected error occurred. No browser may be installed on the device.
+        }
+    }
+}

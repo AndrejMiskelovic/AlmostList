@@ -1,0 +1,45 @@
+﻿@page "/Media/{Id:int}"
+
+@using AlmostList.Client
+@using AlmostList.Client.Anime
+@using System.Text.Json;
+@using AlmostList.Client.Models
+@using AlmostList.Client.Models.Responses
+@using GraphQL
+@inject BaseClient baseClient
+
+@if (@render)
+{
+	<card>
+		<div class="header">
+			<img class="bannerimage" src="@mediaResponse.Data.Media.BannerImage" />
+			<img class="coverImage" src="@mediaResponse.Data.Media.CoverImage.ExtraLarge" />
+			<div class="headerInfo">
+				<text class="title">@mediaResponse.Data.Media.Title.English </text>
+			</div>
+		</div>
+	</card>
+	<button>ADD</button>
+	<p>
+		@((MarkupString)mediaResponse.Data.Media.Description)
+	</p>
+}
+
+@code {
+	[Parameter]
+	public int Id { get; set; }
+	bool render = false;
+	GraphQLResponse<MediaResponse> mediaResponse = new GraphQLResponse<MediaResponse>();
+	string myMarkup = "<p class='markup'>This is a <em>markup string</em>.</p><button class='btn btn-primary'>Button</button>";
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			mediaResponse = await baseClient.GetMedia(Id);
+			render = true;
+			StateHasChanged();
+		}
+	}
+
+}

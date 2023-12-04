@@ -1,0 +1,41 @@
+﻿@page "/PageMedia"
+
+@using AlmostList.Client
+@using AlmostList.Client.Anime
+@using System.Text.Json;
+@using AlmostList.Client.Models
+@using AlmostList.Client.Models.Enums
+@using AlmostList.Client.Models.Responses
+@using GraphQL
+@using Newtonsoft.Json
+@inject BaseClient baseClient
+
+@if (@render)
+{
+	<p>
+		@data
+	</p>
+}
+@code {
+	string data = "";
+	bool render = false;
+	GraphQLResponse<PageResponse<PagedMedia>> PageMediaResponse = new GraphQLResponse<PageResponse<PagedMedia>>();
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			List<MediaSort> sort = new List<MediaSort>();
+			sort.Add(MediaSort.TRENDING_DESC);
+			var variables = new PageMediaRequest
+				{
+					Page = 1,
+					Sort = sort
+				};
+			PageMediaResponse = await baseClient.GetPageMedia(variables);
+			data = JsonConvert.SerializeObject(PageMediaResponse.Data, Formatting.Indented);
+			render = true;
+			StateHasChanged();
+		}
+	}
+}
