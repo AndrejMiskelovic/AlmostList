@@ -1,4 +1,5 @@
 ﻿using AlmostList.Client.Models.Properties;
+using AlmostList.Client.Models.Properties.Media;
 
 namespace AlmostList.Client.Models.Responses
 {

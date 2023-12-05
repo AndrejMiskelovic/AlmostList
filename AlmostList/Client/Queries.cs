@@ -1,8 +1,10 @@
-﻿namespace AlmostList.Client.Anime
+﻿using System.ComponentModel;
+
+namespace AlmostList.Client
 {
-	public class Queries
-	{
-		public const string Media = @"
+    public class Queries
+    {
+        public const string Media = @"
 query ($id:Int, $statusVersion:Int, $sourceVersion:Int, $relationTypeVersion: Int) {
     Media(id:$id) {
         id
@@ -213,10 +215,10 @@ query ($id:Int, $statusVersion:Int, $sourceVersion:Int, $relationTypeVersion: In
         siteUrl
     }
 }";
-        
+
         public const string MediaListEntry = @"
 query ($userId:Int, $mediaId:Int) {
-    MediaListEntry(id:$userId, mediaId:$mediaId) {
+    MediaList(userId:$userId, mediaId:$mediaId) {
         id
         userId
         mediaId
@@ -246,8 +248,7 @@ query ($userId:Int, $mediaId:Int) {
     }
 }";
 
-
-		public const string PageMedia = @"
+        public const string PageMedia = @"
 query (  $page:Int,
   $statusVersion:Int,
   $sourceVersion: Int,
@@ -400,5 +401,162 @@ query (  $page:Int,
   }
 }
 ";
+
+		public const string UserMain = @"
+query (	$id: Int, $name: String) {
+  User(id: $id, name: $name) {
+    id
+    name
+    about(asHtml: false)
+    avatar {
+      large
+      medium
+    }
+    bannerImage
+    isFollowing
+    isFollower
+    isBlocked
+    options {
+      titleLanguage
+      displayAdultContent
+      airingNotifications
+      timezone
+      activityMergeTime
+      staffNameLanguage
+      restrictMessagesToFollowing
+      disabledListActivity {
+        disabled
+        type
+      }
+    }
+    favourites {
+      anime {
+        nodes {
+          id
+          title {
+            romaji
+            english
+            native
+            userPreferred
+          }
+          coverImage {
+            extraLarge
+            large
+            medium
+          }
+          siteUrl
+        }
+      }
+      manga {
+        nodes {
+          id
+          title {
+            romaji
+            english
+            native
+            userPreferred
+          }
+          coverImage {
+            extraLarge
+            large
+            medium
+          }
+          siteUrl
+        }
+      }
+      characters {
+        nodes {
+          id
+          name {
+            first
+            middle
+            last
+            full
+            native
+            alternative
+            alternativeSpoiler
+            userPreferred
+          }
+          image {
+            large
+            medium
+          }
+          siteUrl
+        }
+      }
+      staff {
+        nodes {
+          id
+          name {
+            first
+            middle
+            last
+            full
+            native
+            alternative
+            userPreferred
+          }
+          languageV2
+          image {
+            large
+            medium
+          }
+          siteUrl
+        }
+      }
+      studios {
+        nodes {
+          id
+          name
+          siteUrl
+        }
+      }
+    }
+    statistics {
+      anime {
+        count
+        meanScore
+        standardDeviation
+        minutesWatched
+        episodesWatched
+        genrePreview: genres(limit: 10, sort: COUNT_DESC) {
+          genre
+          count
+        }
+      }
+      manga {
+        count
+        meanScore
+        standardDeviation
+        minutesWatched
+        episodesWatched
+        genrePreview: genres(limit: 10, sort: COUNT_DESC) {
+          genre
+          count
+        }
+      }
+    }
+    unreadNotificationCount
+    donatorTier
+    donatorBadge
+    moderatorRoles
+    siteUrl
+    createdAt
+  }
+}";
+
+		public const string ExternalLisks = @"
+query ($mediaType: ExternalLinkMediaType, $type: ExternalLinkType) {
+  ExternalLinkSourceCollection(mediaType: $type, type: INFO) {
+    id
+    url
+    site
+    type
+    language
+    color
+    icon
+  }
+}";
+
 	}
 }

@@ -1,23 +1,52 @@
 ﻿@page "/PageMedia"
 
 @using AlmostList.Client
-@using AlmostList.Client.Anime
-@using System.Text.Json;
 @using AlmostList.Client.Models
 @using AlmostList.Client.Models.Enums
 @using AlmostList.Client.Models.Responses
+@using AlmostList.Client.Models.Requests
 @using GraphQL
 @using Newtonsoft.Json
+@inject NavigationManager UriHelper
 @inject BaseClient baseClient
+
+@* <label for="id">ID of media:</label>
+<input type="number" id="id" name="id" @bind="@searchText">
+
+<label for="cars">Choose a car:</label>
+<select name="cars" id="cars" multiple>
+	<option value="volvo">Volvo</option>
+	<option value="saab">Saab</option>
+	<option value="opel">Opel</option>
+	<option value="audi">Audi</option>
+</select> *@
+<div class='pageMedia'>
 
 @if (@render)
 {
-	<p>
-		@data
-	</p>
+	@foreach (var item in @PageMediaResponse.Data.Page.Media)
+	{
+
+		<div class="mediaCard" @onclick="(() => OpenMedia(item.Id))">
+			<img src="@item.CoverImage.Medium" />
+			<div class="mediaInfo">
+				<div class="title">
+					@item.Title.UserPreferred
+				</div>
+			</div>
+		</div>
+
+	}
 }
+</div>
 @code {
-	string data = "";
+
+	private void OpenMedia(int id)
+	{
+		UriHelper.NavigateTo($"/Media/{id}");
+	}
+
+	string? searchText = null;
 	bool render = false;
 	GraphQLResponse<PageResponse<PagedMedia>> PageMediaResponse = new GraphQLResponse<PageResponse<PagedMedia>>();
 
@@ -30,10 +59,10 @@
 			var variables = new PageMediaRequest
 				{
 					Page = 1,
+					Search = searchText,
 					Sort = sort
 				};
 			PageMediaResponse = await baseClient.GetPageMedia(variables);
-			data = JsonConvert.SerializeObject(PageMediaResponse.Data, Formatting.Indented);
 			render = true;
 			StateHasChanged();
 		}

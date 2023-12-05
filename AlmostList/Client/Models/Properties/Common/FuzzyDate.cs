@@ -1,4 +1,4 @@
-﻿namespace AlmostList.Client.Models.Properties
+﻿namespace AlmostList.Client.Models.Properties.Common
 {
     public class FuzzyDate
     {

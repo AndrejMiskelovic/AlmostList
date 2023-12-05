@@ -5,6 +5,5 @@
     {
         ANIME,
         MANGA
-
     }
 }

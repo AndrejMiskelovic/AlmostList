@@ -1,4 +1,4 @@
-﻿namespace AlmostList.Client.Models.Properties
+﻿namespace AlmostList.Client.Models.Properties.Media
 {
     public class MediaCoverImage
     {

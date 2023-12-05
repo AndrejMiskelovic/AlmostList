@@ -1,16 +1,16 @@
 ﻿using AlmostList.Client.Models.Enums;
-using AlmostList.Client.Models.Properties;
+using AlmostList.Client.Models.Properties.Common;
 using System.Security.Policy;
 
-namespace AlmostList.Client.Models
+namespace AlmostList.Client.Models.Properties.Media
 {
     public class Media
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public MediaTitle? Title { get; set; }
-        public MediaType Type { get; set; }
-        public MediaFormat Format { get; set; }
-        public MediaStatus Status { get; set; }
+        public MediaType? Type { get; set; }
+        public MediaFormat? Format { get; set; }
+        public MediaStatus? Status { get; set; }
         public string? Description { get; set; }
         public FuzzyDate? StartDate { get; set; }
         public FuzzyDate? EndDate { get; set; }
@@ -23,7 +23,7 @@ namespace AlmostList.Client.Models
         public int? Volumes { get; set; }
         public CountryCode? CountryCode { get; set; }
         public bool? IsLicensed { get; set; }
-        public MediaSource Source { get; set; }
+        public MediaSource? Source { get; set; }
         public string? Hashtah { get; set; }
         public MediaTrailer? Trailer { get; set; }
         public int? UpdatedAt { get; set; }
@@ -40,7 +40,7 @@ namespace AlmostList.Client.Models
         public List<MediaTag>? Tags { get; set; }
         public MediaConnection? Relations { get; set; }
         public AiringSchedule? NextAiringEpisode { get; set; }
-        public MediaList? mediaListEntry { get; set; }
+        public MediaListEntry? mediaListEntry { get; set; }
     }
 }
 

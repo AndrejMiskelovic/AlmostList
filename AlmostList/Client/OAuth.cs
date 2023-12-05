@@ -1,29 +1,18 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using Xamarin.Essentials;
+﻿using Android.App;
+using Android.Content.PM;
 
-//namespace AlmostList.Client
-//{
-//	public class Auth : Microsoft.Maui.Authentication.WebAuthenticatorCallbackActivity
-//    {
-//        public async Task<string> GetToken()
-//        {
-//            int clientId = 15602;
+namespace AlmostList.Client
+{
+    [Activity(NoHistory = true, LaunchMode = LaunchMode.SingleTop, Exported = true)]
+    [IntentFilter(new[] { Android.Content.Intent.ActionView },
+              Categories = new[] { Android.Content.Intent.CategoryDefault, Android.Content.Intent.CategoryBrowsable },
+              DataScheme = CALLBACK_SCHEME)]
+    public class WebAuthenticationCallbackActivity : WebAuthenticatorCallbackActivity
+    {
+        const string CALLBACK_SCHEME = "myapp";
 
-//            Microsoft.Maui.Authentication.WebAuthenticatorResult authResult = await Microsoft.Maui.Authentication.WebAuthenticator.Default.AuthenticateAsync(
-//new Microsoft.Maui.Authentication.WebAuthenticatorOptions()
-//{
-//    Url = new Uri($@"https://anilist.co/api/v2/oauth/authorize?client_id={clientId}&response_type=token"),
-//    CallbackUrl = new Uri("myapp://"),
-//    PrefersEphemeralWebBrowserSession = true
-//});
-
-//            return authResult?.AccessToken;
-//        }
-
-//    }
-//}
-
+    }
+    //internal class Webauth
+    //{
+    //}
+}

@@ -1,4 +1,6 @@
-﻿namespace AlmostList.Client.Models.Responses
+﻿using AlmostList.Client.Models.Properties.Media;
+
+namespace AlmostList.Client.Models.Responses
 {
     public class MediaResponse
     {

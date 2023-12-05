@@ -20,10 +20,10 @@ namespace AlmostList
 				//Formatting = Formatting.Indented,
 				//TypeNameHandling = TypeNameHandling.Objects,
 				//ContractResolver = new CamelCasePropertyNamesContractResolver(),
-				NullValueHandling = NullValueHandling.Ignore,
+				NullValueHandling = NullValueHandling.Ignore
 				//Converters = new JsonConverter[] {new StringEnumConverter()}
 			};
-			
+
 			builder.Services.AddMauiBlazorWebView();
 
 

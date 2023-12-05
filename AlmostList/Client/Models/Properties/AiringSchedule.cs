@@ -1,4 +1,6 @@
-﻿namespace AlmostList.Client.Models.Properties
+﻿using AlmostList.Client.Models.Properties.Media;
+
+namespace AlmostList.Client.Models.Properties
 {
     public class AiringSchedule
     {
@@ -10,7 +12,7 @@
         public int? TimeUntilAiring { get; set; }
         public int? Episode { get; set; }
         public int? MediaId { get; set; }
-        public Media? Media { get; set; }
+        public Media.Media? Media { get; set; }
     }
 
 }

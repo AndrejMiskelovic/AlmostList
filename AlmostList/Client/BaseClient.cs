@@ -1,8 +1,10 @@
-﻿using AlmostList.Client.Anime;
-using AlmostList.Client.Models;
+﻿using AlmostList.Client.Models;
 using AlmostList.Client.Models.Enums;
 using AlmostList.Client.Models.Properties;
+using AlmostList.Client.Models.Properties.Media;
+using AlmostList.Client.Models.Requests;
 using AlmostList.Client.Models.Responses;
+using Android.Provider;
 using GraphQL;
 using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.Newtonsoft;
@@ -32,6 +34,66 @@ namespace AlmostList.Client
 			var response = await _graphQLClient.SendQueryAsync<MediaResponse>(request);
 			return response;
 		}
+		public async Task<GraphQLResponse<MediaListEntryResponse>> GetMediaListEntry(int id)
+		{
+			try
+			{
+				var request = new GraphQLRequest
+				{
+					Query = Queries.MediaListEntry,
+					Variables = new { mediaId = id }
+				};
+
+				var response = await _graphQLClient.SendQueryAsync<MediaListEntryResponse>(request);
+				return response;
+			}
+			catch (Exception ex)
+			{
+
+				throw;
+			}
+
+		}
+		public async Task<GraphQLResponse<UserMainResponse>> GetUser(int? id, string? name)
+		{
+			try
+			{
+				var request = new GraphQLRequest
+				{
+					Query = Queries.UserMain,
+					Variables = new { id = id, name = name}
+				};
+
+				var response = await _graphQLClient.SendQueryAsync<UserMainResponse>(request);
+				return response;
+			}
+			catch (Exception ex)
+			{
+				throw;
+			}
+		}
+
+		public async Task<GraphQLResponse<UserMainResponse>> GetExterlLinks(ExternalLinkType type, ExternalLinkMediaType mediaType)
+		{
+			try
+			{
+				var request = new GraphQLRequest
+				{
+					Query = Queries.ExternalLisks,
+					Variables = new { type = type, mediaType = mediaType}
+				};
+
+				var response = await _graphQLClient.SendQueryAsync<UserMainResponse>(request);
+				return response;
+			}
+			catch (Exception ex)
+			{
+
+				throw;
+			}
+
+		}
+
 		public async Task<GraphQLResponse<PageResponse<PagedMedia>>> GetPageMedia(PageMediaRequest variables)
 		{
 			try
