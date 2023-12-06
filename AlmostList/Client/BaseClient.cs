@@ -1,7 +1,6 @@
 ﻿using AlmostList.Client.Models;
 using AlmostList.Client.Models.Enums;
 using AlmostList.Client.Models.Properties;
-using AlmostList.Client.Models.Properties.Media;
 using AlmostList.Client.Models.Requests;
 using AlmostList.Client.Models.Responses;
 using Android.Provider;
@@ -93,7 +92,25 @@ namespace AlmostList.Client
 			}
 
 		}
+		public async Task<GraphQLResponse<UserMainResponse>> GetGenresAndTagsCollection()
+		{
+			try
+			{
+				var request = new GraphQLRequest
+				{
+					Query = Queries.GenresAndTagsCollection
+				};
 
+				var response = await _graphQLClient.SendQueryAsync<UserMainResponse>(request);
+				return response;
+			}
+			catch (Exception ex)
+			{
+
+				throw;
+			}
+
+		}
 		public async Task<GraphQLResponse<PageResponse<PagedMedia>>> GetPageMedia(PageMediaRequest variables)
 		{
 			try

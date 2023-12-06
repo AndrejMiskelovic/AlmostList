@@ -1,4 +1,4 @@
-﻿@page "/PageMedia"
+﻿@page "/PageMedia/search:PageMediaSearchType "
 
 @using AlmostList.Client
 @using AlmostList.Client.Models
@@ -10,16 +10,24 @@
 @inject NavigationManager UriHelper
 @inject BaseClient baseClient
 
-@* <label for="id">ID of media:</label>
+<label for="id">ID of media:</label>
 <input type="number" id="id" name="id" @bind="@searchText">
 
 <label for="cars">Choose a car:</label>
-<select name="cars" id="cars" multiple>
-	<option value="volvo">Volvo</option>
-	<option value="saab">Saab</option>
-	<option value="opel">Opel</option>
-	<option value="audi">Audi</option>
-</select> *@
+@if (search == PageMediaSearchType.Anime)
+{
+	<select>
+
+		@foreach (var item in AllAllowedRoles(MediaSeason.SPRING))
+		{
+			<option value="@item">@item</option>
+		}
+		foreach (GameObjectType type in Enum.GetValues(typeof(GameObjectType))
+	{
+	...
+	}
+</select>
+}
 <div class='pageMedia'>
 
 @if (@render)
@@ -40,6 +48,11 @@
 }
 </div>
 @code {
+	PageMediaSearchType search { get; set; }
+	private IEnumerable<MediaSeason> AllAllowedRoles(MediaSeason season)
+	{
+		return Enum.GetValues(typeof(MediaSeason)).Cast<MediaSeason>().Where(role => season >= role);
+	}
 
 	private void OpenMedia(int id)
 	{
@@ -49,9 +62,10 @@
 	string? searchText = null;
 	bool render = false;
 	GraphQLResponse<PageResponse<PagedMedia>> PageMediaResponse = new GraphQLResponse<PageResponse<PagedMedia>>();
-
+	PageMediaRequest pageMediaRequest = new PageMediaRequest();
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
+		Console.WriteLine(search);
 		if (firstRender)
 		{
 			List<MediaSort> sort = new List<MediaSort>();

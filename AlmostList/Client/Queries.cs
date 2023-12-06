@@ -339,7 +339,6 @@ query (  $page:Int,
       type
       format
       status(version:$statusVersion)
-      description(asHtml: false)
       episodes
       chapters
       volumes
@@ -349,54 +348,19 @@ query (  $page:Int,
         day
       }
       genres
-      studios(isMain:true) {
-        edges {
-          node {
-            name
-          }
-        }
-      }
-      staff {
-        edges {
-          node {
-            name {
-              first
-              middle
-              last
-              full
-              native
-              alternative
-              userPreferred
-            }
-          }
-          role
-        }
-      }
       source(version:$sourceVersion)
       coverImage {
         extraLarge
         large
         medium
       }
-      bannerImage
       averageScore
       meanScore
       popularity
       trending
       favourites
-      mediaListEntry {
-        status
-      }
-      stats {
-          scoreDistribution {
-              score
-              amount
-          }
-          statusDistribution {
-              status
-              amount
-          }
-      }
+      seasonYear
+	  seasonInt
     }
   }
 }
@@ -545,6 +509,97 @@ query (	$id: Int, $name: String) {
   }
 }";
 
+		public const string UserMedia = @"
+query ($userId: Int, $userName: String, $type: MediaType) {
+  MediaListCollection(userId: $userId, userName: $userName, type: $type) {
+    lists {
+      name
+      isCustomList
+      isCompletedList: isSplitCompletedList
+      entries {
+  id
+  mediaId
+  status
+  score
+  progress
+  progressVolumes
+  repeat
+  priority
+  private
+  hiddenFromStatusLists
+  customLists
+  advancedScores
+  notes
+  updatedAt
+  startedAt {
+    year
+    month
+    day
+  }
+  completedAt {
+    year
+    month
+    day
+  }
+  media {
+    id
+    title {
+      userPreferred
+      romaji
+      english
+      native
+    }
+    coverImage {
+      extraLarge
+      large
+    }
+    type
+    format
+    status(version: 2)
+    episodes
+    volumes
+    chapters
+    averageScore
+    popularity
+    isAdult
+    countryOfOrigin
+    genres
+    bannerImage
+    startDate {
+      year
+      month
+      day
+    }
+  }
+}
+    }
+    user {
+      id
+      name
+      avatar {
+        large
+      }
+      mediaListOptions {
+        scoreFormat
+        rowOrder
+        animeList {
+          sectionOrder
+          customLists
+          splitCompletedSectionByFormat
+          theme
+        }
+        mangaList {
+          sectionOrder
+          customLists
+          splitCompletedSectionByFormat
+          theme
+        }
+      }
+    }
+  }
+}
+";
+
 		public const string ExternalLisks = @"
 query ($mediaType: ExternalLinkMediaType, $type: ExternalLinkType) {
   ExternalLinkSourceCollection(mediaType: $type, type: INFO) {
@@ -558,5 +613,139 @@ query ($mediaType: ExternalLinkMediaType, $type: ExternalLinkType) {
   }
 }";
 
+        public const string GenresAndTagsCollection = @"
+query {
+  genres: GenreCollection
+  tags: MediaTagCollection {
+    name
+    description
+    category
+    isAdult
+  }
+}";
+
+		public const string PageStudioWithListMedia = @"
+query ($page:Int, $search:String, $sort: [StudioSort] = [FAVOURITES_DESC]) {
+  Page(page:$page) {
+    pageInfo {
+      total
+      perPage
+      currentPage
+      lastPage
+      hasNextPage
+    }
+    studios(search:$search, sort: $sort) {
+      id
+      name
+      favourites
+      media(sort:[POPULARITY_DESC] perPage:3) {
+        nodes {
+          id
+          coverImage {
+            large
+            color
+          }
+        }
+      }
+    }
+  }
+}";
+		public const string StudioWithListMedia = @"
+query ($id: Int, $page: Int, $sort: [MediaSort] = [FAVOURITES_DESC], $onList: Boolean) {
+  Studio(id: $id) {
+    id
+    name
+    isAnimationStudio
+    favourites
+    isFavourite
+    media(page: $page, sort: $sort, onList: $onList) {
+      pageInfo {
+        total
+        perPage
+        currentPage
+        lastPage
+        hasNextPage
+      }
+      edges {
+        isMainStudio
+        node {
+          id
+          title {
+            userPreferred
+          }
+          coverImage {
+            large
+            color
+          }
+          startDate {
+            year
+            month
+            day
+          }
+          endDate {
+            year
+            month
+            day
+          }
+          bannerImage       
+          type
+          format
+          status(version: 2)
+          isAdult
+          averageScore
+          popularity
+        }
+      }
+    }
+  }
+}
+";
+
+		public const string PageCharacter = @"
+query ($page: Int = 1, $id: Int, $search: String, $isBirthday: Boolean, $sort: [CharacterSort] = [FAVOURITES_DESC]) {
+  Page(page: $page, perPage: 20) {
+    pageInfo {
+      total
+      perPage
+      currentPage
+      lastPage
+      hasNextPage
+    }
+    characters(id: $id, search: $search, isBirthday: $isBirthday, sort: $sort) {
+      id
+      favourites
+      name {
+        userPreferred
+      }
+      image {
+        large
+      }
+    }
+  }
+}
+";
+		public const string PageStaff = @"
+query ($page: Int = 1, $id: Int, $search: String, $isBirthday: Boolean, $sort: [CharacterSort] = [FAVOURITES_DESC]) {
+  Page(page: $page, perPage: 20) {
+    pageInfo {
+      total
+      perPage
+      currentPage
+      lastPage
+      hasNextPage
+    }
+    characters(id: $id, search: $search, isBirthday: $isBirthday, sort: $sort) {
+      id
+      favourites
+      name {
+        userPreferred
+      }
+      image {
+        large
+      }
+    }
+  }
+}
+";
 	}
 }
