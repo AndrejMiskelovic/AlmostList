@@ -4,15 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AlmostList.Client.Models.Enums
+namespace AlmostList.Client.Objects.Responses
 {
-	public enum PageMediaSearchType
+	public class UserAiringSchedule
 	{
-		ANIME,
-		MANGA,
-		CHARACTER,
-		STAFF,
-		STUDIO
-
+		//TODO
 	}
 }

@@ -3,15 +3,17 @@ using AlmostList.Client.Models.Properties.Common;
 
 namespace AlmostList.Client.Models.Properties.Media
 {
-    public class MediaListEntry
+    public class MediaList
     {
         public int? Id { get; set; }
         public int? UserId { get; set; }
         public int? MediaId { get; set; }
         public MediaListStatus? Status { get; set; }
-        public float? Score { get; set; }
-        //public ScoreFormat Score { get; set; } //format of score
-        public int? Progress { get; set; }
+		/// <summary>
+		/// format of score by ScoreFormat
+		/// </summary>
+		public float? Score { get; set; } 
+		public int? Progress { get; set; }
         public int? ProgressVolumes { get; set; }
         public int? Repeat { get; set; }
         public int? Priority { get; set; }

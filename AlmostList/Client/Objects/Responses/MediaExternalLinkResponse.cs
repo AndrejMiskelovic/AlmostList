@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AlmostList.Client.Models.Responses
+namespace AlmostList.Client.Objects.Responses
 {
-	public class MediaMediaList
+	public class MediaExternalLinkResponse
 	{
-		public Media? Media { get; set; }
-		public MediaListEntry? MediaList { get; set; }
+		public List<MediaExternalLink>? ExternalLinkSourceCollection { get; set; }
 	}
 }

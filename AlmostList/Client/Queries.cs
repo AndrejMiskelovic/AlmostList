@@ -1,8 +1,6 @@
-﻿using System.ComponentModel;
-
-namespace AlmostList.Client
+﻿namespace AlmostList.Client
 {
-    public class Queries
+	public class Queries
     {
         public const string Media = @"
 query ($id:Int, $statusVersion:Int, $sourceVersion:Int, $relationTypeVersion: Int) {
@@ -56,6 +54,10 @@ query ($id:Int, $statusVersion:Int, $sourceVersion:Int, $relationTypeVersion: In
         popularity
         trending
         favourites
+        nextAiringEpisode{
+          airingAt,
+          episode
+        }
         tags {
             id
             name
@@ -216,7 +218,252 @@ query ($id:Int, $statusVersion:Int, $sourceVersion:Int, $relationTypeVersion: In
     }
 }";
 
-        public const string MediaListEntry = @"
+		public const string MediaWithMediaListEntry = @"
+query ($id:Int, $statusVersion:Int, $sourceVersion:Int, $relationTypeVersion: Int) {
+    Media(id:$id) {
+        id
+        idMal
+        title {
+            romaji
+            english
+            native
+            userPreferred
+        }
+        type
+        format
+        status(version: $statusVersion)
+        description(asHtml: false)
+        startDate {
+            year
+            month
+            day
+        }
+        endDate {
+            year
+            month
+            day
+        }
+        season
+        seasonYear
+        episodes
+        duration
+        chapters
+        volumes
+        countryOfOrigin
+        isLicensed
+        source(version: $sourceVersion)
+        trailer {
+            id
+            site
+            thumbnail
+        }
+        coverImage {
+            extraLarge
+            large
+            medium
+        }
+        bannerImage
+        genres
+        synonyms
+        averageScore
+        meanScore
+        popularity
+        trending
+        favourites
+        nextAiringEpisode{
+          airingAt,
+          episode
+        }
+        tags {
+            id
+            name
+            description
+            category
+            rank
+            isGeneralSpoiler
+            isMediaSpoiler
+            isAdult
+        }
+        relations {
+            edges {
+                node {
+                    id
+                    title {
+                        romaji
+                        english
+                        native
+                        userPreferred
+                    }
+                    type
+                    format
+                    coverImage {
+                        extraLarge
+                        large
+                        medium
+                    }
+                    countryOfOrigin
+                }
+                relationType(version: $relationTypeVersion)
+            }
+        }
+        characters(role: MAIN, sort: [ID]) {
+            nodes {
+                id
+                name {
+                    first
+                    middle
+                    last
+                    full
+                    native
+                    alternative
+                    alternativeSpoiler
+                    userPreferred
+                }
+                image {
+                    large
+                    medium
+                }
+            }
+        }
+        staff(sort:[RELEVANCE, ID]) {
+            edges {
+                node {
+                    id
+                    name {
+                        first
+                        middle
+                        last
+                        full
+                        native
+                        alternative
+                        userPreferred
+                    }
+                    image {
+                        large
+                        medium
+                    }
+                }
+                id
+                role
+            }
+        }
+        studios {
+            edges {
+                node {
+                    id
+                    name
+                    isAnimationStudio
+                }
+                id
+                isMain
+            }
+        }
+        isFavourite
+        isAdult
+        nextAiringEpisode {
+            id
+            airingAt
+            timeUntilAiring
+            episode
+        }
+        externalLinks {
+            id
+            url
+            site
+            siteId
+            type
+            language
+            color
+            icon
+        }
+        rankings {
+            id
+            rank
+            type
+            format
+            year
+            season
+            allTime
+            context
+        }
+        recommendations(sort:[RATING_DESC]) {
+            nodes {
+                id
+              	rating
+              	userRating
+              	mediaRecommendation {
+                  	id
+                    isAdult
+                  	title {
+                      	romaji
+                      	english
+                      	native
+                      	userPreferred
+                    }
+                    countryOfOrigin
+                    type
+                  	format
+                  	status(version: $statusVersion)
+                  	startDate {
+                        year
+                        month
+                        day
+                    }
+                  	episodes
+                  	chapters
+                  	coverImage {
+                      	extraLarge
+                      	large
+                      	medium
+                    }
+                  	averageScore
+                  	favourites
+                }
+            }
+        }
+        stats {
+            scoreDistribution {
+                score
+                amount
+            }
+            statusDistribution {
+                status
+                amount
+            }
+        }
+        siteUrl
+        mediaListEntry {
+            id
+            userId
+            mediaId
+            status
+            score
+            progress
+            progressVolumes
+            repeat
+            priority
+            private
+            notes
+            hiddenFromStatusLists
+            customLists
+            advancedScores
+            startedAt {
+                year
+                month
+                day
+            }
+            completedAt {
+                year
+                month
+                day
+            }
+            updatedAt
+            createdAt
+        }
+    }
+}";
+
+		public const string MediaListEntry = @"
 query ($userId:Int, $mediaId:Int) {
     MediaList(userId:$userId, mediaId:$mediaId) {
         id
@@ -602,7 +849,7 @@ query ($userId: Int, $userName: String, $type: MediaType) {
 
 		public const string ExternalLisks = @"
 query ($mediaType: ExternalLinkMediaType, $type: ExternalLinkType) {
-  ExternalLinkSourceCollection(mediaType: $type, type: INFO) {
+  ExternalLinkSourceCollection(mediaType: $mediaType, type: $type) {
     id
     url
     site
@@ -650,8 +897,9 @@ query ($page:Int, $search:String, $sort: [StudioSort] = [FAVOURITES_DESC]) {
     }
   }
 }";
+
 		public const string StudioWithListMedia = @"
-query ($id: Int, $page: Int, $sort: [MediaSort] = [FAVOURITES_DESC], $onList: Boolean) {
+query ($id: Int, $page: Int, $sort: [MediaSort], $onList: Boolean) {
   Studio(id: $id) {
     id
     name
@@ -702,8 +950,8 @@ query ($id: Int, $page: Int, $sort: [MediaSort] = [FAVOURITES_DESC], $onList: Bo
 ";
 
 		public const string PageCharacter = @"
-query ($page: Int = 1, $id: Int, $search: String, $isBirthday: Boolean, $sort: [CharacterSort] = [FAVOURITES_DESC]) {
-  Page(page: $page, perPage: 20) {
+query ($page: Int, $id: Int, $search: String, $isBirthday: Boolean, $sort: [CharacterSort] = [FAVOURITES_DESC]) {
+  Page(page: $page) {
     pageInfo {
       total
       perPage
@@ -724,9 +972,10 @@ query ($page: Int = 1, $id: Int, $search: String, $isBirthday: Boolean, $sort: [
   }
 }
 ";
+
 		public const string PageStaff = @"
-query ($page: Int = 1, $id: Int, $search: String, $isBirthday: Boolean, $sort: [CharacterSort] = [FAVOURITES_DESC]) {
-  Page(page: $page, perPage: 20) {
+query ($page: Int, $id: Int, $search: String, $isBirthday: Boolean, $sort: [CharacterSort] = [FAVOURITES_DESC]) {
+  Page(page: $page) {
     pageInfo {
       total
       perPage
@@ -747,5 +996,182 @@ query ($page: Int = 1, $id: Int, $search: String, $isBirthday: Boolean, $sort: [
   }
 }
 ";
-	}
+
+        public const string PageAiringSchedule = @"
+query($page: Int,
+  $airingAtGreater: Int,
+  $airingAtLesser: Int
+) {
+  Page(page: $page) {
+    pageInfo {
+      total
+      perPage
+      currentPage
+      lastPage
+      hasNextPage
+    }
+    airingSchedules(
+      airingAt_greater: $airingAtGreater,
+      airingAt_lesser: $airingAtLesser,
+      sort: [TIME]
+    ) {
+      id
+      airingAt
+      timeUntilAiring
+      episode
+      media {
+        id
+        title {
+          romaji
+          english
+          native
+          userPreferred
+        }
+        countryOfOrigin
+        season
+        seasonYear
+        bannerImage
+        isAdult
+        externalLinks {
+		  id
+          url
+          site
+          siteId
+          type
+          language
+          color
+          icon
+        }
+        mediaListEntry {
+          status
+        }
+      }
+    }
+  }
+}";
+
+        public const string Viewer = @"
+query {
+  Viewer {
+    id
+    name
+    avatar {
+      large
+      medium
+    }
+    options {
+      titleLanguage
+      displayAdultContent
+      airingNotifications
+      notificationOptions {
+        type
+        enabled
+      }
+      timezone
+      activityMergeTime
+      staffNameLanguage
+      restrictMessagesToFollowing
+      disabledListActivity {
+        disabled
+        type
+      }
+    }
+    unreadNotificationCount
+    donatorTier
+    donatorBadge
+    moderatorRoles
+    siteUrl
+    createdAt
+  }
+}";
+
+        public const string DeleteMediaEntry = @"
+mutation ($id: Int) {
+    DeleteMediaListEntry(id: $id) {
+        deleted
+    }
+}";
+
+        public const string UpdateUser = @"
+mutation ($titleLanguage:UserTitleLanguage,
+  $displayAdultContent:Boolean,
+  $airingNotifications:Boolean,
+  $scoreFormat:ScoreFormat,
+  $rowOrder:String,
+  $notificationOptions:[NotificationOptionInput],
+  $timezone:String,
+  $activityMergeTime:Int,
+  $animeListOptions:MediaListOptionsInput,
+  $mangaListOptions:MediaListOptionsInput,
+  $staffNameLanguage:UserStaffNameLanguage,
+  $restrictMessagesToFollowing:Boolean,
+  $disabledListActivity:[ListActivityOptionInput]
+) {
+  UpdateUser(
+    titleLanguage:$titleLanguage,
+    displayAdultContent:$displayAdultContent,
+    airingNotifications:$airingNotifications,
+    scoreFormat:$scoreFormat,
+    rowOrder:$rowOrder,
+    notificationOptions:$notificationOptions,
+    timezone:$timezone,
+    activityMergeTime:$activityMergeTime,
+    animeListOptions:$animeListOptions,
+    mangaListOptions:$mangaListOptions,
+    staffNameLanguage:$staffNameLanguage,
+    restrictMessagesToFollowing:$restrictMessagesToFollowing,
+    disabledListActivity:$disabledListActivity
+  ) {
+    id
+    name
+    about(asHtml: false)
+    avatar {
+      large
+      medium
+    }
+    bannerImage
+    options {
+      titleLanguage
+      displayAdultContent
+      airingNotifications
+      notificationOptions {
+        type
+        enabled
+      }
+      timezone
+      activityMergeTime
+      staffNameLanguage
+      restrictMessagesToFollowing
+      disabledListActivity {
+        disabled
+        type
+      }
+    }
+    mediaListOptions {
+      scoreFormat
+      rowOrder
+      animeList {
+        sectionOrder
+        splitCompletedSectionByFormat
+        customLists
+        advancedScoring
+        advancedScoringEnabled
+      }
+      mangaList {
+        sectionOrder
+        splitCompletedSectionByFormat
+        customLists
+        advancedScoring
+        advancedScoringEnabled
+      }
+    }
+    unreadNotificationCount
+    donatorTier
+    donatorBadge
+    moderatorRoles
+    siteUrl
+    createdAt
+  }
+}";
+    }
 }

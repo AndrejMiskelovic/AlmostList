@@ -8,8 +8,8 @@ namespace AlmostList.Client.Models.Requests
         public int? StatusVersion { get; set; } = 2;
         public int? SourceVersion { get; set; } = 2;
         public string? Search { get; set; }
-        public MediaType? Type { get; set; }
-        public List<MediaSort>? Sort { get; set; }
+        public MediaType Type { get; set; } = MediaType.ANIME;
+        public List<MediaSort> Sort { get; set; } = new List<MediaSort>() { MediaSort.TRENDING_DESC};
         public List<MediaFormat>? FormatIn { get; set; }
         public List<MediaStatus>? StatusIn { get; set; }
         public List<MediaSource>? SourceIn { get; set; }
@@ -44,7 +44,7 @@ namespace AlmostList.Client.Models.Requests
         {
             get
             {
-                return _startDateGreater == null ? null : _startDateGreater.Value.AddDays(1).ToString();
+                return _startDateGreater == null ? null : _startDateGreater.Value.ToString("yyyyMMdd");
             }
             set
             {
@@ -56,7 +56,7 @@ namespace AlmostList.Client.Models.Requests
         {
             get
             {
-                return _startDateLesser == null ? null : _startDateLesser.Value.AddDays(-1).ToString();
+                return _startDateLesser == null ? null : _startDateLesser.Value.ToString("yyyyMMdd");
             }
             set
             {

@@ -10,7 +10,7 @@ namespace AlmostList.Client.Models.Properties.Studio
 	{
 		public Studio? Node { get; set; }
 		public int? Id { get; set; }
-		public string? Role { get; set; }
+		public bool? IsMain { get; set; }
 		public int? FavouriteOrder { get; set; }
 	}
 }

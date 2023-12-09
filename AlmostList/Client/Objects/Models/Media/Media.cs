@@ -51,19 +51,19 @@ namespace AlmostList.Client.Models.Properties.Media
         public bool IsFavourite { get; set; }
         public bool IsFavouriteBlocked { get; set; }
         public bool IsAdult { get; set; }
-		public AiringSchedule.AiringSchedule? NextAiringEpisode { get; set; }
-        public Connection<AiringScheduleEdge, AiringSchedule.AiringSchedule>? AiringSchedule {  get; set; }    
-        public Connection<MediaTrendEdge, MediaTrend.MediaTrend>? Trends {  get; set; }    
-		public List<MediaExternalLink>? ExternalLinks { get; set; }
-		public List<MediaStreamingEpisode>? StreamingEpisodes { get; set; }
-		public List<MediaRank>? Rankings { get; set; }
-		public MediaListEntry? MediaListEntry { get; set; }
-		public Connection<ReviewEdge, Review>? Reviews { get; set; }
-		public Connection<RecommendationEdge, Recommendation.Recommendation>? Recommendations { get; set; }
-		public MediaStats? Stats { get; set; }
-		public bool? AutoCreateForumThread { get; set; }
-		public bool? IsRecommendationBlocked { get; set; }
-		public bool? IsReviewBlocked { get; set; }
-		public string? ModNotes { get; set; }
+        public AiringSchedule.AiringSchedule? NextAiringEpisode { get; set; }
+        public Connection<AiringScheduleEdge, AiringSchedule.AiringSchedule>? AiringSchedule { get; set; }
+        public Connection<MediaTrendEdge, MediaTrend.MediaTrend>? Trends { get; set; }
+        public List<MediaExternalLink>? ExternalLinks { get; set; }
+        public List<MediaStreamingEpisode>? StreamingEpisodes { get; set; }
+        public List<MediaRank>? Rankings { get; set; }
+        public MediaList? MediaListEntry { get; set; }
+        public Connection<ReviewEdge, Review>? Reviews { get; set; }
+        public Connection<RecommendationEdge, Recommendation.Recommendation>? Recommendations { get; set; }
+        public MediaStats? Stats { get; set; }
+        public bool? AutoCreateForumThread { get; set; }
+        public bool? IsRecommendationBlocked { get; set; }
+        public bool? IsReviewBlocked { get; set; }
+        public string? ModNotes { get; set; }
     }
 }

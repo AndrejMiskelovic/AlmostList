@@ -9,5 +9,4 @@ namespace AlmostList.Client.Models.Responses
 	//    public PageInfo PageInfo { get; set; }
 	//    public List<Media> Media {  get; set; }
 	//}
-
 }

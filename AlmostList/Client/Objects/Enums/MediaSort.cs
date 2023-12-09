@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AlmostList.Client.Models.Enums
+﻿namespace AlmostList.Client.Models.Enums
 {
-	public enum MediaSort
+    public enum MediaSort
 	{
 		ID,
 		ID_DESC,

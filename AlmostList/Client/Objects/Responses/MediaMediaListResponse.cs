@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace AlmostList.Client.Models.Responses
 {
-	public class MediaListEntryResponse
+	public class MediaMediaListResponse
 	{
-		public MediaList MediaList { get; set; }
+		public Media? Media { get; set; }
+		public MediaList? MediaList { get; set; }
 	}
 }

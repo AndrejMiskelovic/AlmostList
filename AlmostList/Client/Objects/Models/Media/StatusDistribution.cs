@@ -4,7 +4,7 @@ namespace AlmostList.Client.Models.Properties.Media
 {
 	public class StatusDistribution
 	{
-		public List<MediaListStatus>? Status { get; set; }
-		public int Amount {  get; set; }
+		public MediaListStatus? Status { get; set; }
+		public int? Amount {  get; set; }
 	}
 }

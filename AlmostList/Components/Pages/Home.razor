@@ -1,21 +1,32 @@
 ﻿@page "/"
 @using AlmostList.Client
 @using AlmostList.Client.Models.Enums
+@using AlmostList.Client.Objects.Responses
+@using GraphQL
 @inject NavigationManager UriHelper
 @inject BaseClient baseClient
 
+@if (@render)
+{
+	<card>
+		<div class="header">
+			<img class="coverImage" src="@viewerResponse.Data.Viewer.Avatar.Medium" />
+			<div class="headerInfo">
+				<text class="title">@viewerResponse.Data.Viewer.Name</text>
+			</div>
+		</div>
+	</card>
+}
 
 <label for="id">ID of media:</label>
 <input type="number" id="id" name="id" @bind="@Id">
-<select>
-@foreach (var item in Enum.GetValues(typeof(PageMediaSearchType)))
-{
-	<option value="@item">@item</option>
-}
-</select>
 <button class="btn btn-primary" @onclick="OnClick">Media</button>
-<button class="btn btn-primary" @onclick="OnClick2">Page Media</button>
+<button class="btn btn-primary" @onclick="Search">Search</button>
+<button class="btn btn-primary" @onclick="Search2">PageMediaWithTabs</button>
+<button class="btn btn-primary" @onclick="Search3">PageMediaWithTabs2</button>
+<button class="btn btn-primary" @onclick="Search4">PageMediaWithTabs3</button>
 <button class="btn btn-primary" @onclick="OnClick3">User</button>
+<button class="btn btn-primary" @onclick="Calendar">Calendar</button>
 <button class="btn btn-primary" @onclick="Login">Login with AniList</button>
 
 @code {
@@ -23,14 +34,32 @@
 	int clientId = 15602;
 	int? Id { get; set; }
 	int? type { get; set; }
+	bool render = false;
+	GraphQLResponse<ViewerResponse> viewerResponse = new GraphQLResponse<ViewerResponse>();
 
 	private void OnClick()
 	{
-		UriHelper.NavigateTo($"/Media/{Id}");
+		UriHelper.NavigateTo($"/Media/{129188}");
 	}
-	private void OnClick2()
+	private void Calendar()
 	{
-		UriHelper.NavigateTo($"/PageMedia/{type}");
+		UriHelper.NavigateTo($"/Calendar");
+	}
+	private void Search()
+	{
+		UriHelper.NavigateTo($"/PageMedia");
+	}
+	private void Search2()
+	{
+		UriHelper.NavigateTo($"/PageMediaWithTabs");
+	}
+	private void Search3()
+	{
+		UriHelper.NavigateTo($"/PageMediaWithTabs2");
+	}
+	private void Search4()
+	{
+		UriHelper.NavigateTo($"/PageMediaWithTabs3");
 	}
 	private void OnClick3()
 	{
@@ -49,7 +78,7 @@
 			//         PreferredToolbarColor = Colors.Black,
 			//         PreferredControlColor = Colors.SandyBrown
 			//     };
-
+			
 			// await Browser.Default.OpenAsync(uri, options);
 
 			WebAuthenticatorResult authResult = await WebAuthenticator.Default.AuthenticateAsync(
@@ -60,8 +89,13 @@
 						PrefersEphemeralWebBrowserSession = true
 					});
 
-			string accessToken = authResult?.AccessToken;
-			baseClient.SetToken(accessToken);
+			baseClient.SetToken(authResult?.AccessToken);
+
+
+			viewerResponse = await baseClient.GetCurrentUser();
+			render = true;
+			StateHasChanged();
+
 		}
 		catch (Exception ex)
 		{

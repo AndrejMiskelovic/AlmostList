@@ -1,20 +1,9 @@
 ﻿using AlmostList.Client.Models.Enums;
-using AlmostList.Client.Models.Properties.Media;
 using AlmostList.Client.Models.Properties.User;
-using Android.Accounts;
-using Android.Media;
-using Android.Text;
-using Java.Net;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Android.Provider.ContactsContract.CommonDataKinds;
 
 namespace AlmostList.Client.Objects.Models.Review
 {
-    public class Review
+	public class Review
     {
         public int? Id { get; set; }
         public int? UserId { get; set; }
@@ -31,6 +20,6 @@ namespace AlmostList.Client.Objects.Models.Review
         public int? CreatedAt { get; set; }
         public int? UpdatedAt { get; set; }
         public User? User { get; set; }
-        public Media? Media { get; set; }
+        public Client.Models.Properties.Media.Media? Media { get; set; }
     }
 }

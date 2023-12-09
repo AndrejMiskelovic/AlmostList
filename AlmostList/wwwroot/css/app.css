@@ -4,6 +4,8 @@
     margin: 0;
     width: 100vw;
     padding: 0;
+    background-color: #232629;
+    color: white;
 }
 
 a, .btn-link {
@@ -118,7 +120,7 @@ image {
     overflow: hidden;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    background-color: darkblue;
+    background-color: #232629;
 }
 
 .mediaCard {
@@ -128,12 +130,14 @@ image {
     margin-bottom: 2px;
     margin-top: 2px;
     overflow: hidden;
-    background-color: rgba(255,255,255,0.5);
+    background-color: #121212;
 }
-.mediaCard:nth-child(2n+1){
-    margin-left:4px;
-    margin-right:2px;
-}
+
+    .mediaCard:nth-child(2n+1) {
+        margin-left: 4px;
+        margin-right: 2px;
+    }
+
     .mediaCard:nth-child(2n+2) {
         margin-left: 2px;
         margin-right: 4px;
@@ -151,7 +155,7 @@ image {
         font-size: 12px;
         height: 100%;
         padding-left: 5px;
-        color:orange;
+        color: orange;
         font-family: sans-serif;
         font-weight: 450;
     }
@@ -162,3 +166,347 @@ image {
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+
+
+.headerInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+    .headerInfo button {
+        width: fit-content;
+        padding: 0px 10px;
+        border-radius: 4px;
+        background-color: #121212;
+        font-size: 14px;
+    }
+
+.contentCard {
+    margin: 0 10px;
+    padding: 5px;
+    border: 1px solid white;
+    border-radius: 4px;
+}
+
+.mediaPseudoCollapse {
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    white-space: nowrap;
+    font-size: 14px;
+    height: 22px;
+    padding: 0 8px;
+    margin: 2px 8px;
+    border: 1px solid white;
+    padding-right: 20px;
+    background-color: #121212;
+    border-radius: 4px;
+}
+
+    .mediaPseudoCollapse.show {
+        height: fit-content;
+        white-space: pre-wrap;
+    }
+
+    .mediaPseudoCollapse .arrow {
+        position: absolute;
+        top: 0;
+        right: 5px;
+    }
+
+    .mediaPseudoCollapse.show .arrow {
+        transform: rotate(180deg);
+    }
+
+button {
+    color: white;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+    .row .score {
+        margin-left: auto;
+        width: fit-content;
+    }
+
+    .row .scoreLable {
+        width: fit-content;
+    }
+
+.scoreCard {
+    border-radius: 4px;
+    border: 1px solid white;
+    background-color: #121212;
+    width: fit-content;
+    padding: 0px 5px;
+    display: inline-flex;
+    flex-direction: column;
+    margin-bottom: auto;
+}
+
+.episodeRow {
+    display: block;
+    width: 100vw;
+    margin: 8px;
+}
+
+.infoRow {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px;
+}
+
+.mediaInfo {
+    border-radius: 4px;
+    border: 1px solid white;
+    background-color: #121212;
+    width: calc(100vw - 16px);
+    padding: 0px 5px;
+    display: inline-flex;
+    margin: 8px;
+}
+
+
+    .mediaInfo .col {
+        margin: 0 5px;
+    }
+
+
+        .mediaInfo .col .row {
+            padding: 5px 0px;
+        }
+
+            .mediaInfo .col .row div {
+                display: block;
+            }
+
+                .mediaInfo .col .row div:first-child {
+                    color: white;
+                }
+
+        .mediaInfo .col:last-of-type .row div:not(:first-of-type) {
+            display: flex;
+            justify-content: space-between
+        }
+
+            .mediaInfo .col:last-of-type .row div:not(:first-of-type) div {
+                color: white;
+            }
+
+.mediaBanners {
+    display: flex;
+    width: calc(100% - 16px);
+    margin: 8px;
+    justify-content: space-between;
+    overflow: hidden;
+    font-size: 14px;
+}
+
+    .mediaBanners .mediaBanner {
+        min-width: calc(33% - 2px);
+        width: calc(33% - 2px);
+        max-width: calc(33% - 2px);
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .mediaBanners .mediaBannersScroll {
+        column-gap: 3px;
+        overflow: auto;
+        display: flex;
+        width: 100%;
+    }
+
+    .mediaBanners .mediaBanner img {
+        width: 100%;
+        height: 180px;
+        max-height: 175px;
+        object-fit: cover;
+    }
+
+    .mediaBanners .mediaBanner .mediaBannerTitle {
+        width: 100%;
+        text-align: left;
+    }
+
+    .mediaBanners .mediaBanner .mediaBannerType {
+        width: 100%;
+        text-align: left;
+    }
+
+.mediaStaffs {
+    display: flex;
+    width: calc(100% - 16px);
+    margin: 8px;
+    overflow: hidden;
+}
+
+    .mediaStaffs .mediaStaff {
+        min-width: calc(33% - 40px);
+        width: calc(33% - 40px);
+        max-width: calc(33% - 40px);
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin: 0px 4px;
+    }
+
+
+        .mediaStaffs .mediaStaff img {
+            width: 100%;
+            height: 120px;
+            max-height: 175px;
+            object-fit: cover;
+        }
+
+    .mediaStaffs .staffMore {
+        height: 100%;
+        margin: 55px 0 0 0;
+        text-align: center;
+        width: 100%;
+        line-height: 0.9;
+    }
+
+.mediaStaff {
+    line-height: 1;
+    font-size: 14px;
+}
+
+.mediaRecommendations {
+    display: flex;
+    width: calc(100% - 16px);
+    margin: 8px;
+    justify-content: space-between;
+    overflow: hidden;
+    font-size: 14px;
+}
+
+    .mediaRecommendations .mediaRecommendationsScroll {
+        column-gap: 3px;
+        overflow: auto;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        height: 160px;
+    }
+
+    .mediaRecommendations .mediaRecommendation {
+        display: flex;
+        border-radius: 4px;
+        border: 1px solid white;
+        background-color: #121212;
+        height: 160px;
+        width: 400px;
+    }
+
+        .mediaRecommendations .mediaRecommendation .mediaRecommendationInfo {
+            width: 160px;
+            padding: 8px;
+        }
+
+            .mediaRecommendations .mediaRecommendation .mediaRecommendationInfo div {
+                line-height: 1;
+                margin: 0 0 6px 0;
+                display: -webkit-box;
+                -webkit-line-clamp: 6;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+        .mediaRecommendations .mediaRecommendation img {
+            width: 120px;
+            height: 100%;
+            object-fit: cover;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+
+.mediaLogo {
+    display: grid;
+    grid-auto-columns: 50px;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    column-gap: 10px;
+    width: calc(100vw - 16px);
+    margin: 0 8px
+}
+
+    .mediaLogo img {
+        width: 50px;
+    }
+﻿:root {
+    --main-color: #003270;
+    --main-disabled-color: #808080;
+    --main-text-color: #003250;
+    --main-text-disabled-color: #FCFCFC;
+}
+
+.tabs {
+    width: 100%;
+    background-color: #ffffff;
+    font-size: 12px;
+    text-align: center;
+}
+
+.tab {
+    background-color: #FCFCFC;
+    color: var(--main-text-color);
+    padding: 15px 10px;
+    min-width: 150px;
+    border: 1px solid var(--main-color);
+    cursor: pointer;
+}
+
+.tab-filling {
+    border-bottom: 1px solid var(--main-color);
+    width: 100%;
+    font-size: 10px;
+    font-weight: 400;
+}
+
+    .tab-filling.tab-filling-left {
+        text-align: left;
+        color: #000000;
+        padding-top: 15px;
+    }
+
+    .tab-filling.tab-filling-right {
+        text-align: right;
+        color: #000000;
+        padding-top: 15px;
+    }
+
+.tab.tab-active {
+    background-color: #ffffff;
+    border-bottom: 0px solid;
+    color: #30256C;
+    font-weight: bold;
+}
+
+.tab.tab-disabled {
+    background-color: var(--main-disabled-color);
+    border-bottom: 1px solid var(--main-color);
+    color: #FCFCFC;
+    font-weight: bold;
+    cursor: not-allowed;
+}
+
+.tab-container {
+    overflow:auto;
+    display: inline-flex;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100vw;
+}
+
+.tab-content {
+    padding-top: 0px;
+    text-align: left;
+}
+
+

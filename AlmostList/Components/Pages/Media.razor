@@ -3,45 +3,330 @@
 @using AlmostList.Client
 @using System.Text.Json;
 @using AlmostList.Client.Models
+@using AlmostList.Client.Models.Requests
 @using AlmostList.Client.Models.Responses
 @using GraphQL
 @using Newtonsoft.Json
 @inject BaseClient baseClient
+@* @inject IJSRuntime JsRuntime*@
+@inject NavigationManager UriHelper
+
 
 @if (@render)
 {
-	<card>
+	<div id="media">
 		<div class="header">
 			<img class="bannerimage" src="@mediaResponse.Data.Media.BannerImage" />
 			<img class="coverImage" src="@mediaResponse.Data.Media.CoverImage.ExtraLarge" />
 			<div class="headerInfo">
 				<text class="title">@mediaResponse.Data.Media.Title.English </text>
+				@if (@mediaResponse.Data.Media.MediaListEntry == null)
+				{
+					<button>Add to List</button>
+				}
+				else
+				{
+					<button>@mediaResponse.Data.Media.MediaListEntry.Status.Value</button>
+					@* <button @onclick="(() => Delete(mediaResponse.Data.Media.MediaListEntry.Id.Value))">Delete</button> *@
+				}
 			</div>
 		</div>
-	</card>
-	<button>ADD</button> 
-	<p>
-		 @((MarkupString)mediaResponse.Data.Media.Description)
-		@data
-	</p>
+		@if (mediaResponse.Data.Media.NextAiringEpisode != null)
+		{
+			<div class="episodeRow">
+				Ep @mediaResponse.Data.Media.NextAiringEpisode.Episode:  @mediaResponse.Data.Media.NextAiringEpisode.GetAiringAt()
+			</div>
+		}
+		<div class="infoRow">
+			<div class="scoreCard">
+				<labal>Score</labal>
+				<div class='row'>
+					<div class='scoreLable'>Average</div>
+					<div class='score'>@mediaResponse.Data.Media.AverageScore</div>
+				</div>
+				<div class="row">
+					<div class='scoreLable'>Mean</div>
+					<div class='score'>@mediaResponse.Data.Media.MeanScore</div>
+				</div>
+			</div>
+
+			<div class="scoreCard">
+				@mediaResponse.Data.Media.Format
+				@mediaResponse.Data.Media.Episodes Episodes
+				@mediaResponse.Data.Media.SeasonYear
+				@mediaResponse.Data.Media.Season
+			</div>
+		</div>
+
+		<div @onclick="(() => ToggleCollapse(ref showDescription))" class="@showDescription mediaPseudoCollapse">@((MarkupString)mediaResponse.Data.Media.Description) <div class="arrow">\/</div></div>
+
+		@* 		<div @onclick="(() => ToggleCollapse(ref showInfo))" class="@showInfo mediaPseudoCollapse">
+
+	@foreach (var item in @mediaResponse.Data.Media.)
+	{
+
+	}
+	@((MarkupString)mediaResponse.Data.Media.Description)
+	<div class="arrow">\/</div>
+	</div> *@
+
+		<div class='mediaInfo'>
+			<div class="col">
+				<div class="row">
+
+					<div>Fromat:</div>
+					<div>@mediaResponse.Data.Media.Format</div>
+				</div>
+
+				<div class='row'>
+					<div>Episodes:</div>
+					<div>@mediaResponse.Data.Media.Episodes</div>
+				</div>
+
+				<div class='row'>
+					<div>Episodes duration</div>
+					<div>@mediaResponse.Data.Media.Duration</div>
+				</div>
+
+				<div class='row'>
+					<div>Source</div>
+					<div>@mediaResponse.Data.Media.Source</div>
+				</div>
+
+				<div class='row'>
+					<div>Status</div>
+					<div>@mediaResponse.Data.Media.Status</div>
+				</div>
+
+				<div class='row'>
+					<div>Start date</div>
+					<div>
+						@mediaResponse.Data.Media.StartDate.Year - @mediaResponse.Data.Media.StartDate.Month - @mediaResponse.Data.Media.StartDate.Day
+					</div>
+				</div>
+
+				<div class='row'>
+					<div>End date</div>
+					<div>
+						@mediaResponse.Data.Media.StartDate.Year - @mediaResponse.Data.Media.StartDate.Month - @mediaResponse.Data.Media.StartDate.Day
+					</div>
+				</div>
+
+				<div class='row'>
+					<div>Average Score</div>
+					<div>@mediaResponse.Data.Media.AverageScore</div>
+				</div>
+
+				<div class='row'>
+					<div>Mean Score</div>
+					<div>@mediaResponse.Data.Media.MeanScore</div>
+				</div>
+
+				<div class='row'>
+					<div>Popularity</div>
+					<div>@mediaResponse.Data.Media.Popularity</div>
+
+				</div>
+
+				<div class='row'>
+					@if (!mediaResponse.Data.Media.IsFavouriteBlocked)
+					{
+						<div>favorites</div>
+						<div>@mediaResponse.Data.Media.Favourites</div>
+					}
+
+				</div>
+				<div class='row'>
+					<div>Studios</div>
+					<div>@mediaResponse.Data.Media.Studios.Edges.Where(x => x.IsMain == true).Select(x => x.Node.Name).Single()</div>
+				</div>
+
+				<div class='row'>
+					<div>Producers</div>
+					@foreach (var item in mediaResponse.Data.Media.Studios.Edges.Where(x => x.IsMain == false).Select(x=>x.Node))
+					{
+						<div>@item.Name</div>
+					}
+				</div>
+
+				<div class='row'>
+
+					<div>Source</div>
+					<div>@mediaResponse.Data.Media.Source</div>
+				</div>
+				<div class='row'>
+
+					@if (mediaResponse.Data.Media.Hashtah != null)
+					{
+						<div>source</div>
+						<div>@mediaResponse.Data.Media.Source</div>
+					}
+				</div>
+				<div class='row'>
+
+					<div>Genres</div>
+					@foreach (var item in mediaResponse.Data.Media.Genres)
+					{
+						<div>@item</div>
+					}
+				</div>
+
+				<div class='row'>
+
+					<div>Romaji</div>
+					<div>@mediaResponse.Data.Media.Title.Romaji</div>
+				</div>
+
+				<div class='row'>
+
+					<div>English</div>
+					<div>@mediaResponse.Data.Media.Title.English</div>
+				</div>
+
+				<div class='row'>
+
+					<div>Native</div>
+					<div>@mediaResponse.Data.Media.Title.Native</div> @* TODO convert to jp text if needed *@
+				</div>
+
+				<div class='row'>
+					<div>Synonyms</div>
+					@foreach (var item in mediaResponse.Data.Media.Synonyms)
+					{
+						<div>@item</div>
+					}
+				</div>
+
+			</div>
+			<div class="col">
+				<div class='row'>
+					<div>Tags</div>
+				@foreach (var item in mediaResponse.Data.Media.Tags)
+				{
+					@* <div hidden="@item.IsMediaSpoiler ? true : @item.IsGeneralSpoiler ? true : false"> *@
+					<div class="mediaTags">
+						<div>@item.Name</div
+
+					<div>@item.Rank</div>
+					</div>
+					@* </div> *@
+
+				}
+				</div>
+			</div>
+
+		</div>
+
+		<div class='mediaBanners'>
+			<div class='mediaBannersScroll'>
+
+		@foreach (var item in mediaResponse.Data.Media.Relations.Edges)
+		{
+			<div class="mediaBanner">
+				<img src="@item.Node.CoverImage.Medium" />
+				<div class='mediaBannerTitle'> @item.Node.Title.UserPreferred</div>
+				<div class='mediaBannerType'> @item.RelationType</div>
+			</div>
+		}
+		</div>
+		</div>
+
+
+@* 		@foreach (var item in mediaResponse.Data.Media.Characters.Edges)
+		{
+
+			<img src="@item.Node.Image.Medium"  />
+
+		} *@
+		<div class='mediaStaffs'>
+
+		@for (int i = 0 ; i < 4; i++)
+		{
+			@if(mediaResponse.Data.Media.Staff.Edges.Count() > i && i != 3)
+			{
+				<div class='mediaStaff'>
+					<img src="@mediaResponse.Data.Media.Staff.Edges[i].Node.Image.Medium"  />
+					<div>@mediaResponse.Data.Media.Staff.Edges[i].Node.Name.UserPreferred</div>	
+					<div>@mediaResponse.Data.Media.Staff.Edges[i].Role</div>	
+				</div>
+			} 
+			
+		}	
+			@if (mediaResponse.Data.Media.Staff.Edges.Count() >= 4){
+				<div class="staffMore">See more</div>
+			}
+		</div>
+		
+		@* <iframe src="@PrepareYoutubeLink()"/> *@
+
+	<div class='mediaRecommendations'>
+		<div class='mediaRecommendationsScroll'>
+		@foreach (var item in mediaResponse.Data.Media.Recommendations.Nodes)
+		{
+			@if (!item.MediaRecommendation.IsAdult)
+			{
+				<div class='mediaRecommendation'>
+					<img src="@item.MediaRecommendation.CoverImage.Medium" @onclick="(() => OpenMedia(item.MediaRecommendation.Id))" />
+					<div class='mediaRecommendationInfo'>
+						<div>@item.MediaRecommendation.Title.UserPreferred</div>	
+						<div>@item.MediaRecommendation.Format</div>	
+						<div>@item.MediaRecommendation.Episodes Episodes</div>	
+						<div>@item.MediaRecommendation.SeasonYear</div>
+					</div>
+				</div>
+			}
+		}
+		</div>
+	</div>
+
+	<div class="mediaLogo"> 
+		@foreach (var item in mediaResponse.Data.Media.ExternalLinks)
+		{
+			<img src="@item.Icon" href="@item.Url" /> 
+		}
+		</div>
+	</div>
+
 }
 
 @code {
 	[Parameter]
 	public int Id { get; set; }
-	public string data { get; set; }
 	bool render = false;
+	string showDescription = "";
+	string showInfo = "";
 	GraphQLResponse<MediaResponse> mediaResponse = new GraphQLResponse<MediaResponse>();
+	ElementReference timeElement;
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		if (firstRender)
 		{
-			mediaResponse = await baseClient.GetMedia(Id);
-
+			mediaResponse = await baseClient.GetMediaWithListEntry(Id);
 			render = true;
 			StateHasChanged();
 		}
+	}
+	private void OpenMedia(int id)
+	{
+
+		UriHelper.NavigateTo($"/Media/{id}", true);
+	}
+
+	private void ToggleCollapse(ref string value)
+	{
+		if (string.IsNullOrEmpty(value))
+			value = "show";
+		else
+			value = "";
+	}
+	private string PrepareYoutubeLink()
+	{
+		return $"https://www.youtube.com/embed/{mediaResponse.Data.Media.Trailer.Id}";
+	}
+	private async void Delete(int id)
+	{
+		await baseClient.DeleteMediaEntry(id);
 	}
 
 }

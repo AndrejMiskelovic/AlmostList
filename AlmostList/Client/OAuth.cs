@@ -12,7 +12,4 @@ namespace AlmostList.Client
         const string CALLBACK_SCHEME = "myapp";
 
     }
-    //internal class Webauth
-    //{
-    //}
 }

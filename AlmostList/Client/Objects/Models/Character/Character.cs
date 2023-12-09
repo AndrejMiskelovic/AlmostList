@@ -5,8 +5,8 @@ namespace AlmostList.Client.Models.Properties.Character
 {
     public class Character
     {
-        public int Id { get; set; }
-        public CharacterName Name { get; set; }
+        public int? Id { get; set; }
+        public CharacterName? Name { get; set; }
         public Common.Image? Image { get; set; }
         /// <summary>
         /// can be html (bool)

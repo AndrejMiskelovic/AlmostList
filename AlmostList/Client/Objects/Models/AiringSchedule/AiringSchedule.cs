@@ -1,4 +1,8 @@
-﻿namespace AlmostList.Client.Models.Properties.AiringSchedule
+﻿using Android.Net.Wifi.Aware;
+using Newtonsoft.Json.Converters;
+using AlmostList.Utils;
+
+namespace AlmostList.Client.Models.Properties.AiringSchedule
 {
 	public class AiringSchedule
     {
@@ -11,5 +15,14 @@
 		public int? Episode { get; set; }
 		public int? MediaId { get; set; }
 		public Media.Media? Media { get; set; }
+		
+		public DateTime? GetTimeUntil()
+		{
+			return TimeUntilAiring == null ? null : UnixTmeConverter.ConvertFromUnixTimestamp(TimeUntilAiring.Value);
+		}
+		public DateTime? GetAiringAt()
+		{
+			return AiringAt == null ? null : UnixTmeConverter.ConvertFromUnixTimestamp(AiringAt.Value);
+		}
 	}
 }

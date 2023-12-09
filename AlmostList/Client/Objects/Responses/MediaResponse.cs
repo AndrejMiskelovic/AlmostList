@@ -4,6 +4,6 @@ namespace AlmostList.Client.Models.Responses
 {
     public class MediaResponse
     {
-        public Media Media { get; set; }
+        public Media? Media { get; set; }
     }
 }

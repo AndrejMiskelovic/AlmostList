@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AlmostList.Client.Models.Responses
 {
-    public class GenresAndTags
+    public class GenresAndTagsResponse
     {
         public List<string>? Genres { get; set; }
         public List<MediaTag>? MediaTags { get; set; }
