@@ -1,0 +1,22 @@
+﻿@using AlmostList.Client.Models.Properties.Common
+@using System.Globalization
+
+<CascadingValue Value="this">
+	@if (!string.IsNullOrEmpty(Data))
+	{
+		<div class="row">
+			<div>@Text</div>
+			<div>@Data</div>
+		</div>
+	}
+@* 	else if ()
+	{
+		
+	} *@
+</CascadingValue>
+
+@code {
+	[Parameter] public string? Text { get; set; }
+	[Parameter] public RenderFragment? ChildContent { get; set; }
+	[Parameter] public string? Data { get; set; }
+}

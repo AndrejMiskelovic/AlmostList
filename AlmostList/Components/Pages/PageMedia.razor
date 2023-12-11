@@ -5,80 +5,122 @@
 @using AlmostList.Client.Models.Enums
 @using AlmostList.Client.Models.Responses
 @using AlmostList.Client.Models.Requests
+@using AlmostList.Utils
 @using GraphQL
 @using Newtonsoft.Json
+@using AlmostList.Components.Pages.Components
+@using Sve.Blazor.InfiniteScroll.Components
 @inject NavigationManager UriHelper
 @inject BaseClient baseClient
 
-<label for="id">ID of media:</label>
-<input type="number" id="id" name="id" @bind="@searchText">
 
-<label for="cars">Choose a car:</label>
-@* @if (search == 1)
-{ *@
-	<select>
-	<option value="nissan">nissan epta</option>
+<Tabs OnTabChanged="OnTabChanged">
+	<Tab Text="@MediaType.ANIME.GetDisplayName()" Value="@MediaType.ANIME.ToString()">
 
-	<option value="ferrari">gazel</option>
-		@foreach (var item in AllAllowedRoles(MediaSeason.SPRING))
-		{
-			<option value="@item">@item</option>
-		}
-		foreach (GameObjectType type in Enum.GetValues(typeof(GameObjectType))
-	{
-	...
-	}
-</select>
+		<div class="pageMedia">
 
-<div class='pageMedia'>
+			@if (@render)
+			{
+				<InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => FetchPageData()">
 
-@if (@render)
-{
-	@foreach (var item in @PageMediaResponse.Data.Page.Media)
-	{
-
-		<div class="mediaCard" @onclick="(() => OpenMedia(item.Id))">
-			<img src="@item.CoverImage.Medium" />
-			<div class="mediaInfo">
-				<div class="title">
-					@item.Title.UserPreferred
-				</div>
-			</div>
+					@foreach (var item in @PageMediaResponse.Data.Page.Media)
+					{
+						<div class="list-group-item mediaCard" @onclick="(() => OpenMedia(item.Id))">
+							<img src="@item.CoverImage.Medium" />
+							<div class="pageMediaInfo">
+								<div class="title">
+									@item.Title.UserPreferred
+								</div>
+							</div>
+						</div>
+					}
+					<div id="observerTarget" />
+				</InfiniteScroll>
+			}
 		</div>
-	}
-}
-</div>
+
+	</Tab>
+	<Tab Text="@MediaType.MANGA.GetDisplayName()" Value="@MediaType.MANGA.ToString()">
+		<div class="pageMedia">
+
+			@if (@render)
+			{
+				<InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => FetchPageData()">
+
+					@foreach (var item in @PageMediaResponse.Data.Page.Media)
+					{
+						<div class="list-group-item mediaCard" @onclick="(() => OpenMedia(item.Id))">
+							<img src="@item.CoverImage.Medium" />
+							<div class="pageMediaInfo">
+								<div class="title">
+									@item.Title.UserPreferred
+								</div>
+							</div>
+						</div>
+					}
+					<div id="observerTarget" />
+				</InfiniteScroll>
+			}
+		</div>
+	</Tab>
+</Tabs>
+
+
+
+
+
 @code {
+
+
+
 	[Parameter]
 	public int search { get; set; }
-	private IEnumerable<MediaSeason> AllAllowedRoles(MediaSeason season)
-	{
-		return Enum.GetValues(typeof(MediaSeason)).Cast<MediaSeason>().Where(role => season >= role);
-	}
+	string? searchText = null;
+	bool render = false;
+	GraphQLResponse<PageResponse<PagedMedia>> PageMediaResponse = new GraphQLResponse<PageResponse<PagedMedia>>();
+	PageMediaRequest PageMediaRequest = new PageMediaRequest();
+
+	// private IEnumerable<MediaSeason> AllAllowedRoles(MediaSeason season)
+	// {
+	// 	return Enum.GetValues(typeof(MediaSeason)).Cast<MediaSeason>().Where(role => season >= role);
+	// }
 
 	private void OpenMedia(int id)
 	{
 		UriHelper.NavigateTo($"/Media/{id}");
 	}
 
-	string? searchText = null;
-	bool render = false;
-	GraphQLResponse<PageResponse<PagedMedia>> PageMediaResponse = new GraphQLResponse<PageResponse<PagedMedia>>();
-	PageMediaRequest pageMediaRequest = new PageMediaRequest();
+	public async Task OnTabChanged(Tab tab)
+	{
+		MakeRequest(true, null, tab);
+	}
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		Console.WriteLine(search);
+		MakeRequest(firstRender);
+	}
+	private async void MakeRequest(bool firstRender, PageMediaRequest? pageMediaRequest = null, Tab? tab = null)
+	{
 		if (firstRender)
 		{
-			var variables = new PageMediaRequest
+			PageMediaRequest = new PageMediaRequest
 				{
 					Page = 1,
-					Search = searchText,
-					Type = MediaType.ANIME
+					Type = tab == null ? MediaType.ANIME : (MediaType)Enum.Parse(typeof(MediaType), tab.Value)
 				};
-			PageMediaResponse = await baseClient.GetPageMedia(variables);
 			render = true;
+			PageMediaResponse = await baseClient.GetPageMedia(PageMediaRequest);
 			StateHasChanged();
 		}
 	}
+	private async Task FetchPageData()
+	{
+		if (PageMediaResponse.Data.Page.PageInfo.CurrentPage < PageMediaResponse.Data.Page.PageInfo.LastPage)
+		{
+			PageMediaRequest.Page += 1;
+			var a = await baseClient.GetPageMedia(PageMediaRequest);
+			PageMediaResponse.Data.Page.Media.AddRange(a.Data.Page.Media.ToArray());
+			PageMediaResponse.Data.Page.PageInfo = a.Data.Page.PageInfo;
+		}
+	}
 }
+

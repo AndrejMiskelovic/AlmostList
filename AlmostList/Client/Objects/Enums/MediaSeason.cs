@@ -1,10 +1,16 @@
-﻿namespace AlmostList.Client.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AlmostList.Client.Models
 {
     public enum MediaSeason
     {
-        WINTER,
+		[Display(Name = "Winter")]
+		WINTER,
+		[Display(Name = "Spring")]
         SPRING,
+		[Display(Name = "Summer")]
         SUMMER,
+		[Display(Name = "Fall")]
         FALL
     }
 }

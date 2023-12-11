@@ -18,16 +18,8 @@
 	</card>
 }
 
-<label for="id">ID of media:</label>
-<input type="number" id="id" name="id" @bind="@Id">
-<button class="btn btn-primary" @onclick="OnClick">Media</button>
-<button class="btn btn-primary" @onclick="Search">Search</button>
-<button class="btn btn-primary" @onclick="Search2">PageMediaWithTabs</button>
-<button class="btn btn-primary" @onclick="Search3">PageMediaWithTabs2</button>
-<button class="btn btn-primary" @onclick="Search4">PageMediaWithTabs3</button>
-<button class="btn btn-primary" @onclick="OnClick3">User</button>
-<button class="btn btn-primary" @onclick="Calendar">Calendar</button>
 <button class="btn btn-primary" @onclick="Login">Login with AniList</button>
+<button class="btn btn-primary" @onclick="Calendar">Calendar</button>
 
 @code {
 	string url = "https://anilist.co/api/v2/oauth/authorize";
@@ -37,33 +29,10 @@
 	bool render = false;
 	GraphQLResponse<ViewerResponse> viewerResponse = new GraphQLResponse<ViewerResponse>();
 
-	private void OnClick()
-	{
-		UriHelper.NavigateTo($"/Media/{129188}");
-	}
+
 	private void Calendar()
 	{
 		UriHelper.NavigateTo($"/Calendar");
-	}
-	private void Search()
-	{
-		UriHelper.NavigateTo($"/PageMedia");
-	}
-	private void Search2()
-	{
-		UriHelper.NavigateTo($"/PageMediaWithTabs");
-	}
-	private void Search3()
-	{
-		UriHelper.NavigateTo($"/PageMediaWithTabs2");
-	}
-	private void Search4()
-	{
-		UriHelper.NavigateTo($"/PageMediaWithTabs3");
-	}
-	private void OnClick3()
-	{
-		UriHelper.NavigateTo($"/UserMain/{Id}");
 	}
 	private async void Login()
 	{
@@ -78,7 +47,7 @@
 			//         PreferredToolbarColor = Colors.Black,
 			//         PreferredControlColor = Colors.SandyBrown
 			//     };
-			
+
 			// await Browser.Default.OpenAsync(uri, options);
 
 			WebAuthenticatorResult authResult = await WebAuthenticator.Default.AuthenticateAsync(

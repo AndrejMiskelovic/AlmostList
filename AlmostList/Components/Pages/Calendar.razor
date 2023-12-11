@@ -281,15 +281,6 @@
                 <li><a title="Dec" data-value="12">Dec</a></li>
             </ul>
             <div class="clearfix"></div>
-            <ul class="weekday">
-                <li><a title="Mon" data-value="1">Mon</a></li>
-                <li><a title="Tue" data-value="2">Tue</a></li>
-                <li><a title="Wed" data-value="3">Wed</a></li>
-                <li><a title="Thu" data-value="4">Thu</a></li>
-                <li><a title="Fri" data-value="5">Fri</a></li>
-                <li><a title="Say" data-value="6">Sat</a></li>
-                <li><a title="Sun" data-value="7">Sun</a></li>
-            </ul>
             <div class="clearfix"></div>
             <ul class="days">
 
@@ -310,6 +301,7 @@
 @code {
     bool render = false;
     GraphQLResponse<PageResponse<PagedAirSchedule>> scheduleResponse = new GraphQLResponse<PageResponse<PagedAirSchedule>>();
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

@@ -1,4 +1,4 @@
-﻿@page "/PageMediaWithTabs"
+﻿@page "/PageMediatest"
 
 @using AlmostList.Client
 @using AlmostList.Client.Models
@@ -10,14 +10,16 @@
 @inject NavigationManager UriHelper
 @inject BaseClient baseClient
 
-@* <label for="id">ID of media:</label>
+<label for="id">ID of media:</label>
 <input type="number" id="id" name="id" @bind="@searchText">
 
 <label for="cars">Choose a car:</label>
- @if (search == 1)
-{ 
+@* @if (search == 1)
+{ *@
 	<select>
+	<option value="nissan">nissan epta</option>
 
+	<option value="ferrari">gazel</option>
 		@foreach (var item in AllAllowedRoles(MediaSeason.SPRING))
 		{
 			<option value="@item">@item</option>
@@ -26,9 +28,9 @@
 	{
 	...
 	}
-</select> 
-} 
- <div class='pageMedia'>
+</select>
+
+<div class='pageMedia'>
 
 @if (@render)
 {
@@ -43,82 +45,10 @@
 				</div>
 			</div>
 		</div>
-
 	}
 }
 </div>
- *@
-<script>
-	$(document).ready(function () {
-		$('ul.tabs').tabs({
-			swipeable: true,
-			responsiveThreshold: 1920
-		});
-	});
-</script>
-
-
-
-<Tabs TextFilling2="@text2" OnTabChanged="OnTabChanged">
-	<Tab Text="Tab 1" Value="Tab1">
-
-			<div class='pageMedia'>
-
-				@if (@render)
-				{
-					@foreach (var item in @PageMediaResponse.Data.Page.Media)
-					{
-
-						<div class="mediaCard" @onclick="(() => OpenMedia(item.Id))">
-							<img src="@item.CoverImage.Medium" />
-							<div class="mediaInfo">
-								<div class="title">
-									@item.Title.UserPreferred
-								</div>
-							</div>
-						</div>
-
-					}
-				}
-			</div>
-		
-	</Tab>
-	<Tab Text="Tab 2" Value="Tab2">
-		<h2>Content Tab 2</h2>
-		<p>
-			This is the content for the Tab 2. It is enabled.
-		</p>
-	</Tab>
-	<Tab Text="Tab 3" Value="Tab3">
-		<h2>Content Tab 3</h2>
-		<p>
-			This is the content for the Tab 3. It is enabled.
-		</p>
-	</Tab>
-	<Tab Text="Tab 4" Enabled="@IsEnabled" Value="Tab4">
-		<h2>Content Tab 4</h2>
-		<p>
-			This is the content for the Tab 4. It is disabled if <i>IsEnabled = false</i>
-		</p>
-	</Tab>
-</Tabs>
-
-
-
-
-
 @code {
-	public string text1 = "Text on the left";
-	public string text2 = "Text on the right";
-
-	public bool IsEnabled = false;
-
-	public async Task OnTabChanged(Tab tab)
-	{
-		text1 = $"Tab value: {tab.Value}";
-		text2 = $"Tab text: {tab.Text}";
-	}
-
 	[Parameter]
 	public int search { get; set; }
 	private IEnumerable<MediaSeason> AllAllowedRoles(MediaSeason season)
@@ -144,7 +74,7 @@
 				{
 					Page = 1,
 					Search = searchText,
-					Type = MediaType.MANGA
+					Type = MediaType.ANIME
 				};
 			PageMediaResponse = await baseClient.GetPageMedia(variables);
 			render = true;

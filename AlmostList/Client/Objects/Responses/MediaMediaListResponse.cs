@@ -10,6 +10,6 @@ namespace AlmostList.Client.Models.Responses
 	public class MediaMediaListResponse
 	{
 		public Media? Media { get; set; }
-		public MediaList? MediaList { get; set; }
+		public MediaList? MediaListEntry { get; set; }
 	}
 }

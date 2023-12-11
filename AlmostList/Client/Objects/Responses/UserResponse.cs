@@ -2,9 +2,8 @@
 
 namespace AlmostList.Client.Models.Responses
 {
-    public class UserMainResponse
+    public class UserResponse
     {
         public User? User { get; set; }
-        public Favourites? Favourites { get; set; }
     }
 }

@@ -12,15 +12,11 @@ namespace AlmostList.Client
     public class BaseClient
 	{
 		private GraphQLHttpClient _graphQLClient = new GraphQLHttpClient("https://graphql.anilist.co", new NewtonsoftJsonSerializer());
-		private int? _currentUserId = null;
+		public int? CurrentUserId { get; set; }
 
 		public void SetToken(string token) 
 		{
 			_graphQLClient.HttpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
-		}
-		public void SetCurrentUserId(int id)
-		{
-			_currentUserId = id;
 		}
 
 		public async Task<GraphQLResponse<ViewerResponse>> GetCurrentUser()
@@ -33,7 +29,8 @@ namespace AlmostList.Client
                 };
 
                 var response = await _graphQLClient.SendQueryAsync<ViewerResponse>(request);
-                return response;
+				CurrentUserId = response.Data.Viewer.Id;
+				return response;
 
             }
             catch (Exception ex)
@@ -42,7 +39,7 @@ namespace AlmostList.Client
                 throw;
             }
         }
-		public async Task<GraphQLResponse<MediaResponse>> GetMediaWithListEntry(int id)
+		public async Task<GraphQLResponse<MediaMediaListResponse>> GetMediaWithListEntry(int id)
 		{
 			try
 			{
@@ -52,7 +49,7 @@ namespace AlmostList.Client
 					Variables = new { id = id }
 				};
 
-				var response = await _graphQLClient.SendQueryAsync<MediaResponse>(request);
+				var response = await _graphQLClient.SendQueryAsync<MediaMediaListResponse>(request);
 				return response;
 
 			}
@@ -102,7 +99,7 @@ namespace AlmostList.Client
 			}
 
 		}
-		public async Task<GraphQLResponse<UserMainResponse>> GetUser(int? id, string? name)
+		public async Task<GraphQLResponse<UserResponse>> GetUser(int? id, string? name = null)
 		{
 			try
 			{
@@ -112,7 +109,25 @@ namespace AlmostList.Client
 					Variables = new { id = id, name = name}
 				};
 
-				var response = await _graphQLClient.SendQueryAsync<UserMainResponse>(request);
+				var response = await _graphQLClient.SendQueryAsync<UserResponse>(request);
+				return response;
+			}
+			catch (Exception ex)
+			{
+				throw;
+			}
+		}
+		public async Task<GraphQLResponse<UserMediaResponse>> GetUserMedia(MediaType type, int? id, string? name = null)
+		{
+			try
+			{
+				var request = new GraphQLRequest
+				{
+					Query = Queries.UserMedia,
+					Variables = new { userId = id, userName = name, mediaType = type }
+				};
+
+				var response = await _graphQLClient.SendQueryAsync<UserMediaResponse>(request);
 				return response;
 			}
 			catch (Exception ex)

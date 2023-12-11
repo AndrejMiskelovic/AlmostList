@@ -1,12 +1,20 @@
-﻿namespace AlmostList.Client.Models.Enums
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace AlmostList.Client.Models.Enums
 {
     public enum MediaStatus
     {
-        FINISHED,
+		[Display(Name = "Finished")]
+		FINISHED,
+		[Display(Name = "Releasing")]
         RELEASING,
+		[Display(Name = "Not Yet Released")]
         NOT_YET_RELEASED,
+		[Display(Name = "Cancelled")]
         CANCELLED,
-        HIATUS,
+		[Display(Name = "Hiatus")]
+        HIATUS
     }
 }
 

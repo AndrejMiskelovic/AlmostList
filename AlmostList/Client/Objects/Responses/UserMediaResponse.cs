@@ -1,11 +1,11 @@
 ﻿using AlmostList.Client.Models.Properties.User;
-using AlmostList.Components.Pages;
+using AlmostList.Client.Objects.Models.Media;
 
 namespace AlmostList.Client.Models.Responses
 {
     public class UserMediaResponse
     {
-        public Media? Media { get; set; }
-        public Favourites? Favourites { get; set; }
+        public MediaListCollection? MediaListCollection { get; set; }
+        public User? User { get; set; }
     }
 }

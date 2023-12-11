@@ -13,6 +13,5 @@ namespace AlmostList.Client.Models.Enums
 		CHARACTER,
 		STAFF,
 		STUDIO
-
 	}
 }

@@ -54,9 +54,11 @@ query ($id:Int, $statusVersion:Int, $sourceVersion:Int, $relationTypeVersion: In
         popularity
         trending
         favourites
-        nextAiringEpisode{
-          airingAt,
-          episode
+        hashtag
+        nextAiringEpisode {
+            airingAt
+            timeUntilAiring
+            episode
         }
         tags {
             id
@@ -144,12 +146,6 @@ query ($id:Int, $statusVersion:Int, $sourceVersion:Int, $relationTypeVersion: In
         }
         isFavourite
         isAdult
-        nextAiringEpisode {
-            id
-            airingAt
-            timeUntilAiring
-            episode
-        }
         externalLinks {
             id
             url
@@ -251,6 +247,7 @@ query ($id:Int, $statusVersion:Int, $sourceVersion:Int, $relationTypeVersion: In
         volumes
         countryOfOrigin
         isLicensed
+        hashtag
         source(version: $sourceVersion)
         trailer {
             id
@@ -289,9 +286,6 @@ query ($id:Int, $statusVersion:Int, $sourceVersion:Int, $relationTypeVersion: In
                 node {
                     id
                     title {
-                        romaji
-                        english
-                        native
                         userPreferred
                     }
                     type
@@ -306,36 +300,26 @@ query ($id:Int, $statusVersion:Int, $sourceVersion:Int, $relationTypeVersion: In
                 relationType(version: $relationTypeVersion)
             }
         }
-        characters(role: MAIN, sort: [ID]) {
-            nodes {
-                id
-                name {
-                    first
-                    middle
-                    last
-                    full
-                    native
-                    alternative
-                    alternativeSpoiler
+        characters(role: MAIN, sort: [ID], perPage: 3) {
+            edges{
+                role
+                node{
+                    id
+                    name{
                     userPreferred
-                }
-                image {
-                    large
-                    medium
-                }
+                    }
+                    image{
+                        large
+                        medium
+                    }
+                }  
             }
         }
-        staff(sort:[RELEVANCE, ID]) {
+        staff(sort:[RELEVANCE, ID], perPage: 3) {
             edges {
                 node {
                     id
                     name {
-                        first
-                        middle
-                        last
-                        full
-                        native
-                        alternative
                         userPreferred
                     }
                     image {
@@ -395,9 +379,6 @@ query ($id:Int, $statusVersion:Int, $sourceVersion:Int, $relationTypeVersion: In
                   	id
                     isAdult
                   	title {
-                      	romaji
-                      	english
-                      	native
                       	userPreferred
                     }
                     countryOfOrigin
@@ -757,8 +738,8 @@ query (	$id: Int, $name: String) {
 }";
 
 		public const string UserMedia = @"
-query ($userId: Int, $userName: String, $type: MediaType) {
-  MediaListCollection(userId: $userId, userName: $userName, type: $type) {
+query ($userId: Int, $userName: String, $mediaType: MediaType) {
+  MediaListCollection(userId: $userId, userName: $userName, type: $mediaType) {
     lists {
       name
       isCustomList

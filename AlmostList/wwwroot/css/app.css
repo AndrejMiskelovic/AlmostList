@@ -151,7 +151,7 @@ image {
         max-width: 80px;
     }
 
-    .mediaCard .mediaInfo {
+    .mediaCard .pageMediaInfo {
         font-size: 12px;
         height: 100%;
         padding-left: 5px;
@@ -160,7 +160,7 @@ image {
         font-weight: 450;
     }
 
-.mediaInfo .title {
+.pageMediaInfo .title {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -433,80 +433,56 @@ button {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     column-gap: 10px;
     width: calc(100vw - 16px);
-    margin: 0 8px
+    margin: 0 8px 5px 0;
 }
 
     .mediaLogo img {
         width: 50px;
     }
-﻿:root {
-    --main-color: #003270;
-    --main-disabled-color: #808080;
-    --main-text-color: #003250;
-    --main-text-disabled-color: #FCFCFC;
-}
 
 .tabs {
-    width: 100%;
-    background-color: #ffffff;
-    font-size: 12px;
+    width: 100vw;
+    /*background-color: #ffffff;*/
+    font-size: 15px;
     text-align: center;
 }
 
 .tab {
-    background-color: #FCFCFC;
-    color: var(--main-text-color);
+    /*background-color: #FCFCFC;*/
+    /* color: var(--main-text-color);*/
     padding: 15px 10px;
     min-width: 150px;
-    border: 1px solid var(--main-color);
-    cursor: pointer;
+    /*border: 1px solid var(--main-color);*/
+    /*cursor: pointer;*/
 }
 
-.tab-filling {
-    border-bottom: 1px solid var(--main-color);
-    width: 100%;
-    font-size: 10px;
-    font-weight: 400;
-}
-
-    .tab-filling.tab-filling-left {
-        text-align: left;
-        color: #000000;
-        padding-top: 15px;
+    .tab.tab-active {
+        background-color: #ffffff;
+        border-bottom: 0px solid;
+        color: #232629;
+        font-weight: bold;
     }
 
-    .tab-filling.tab-filling-right {
-        text-align: right;
-        color: #000000;
-        padding-top: 15px;
+    .tab.tab-disabled {
+        background-color: var(--main-disabled-color);
+        /*border-bottom: 1px solid var(--main-color);*/
+        color: #232629;
+        font-weight: bold;
+        /*cursor: not-allowed;*/
     }
-
-.tab.tab-active {
-    background-color: #ffffff;
-    border-bottom: 0px solid;
-    color: #30256C;
-    font-weight: bold;
-}
-
-.tab.tab-disabled {
-    background-color: var(--main-disabled-color);
-    border-bottom: 1px solid var(--main-color);
-    color: #FCFCFC;
-    font-weight: bold;
-    cursor: not-allowed;
-}
 
 .tab-container {
-    overflow:auto;
+    overflow: auto;
     display: inline-flex;
     margin-left: auto;
     margin-right: auto;
-    width: 100vw;
+    /*  width: 100vw;*/
 }
 
 .tab-content {
     padding-top: 0px;
-    text-align: left;
+    /*text-align: left;*/
 }
-
-
+#observerTarget {
+    height: 1px;
+}

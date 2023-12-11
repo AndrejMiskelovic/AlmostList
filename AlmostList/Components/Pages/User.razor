@@ -1,0 +1,166 @@
+﻿@page "/User/{Id:int}"
+
+@using AlmostList.Client
+@using AlmostList.Client.Models
+@using AlmostList.Client.Models.Enums
+@using AlmostList.Client.Models.Requests
+@using AlmostList.Client.Models.Responses
+@using AlmostList.Components.Pages.Components
+@using AlmostList.Utils
+@using GraphQL
+@using Newtonsoft.Json
+@using Sve.Blazor.InfiniteScroll.Components
+@inject BaseClient baseClient
+@inject NavigationManager UriHelper
+
+
+
+<Tabs OnTabChanged="OnTabChanged">
+	<Tab Text="Overview" Value="User">
+
+		<div class="pageMedia">
+
+			@if (@render)
+			{
+				@if (@render)
+				{
+					<div class="header">
+						<img class="bannerimage" src="@UserReponse.Data.User.BannerImage" />
+						<img class="coverImage" src="@UserReponse.Data.User.Avatar.Large" />
+						<div class="headerInfo">
+							<text class="title">@UserReponse.Data.User.Name</text>
+						</div>
+					</div>
+				}
+			}
+		</div>
+
+	</Tab>
+	<Tab Text="@MediaType.ANIME.GetDisplayName()" Value="@MediaType.ANIME.ToString()">
+		<div class="pageMedia">
+
+			@if (@render)
+			{
+				@* <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => FetchPageData()"> *@
+
+				@foreach (var list in @UserMediaResponse.Data.MediaListCollection.Lists)
+				{
+					<div>@list.Name</div>
+					@foreach (var item in list.Entries)
+					{
+						<div class="list-group-item mediaCard" @onclick="(() => OpenMedia(item.MediaId.Value))">
+							<img src="@item.Media.CoverImage.Medium" />
+							<div class="pageMediaInfo">
+								<div class="title">
+									@item.Media.Title.UserPreferred
+								</div>
+							</div>
+						</div>
+					}
+
+				}
+				@* <div id="observerTarget" /> *@
+				@* </InfiniteScroll> *@
+			}
+		</div>
+	</Tab>
+	<Tab Text="@MediaType.MANGA.GetDisplayName()" Value="@MediaType.MANGA.ToString()">
+		<div class="pageMedia">
+
+			@if (@render)
+			{
+				@* <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => FetchPageData()">
+			*@
+				@foreach (var list in @UserMediaResponse.Data.MediaListCollection.Lists)
+				{
+					<div>@list.Name</div>
+					@foreach (var item in list.Entries)
+					{
+						<div class="list-group-item mediaCard" @onclick="(() => OpenMedia(item.MediaId.Value))">
+							<img src="@item.Media.CoverImage.Medium" />
+							<div class="pageMediaInfo">
+								<div class="title">
+									@item.Media.Title.UserPreferred
+								</div>
+							</div>
+						</div>
+					}
+
+				}
+				@* <div id="observerTarget" /> *@
+				@* </InfiniteScroll> *@
+			}
+		</div>
+	</Tab>
+</Tabs>
+
+
+
+
+
+@code {
+
+	[Parameter]
+	public int Id { get; set; }
+
+	[Parameter]
+	public int search { get; set; }
+	string? searchText = null;
+	bool render = false;
+	GraphQLResponse<UserMediaResponse> UserMediaResponse = new GraphQLResponse<UserMediaResponse>();
+	PageMediaRequest PageMediaRequest = new PageMediaRequest();
+	GraphQLResponse<UserResponse> UserReponse = new GraphQLResponse<UserResponse>();
+
+
+	private void OpenMedia(int id)
+	{
+		UriHelper.NavigateTo($"/Media/{id}");
+	}
+
+	public async Task OnTabChanged(Tab tab)
+	{
+		MakeRequest(true, null, tab);
+	}
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		MakeRequest(firstRender);
+	}
+	private async void MakeRequest(bool firstRender, PageMediaRequest? pageMediaRequest = null, Tab? tab = null)
+	{
+		if (firstRender)
+		{
+			if (tab != null)
+			{
+				switch (tab.Value)
+				{
+					case "ANIME":
+						UserMediaResponse = await baseClient.GetUserMedia(MediaType.ANIME, Id);
+						break;
+					case "MANGA":
+						UserMediaResponse = await baseClient.GetUserMedia(MediaType.MANGA, Id);
+						break;
+					default:
+						UserReponse = await baseClient.GetUser(Id);
+						break;
+				}
+
+			}
+			else
+			{
+				UserReponse = await baseClient.GetUser(Id);
+			}
+			render = true;
+			StateHasChanged();
+		}
+	}
+	// private async Task FetchPageData()
+	// {
+	// 	if (PageMediaResponse.Data.Page.PageInfo.CurrentPage < PageMediaResponse.Data.Page.PageInfo.LastPage)
+	// 	{
+	// 		PageMediaRequest.Page = +1;
+	// 		var a = await baseClient.GetUserMedia(Id, );
+	// 		PageMediaResponse.Data.Page.Media.AddRange(a.Data.Page.Media.ToArray());
+	// 		PageMediaResponse.Data.Page.PageInfo = a.Data.Page.PageInfo;
+	// 	}
+		// }
+}

@@ -6,6 +6,6 @@ namespace AlmostList.Client.Models.Properties.Character
 {
     public class CharacterName : Name
     {
-		public List<string>? AlternativeSpoiler {  get; set; }
+		public List<string>? AlternativeSpoiler { get; set; }
 	}
 }

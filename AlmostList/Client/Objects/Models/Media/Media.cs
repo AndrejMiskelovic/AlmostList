@@ -30,7 +30,7 @@ namespace AlmostList.Client.Models.Properties.Media
         public CountryCode? CountryCode { get; set; }
         public bool? IsLicensed { get; set; }
         public MediaSource? Source { get; set; }
-        public string? Hashtah { get; set; }
+        public string? Hashtag { get; set; }
         public MediaTrailer? Trailer { get; set; }
         public int? UpdatedAt { get; set; }
         public MediaCoverImage? CoverImage { get; set; }
