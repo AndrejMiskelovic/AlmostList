@@ -8,6 +8,8 @@ namespace AlmostList.Utils
 	{
 		public static string GetDisplayName(this Enum enumValue)
 		{
+			if (enumValue == null)
+				return null;
 			return enumValue
 					  .GetType()
 					  .GetMember(enumValue.ToString())

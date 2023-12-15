@@ -1,0 +1,124 @@
+﻿@using AlmostList.Client
+@using AlmostList.Client.Models.Enums
+@using AlmostList.Client.Models.Properties.Common
+@using AlmostList.Client.Models.Properties.Media
+@using AlmostList.Utils
+@inject BaseClient baseClient
+
+<div>
+
+
+
+
+	<select @bind="MediaList.Status">
+		<option disabled selected value hidden>Status</option>
+
+		@foreach (MediaListStatus format in Enum.GetValues(typeof(MediaListStatus)))
+		{
+			<option value="@format">@format.GetDisplayName()</option>
+		}
+	</select>
+	<input type="number" min="0" @bind="MediaList.Score" max="10" step="0.5" />
+	<input type="number" min="0" @bind="MediaList.Progress" max="maxEpisodes" />
+
+	<InputDate ValueExpression="@(()=>startedAt)"
+			   Value="startedAt"
+			   ValueChanged="@((DateTime? value) => StartAt(value))" />
+
+	<InputDate ValueExpression="@(()=>completedAt)"
+			   Value="completedAt"
+			   ValueChanged="@((DateTime? value) => FinishAt(value))" />
+	<input type="number" min="0" @bind="MediaList.Repeat" step="1" />
+	<input type="text" @bind="MediaList.Notes" />
+
+
+	@if (MediaList.CustomLists != null)
+	{
+		@foreach (var item in MediaList.CustomLists)
+		{
+			<InputCheckbox @onchange="() =>AddCustomList(item)" />
+		}
+		<input type="checkbox" @bind="MediaList.HiddenFromStatusLists" />
+	}
+	<input type="checkbox" @bind="MediaList.Private" />
+
+	@if (MediaList.Id != null)
+	{
+		<button @onclick="Delete">Delete</button>
+	}
+
+	<button @onclick="Save">Save</button>
+
+
+
+</div>
+
+@code {
+	private DateTime? startedAt { get; set; }
+	private DateTime? completedAt { get; set; }
+	[Parameter]
+	public int? MaxEpisodes { get; set; }
+
+	[Parameter]
+	public MediaList? MediaList { get; set; }
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			StateHasChanged();
+		}
+	}
+
+
+	private async Task StartAt(DateTime? date)
+	{
+		startedAt = date;
+		if (date == null)
+		{
+			MediaList.StartedAt = null;
+			return;
+		}
+		MediaList.StartedAt = new FuzzyDate();
+		MediaList.StartedAt.Year = date.GetValueOrDefault().Year;
+		MediaList.StartedAt.Month = date.GetValueOrDefault().Month;
+		MediaList.StartedAt.Day = date.GetValueOrDefault().Day;
+	}
+	private async Task FinishAt(DateTime? date)
+	{
+		completedAt = date;
+		if (date == null)
+		{
+			MediaList.CompletedAt = null;
+			return;
+		}
+		MediaList.CompletedAt = new FuzzyDate();
+		MediaList.CompletedAt.Year = date.GetValueOrDefault().Year;
+		MediaList.CompletedAt.Month = date.GetValueOrDefault().Month;
+		MediaList.CompletedAt.Day = date.GetValueOrDefault().Day;
+	}
+	private void AddCustomList(string list)
+	{
+		if (MediaList.CustomLists == null)
+			MediaList.CustomLists = new List<string>();
+
+		if (MediaList.CustomLists.Any(x => x == list))
+			MediaList.CustomLists.Add(list);
+		else
+			MediaList.CustomLists.Remove(list);
+
+		if (MediaList.CustomLists.Count == 0)
+			MediaList.CustomLists = null;
+	}
+	private async Task Delete()
+	{
+		await baseClient.DeleteMediaEntry(MediaList.Id.Value);
+	}
+	private async Task Save()
+	{
+		await baseClient.UpdateMediaEntry(MediaList);
+		StateHasChanged();
+
+	}
+}
+

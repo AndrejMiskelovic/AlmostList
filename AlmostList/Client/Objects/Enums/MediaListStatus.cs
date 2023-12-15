@@ -4,7 +4,7 @@ namespace AlmostList.Client.Models.Enums
 {
     public enum MediaListStatus
     {
-		[Display(Name = "Current")]
+		[Display(Name = "Watching")]
         CURRENT,
 		[Display(Name = "Planning")]
         PLANNING,

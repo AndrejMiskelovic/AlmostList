@@ -17,11 +17,7 @@ namespace AlmostList
 				});
 			JsonConvert.DefaultSettings = () => new JsonSerializerSettings
 			{
-				//Formatting = Formatting.Indented,
-				//TypeNameHandling = TypeNameHandling.Objects,
-				//ContractResolver = new CamelCasePropertyNamesContractResolver(),
-				NullValueHandling = NullValueHandling.Ignore
-				//Converters = new JsonConverter[] {new StringEnumConverter()}
+				NullValueHandling = NullValueHandling.Ignore,
 			};
 
 			builder.Services.AddMauiBlazorWebView();

@@ -41,15 +41,13 @@
 
 			@if (@render)
 			{
-				@* <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => FetchPageData()"> *@
-
 				@foreach (var list in @UserMediaResponse.Data.MediaListCollection.Lists)
 				{
 					<div>@list.Name</div>
 					@foreach (var item in list.Entries)
 					{
-						<div class="list-group-item mediaCard" @onclick="(() => OpenMedia(item.MediaId.Value))">
-							<img src="@item.Media.CoverImage.Medium" />
+						<div class="mediaCard" @onclick="(() => OpenMedia(item.Media.Id))">
+							<img src="@item.Media.CoverImage.Large" />
 							<div class="pageMediaInfo">
 								<div class="title">
 									@item.Media.Title.UserPreferred
@@ -57,10 +55,7 @@
 							</div>
 						</div>
 					}
-
 				}
-				@* <div id="observerTarget" /> *@
-				@* </InfiniteScroll> *@
 			}
 		</div>
 	</Tab>
@@ -103,9 +98,6 @@
 	[Parameter]
 	public int Id { get; set; }
 
-	[Parameter]
-	public int search { get; set; }
-	string? searchText = null;
 	bool render = false;
 	GraphQLResponse<UserMediaResponse> UserMediaResponse = new GraphQLResponse<UserMediaResponse>();
 	PageMediaRequest PageMediaRequest = new PageMediaRequest();
@@ -119,6 +111,7 @@
 
 	public async Task OnTabChanged(Tab tab)
 	{
+		render = false;
 		MakeRequest(true, null, tab);
 	}
 	protected override async Task OnAfterRenderAsync(bool firstRender)

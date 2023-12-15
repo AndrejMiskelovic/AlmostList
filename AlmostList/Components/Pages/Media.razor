@@ -3,6 +3,7 @@
 @using AlmostList.Client
 @using System.Text.Json;
 @using AlmostList.Client.Models
+@using AlmostList.Client.Models.Properties.Media
 @using AlmostList.Client.Models.Requests
 @using AlmostList.Client.Models.Responses
 @using GraphQL
@@ -16,21 +17,17 @@
 
 @if (@render)
 {
-	<div id="media">
 		<div class="header">
 			<img class="bannerimage" src="@mediaResponse.Data.Media.BannerImage" />
 			<img class="coverImage" src="@mediaResponse.Data.Media.CoverImage.ExtraLarge" />
 			<div class="headerInfo">
 				<text class="title">@mediaResponse.Data.Media.Title.English </text>
-				@if (@mediaResponse.Data.Media.MediaListEntry == null)
-				{
-					<button>Add to List</button>
-				}
-				else
-				{
-					<button>@mediaResponse.Data.Media.MediaListEntry.Status.GetDisplayName()</button>
-					@* <button @onclick="(() => Delete(mediaResponse.Data.Media.MediaListEntry.Id.Value))">Delete</button> *@
-				}
+
+					<Popup @ref="popupRef">
+						<MediaEntry MediaList="@mediaList" MaxEpisodes="mediaResponse.Data.Media.Episodes"></MediaEntry>
+					</Popup>
+					<button @onclick="RedirectPage">@(mediaResponse.Data.Media.MediaListEntry == null ? "Add to List" : @mediaResponse.Data.Media.MediaListEntry.Status.GetDisplayName())</button>
+				
 			</div>
 		</div>
 		@if (mediaResponse.Data.Media.NextAiringEpisode != null)
@@ -83,6 +80,8 @@
 				
 				<TextMediaInfoRow Data="@mediaResponse.Data.Media.EndDate.TryParseToDateTime()" Text="End Date"/>
 
+				<TextMediaInfoRow Data="@Concatinate(new string[] {mediaResponse.Data.Media.Season.GetDisplayName(), mediaResponse.Data.Media.SeasonYear.ToString()})" Text="Season"/>
+
 				<TextMediaInfoRow Data="@mediaResponse.Data.Media.AverageScore.ToString()" Text="Average Score"/>
 				
 				<TextMediaInfoRow Data="@mediaResponse.Data.Media.MeanScore.ToString()" Text="Mean Score"/>
@@ -94,47 +93,16 @@
 					<TextMediaInfoRow Data="@mediaResponse.Data.Media.Favourites.ToString()" Text="Favourites"/> 
 				}
 
-				<div class="row">
-					<div>Studios</div>
-					@foreach (var item in mediaResponse.Data.Media.Studios.Edges.Where(x => x.IsMain == true).Select(x=>x.Node))
-					{
-						<div>@item.Name</div>
-					}
-				</div>
-				<div class="row">
-					<div>Producers</div>
-					@foreach (var item in mediaResponse.Data.Media.Studios.Edges.Where(x => x.IsMain == false).Select(x=>x.Node))
-					{
-						<div>@item.Name</div>
-					}
-				</div>  
-
- 				<TextMediaInfoRow Data="@mediaResponse.Data.Media.Source.GetDisplayName()" Text="Source"/>
+				<TextMediaInfoRowArray Data="@mediaResponse.Data.Media.Studios.Edges.Where(x => x.IsMain == true).Select(x=>x.Node.Name).ToList()" Text="Studios"/> 
+				<TextMediaInfoRowArray Data="@mediaResponse.Data.Media.Studios.Edges.Where(x => x.IsMain == false).Select(x=>x.Node.Name).ToList()" Text="Producers"/> 
 				
-				@if(mediaResponse.Data.Media.Genres.Count() > 0)
-				{
-					<div class="row">
-
-						<div>Genres</div>
-						@foreach (var item in mediaResponse.Data.Media.Genres)
-						{
-							<div>@item</div>
-						}
-					</div>
-				}
- 
+				<TextMediaInfoRowArray Data="@mediaResponse.Data.Media.Genres" Text="Genres"/> 
 
 				<TextMediaInfoRow Data="@mediaResponse.Data.Media.Title.Romaji.ToString()" Text="Romaji"/>
 				<TextMediaInfoRow Data="@mediaResponse.Data.Media.Title.English.ToString()" Text="English"/>
-				<TextMediaInfoRow Data="@mediaResponse.Data.Media.Title.Native.ToString()" Text="Native"/> 
-	
-				<div class="row">
-					<div>Synonyms</div>
-					@foreach (var item in mediaResponse.Data.Media.Synonyms)
-					{
-						<div>@item</div>
-					}
-				</div>
+				<TextMediaInfoRow Data="@mediaResponse.Data.Media.Title.Native.ToString()" Text="Native"/>
+				
+				<TextMediaInfoRowArray Data="@mediaResponse.Data.Media.Synonyms" Text="Synonyms"/> 
 
 			</div>
 			<div class="col">
@@ -152,7 +120,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	
 
 		<div>Relations</div>
 		<div class="mediaBanners">
@@ -236,36 +204,61 @@
 	bool render = false;
 	bool showDescription = true;
 	GraphQLResponse<MediaMediaListResponse> mediaResponse = new GraphQLResponse<MediaMediaListResponse>();
-	
+	MediaList mediaList = new MediaList();
+
+	private Popup popupRef;
+
+	private void RedirectPage()
+	{
+		// Shows the popup at the center of the screen
+		popupRef.Show();
+	}
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		if (firstRender)
 		{
 			mediaResponse = await baseClient.GetMediaWithListEntry(Id);
+			if(mediaResponse.Data.Media.MediaListEntry != null)
+			{
+				mediaList = mediaResponse.Data.Media.MediaListEntry;
+			}
+			mediaList.MediaId = mediaResponse.Data.Media.Id;
+			mediaList.UserId = baseClient.CurrentUser.Viewer.Id;
 			render = true;
 			StateHasChanged();
 		}
 	}
+	private string? imageSource;
 
+	// public Image nethod(string url)
+	// {
+	// 	Image image = new Image();
+	// 	//image.Source.FindByName(url);
+
+	// 	image.Source = new UriImageSource
+	// 	{
+	// 	    Uri = new Uri(url),
+	// 	    CacheValidity = new TimeSpan(180,0,0,0)
+	// 	};
+	// 	FileSystem.CacheDirectory.
+	// 	var newFile = Path.Combine(FileSystem.CacheDirectory, url);
+	//        var imageBytes  = File.ReadAllBytes(newFile);
+	//        imageSource = Convert.ToBase64String(imageBytes);
+	//        imageSource = string.Format("data:image/png;base64,{0}", imageSource);
+
+	// 	return image;
+	// }
 	private void OpenMedia(int id)
 	{
 		UriHelper.NavigateTo($"/Media/{id}", true);
 	}
-
-	private DateTime StringToDateTime(int year, int month, int day)
-	{
-		return new DateTime(year, month, day);
-	}
-
+	private string Concatinate(string[] strings) => string.Join(" ", strings);
 	private void ToggleCollapse(ref bool value) => value = !value;
 
 	private string PrepareYoutubeLink()
 	{
 		return $"https://www.youtube.com/embed/{mediaResponse.Data.Media.Trailer.Id}";
 	}
-	private async void Delete(int id)
-	{
-		await baseClient.DeleteMediaEntry(id);
-	}
+
 
 }

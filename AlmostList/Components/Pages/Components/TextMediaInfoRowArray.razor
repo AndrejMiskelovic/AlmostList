@@ -2,18 +2,23 @@
 @using System.Globalization
 
 <CascadingValue Value="this">
-	@if (!string.IsNullOrEmpty(Data))
+
+	@if (Data.Count > 0)
 	{
 		<div class="row">
 			<div>@Text</div>
-			<div>@Data</div>
+			@foreach (var item in Data)
+			{
+				<div>@item</div>
+			}
 		</div>
+
 	}
 </CascadingValue>
+
 
 @code {
 	[Parameter] public string? Text { get; set; }
 	[Parameter] public RenderFragment? ChildContent { get; set; }
-	string? _data { get; set; } 
-	[Parameter] public string? Data { get => _data; set { _data = value.Trim(); } }
+	[Parameter] public List<string>? Data { get; set; }
 }

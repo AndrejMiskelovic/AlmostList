@@ -491,7 +491,7 @@ query (  $page:Int,
   $seasonYear: Int,
   $startDateGreater: FuzzyDateInt,
   $startDateLesser: FuzzyDateInt,
-  $isAdult: Boolean,
+  $isAdult: Boolean = false,
   $onList: Boolean,
   $genreIn: [String],
   $genreNotIn: [String],
@@ -1008,10 +1008,11 @@ query($page: Int,
           native
           userPreferred
         }
-        countryOfOrigin
-        season
-        seasonYear
-        bannerImage
+        coverImage {
+            extraLarge
+            large
+            medium
+        }
         isAdult
         externalLinks {
 		  id
@@ -1073,7 +1074,73 @@ mutation ($id: Int) {
     }
 }";
 
-        public const string UpdateUser = @"
+		public const string UpdateMediaEntry = @"
+mutation ($id: Int,
+    $mediaId: Int,
+    $status: MediaListStatus,
+    $score: Float,
+    $progress: Int,
+    $progressVolumes: Int,
+    $repeat: Int,
+    $priority: Int,
+    $isPrivate: Boolean,
+    $notes: String,
+    $hiddenFromStatusLists: Boolean,
+    $customLists: [String],
+    $advancedScores: [Float],
+    $startedAt: FuzzyDateInput,
+    $completedAt: FuzzyDateInput
+) {
+    SaveMediaListEntry(
+        id: $id,
+        mediaId: $mediaId,
+        status: $status,
+        score: $score,
+        progress: $progress,
+        progressVolumes: $progressVolumes,
+        repeat: $repeat,
+        priority: $priority,
+        private: $isPrivate,
+        notes: $notes,
+        hiddenFromStatusLists: $hiddenFromStatusLists,
+        customLists: $customLists,
+        advancedScores: $advancedScores,
+        startedAt: $startedAt,
+        completedAt: $completedAt
+    ) {
+        id
+        status
+        score
+        progress
+        progressVolumes
+        repeat
+        priority
+        private
+        notes
+        hiddenFromStatusLists
+        customLists
+        advancedScores
+        startedAt {
+            year
+            month
+            day
+        }
+        completedAt {
+            year
+            month
+            day
+        }
+        updatedAt
+        createdAt
+        media {
+            id
+            type
+            isFavourite
+        }
+    }
+}";
+
+		public const string UpdateUser = @"
 mutation ($titleLanguage:UserTitleLanguage,
   $displayAdultContent:Boolean,
   $airingNotifications:Boolean,

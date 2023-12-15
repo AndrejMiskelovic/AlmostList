@@ -2,13 +2,13 @@
 
 namespace AlmostList.Client.Models.Requests
 {
-	public class PageMediaRequest
+	public class PageMediaRequest 
     {
-        public int Page { get; set; }
+        public int Page { get; set; } = 1;
         public int? StatusVersion { get; set; } = 2;
         public int? SourceVersion { get; set; } = 2;
         public string? Search { get; set; }
-        public MediaType Type { get; set; } = MediaType.ANIME;
+        public MediaType Type { get; set; } 
         public List<MediaSort> Sort { get; set; } = new List<MediaSort>() { MediaSort.TRENDING_DESC};
         public List<MediaFormat>? FormatIn { get; set; }
         public List<MediaStatus>? StatusIn { get; set; }

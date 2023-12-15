@@ -15,8 +15,9 @@
 
 
 <Tabs OnTabChanged="OnTabChanged">
+	<Search PageMediaRequest="PageMediaRequest"></Search>
 	<Tab Text="@MediaType.ANIME.GetDisplayName()" Value="@MediaType.ANIME.ToString()">
-
+		<button @onclick="() => Search(MediaType.ANIME)"> </button>
 		<div class="pageMedia">
 
 			@if (@render)
@@ -25,8 +26,8 @@
 
 					@foreach (var item in @PageMediaResponse.Data.Page.Media)
 					{
-						<div class="list-group-item mediaCard" @onclick="(() => OpenMedia(item.Id))">
-							<img src="@item.CoverImage.Medium" />
+						<div class="mediaCard" @onclick="(() => OpenMedia(item.Id))">
+							<img src="@item.CoverImage.Large" />
 							<div class="pageMediaInfo">
 								<div class="title">
 									@item.Title.UserPreferred
@@ -49,8 +50,8 @@
 
 					@foreach (var item in @PageMediaResponse.Data.Page.Media)
 					{
-						<div class="list-group-item mediaCard" @onclick="(() => OpenMedia(item.Id))">
-							<img src="@item.CoverImage.Medium" />
+						<div class="mediaCard" @onclick="(() => OpenMedia(item.Id))">
+							<img src="@item.CoverImage.Large" />
 							<div class="pageMediaInfo">
 								<div class="title">
 									@item.Title.UserPreferred
@@ -80,11 +81,13 @@
 	GraphQLResponse<PageResponse<PagedMedia>> PageMediaResponse = new GraphQLResponse<PageResponse<PagedMedia>>();
 	PageMediaRequest PageMediaRequest = new PageMediaRequest();
 
-	// private IEnumerable<MediaSeason> AllAllowedRoles(MediaSeason season)
-	// {
-	// 	return Enum.GetValues(typeof(MediaSeason)).Cast<MediaSeason>().Where(role => season >= role);
-	// }
-
+	private void Search(MediaType type)
+	{
+		PageMediaRequest.Type = type;
+		PageMediaRequest.Page = 1;
+		render = false;
+		MakeRequest();
+	}
 	private void OpenMedia(int id)
 	{
 		UriHelper.NavigateTo($"/Media/{id}");
@@ -92,26 +95,23 @@
 
 	public async Task OnTabChanged(Tab tab)
 	{
-		MakeRequest(true, null, tab);
+		PageMediaRequest = new PageMediaRequest();
+		PageMediaRequest.Type = tab == null ? MediaType.ANIME : (MediaType)Enum.Parse(typeof(MediaType), tab.Value);
+		render = false;
+		MakeRequest();
 	}
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		MakeRequest(firstRender);
-	}
-	private async void MakeRequest(bool firstRender, PageMediaRequest? pageMediaRequest = null, Tab? tab = null)
-	{
 		if (firstRender)
-		{
-			PageMediaRequest = new PageMediaRequest
-				{
-					Page = 1,
-					Type = tab == null ? MediaType.ANIME : (MediaType)Enum.Parse(typeof(MediaType), tab.Value)
-				};
-			render = true;
-			PageMediaResponse = await baseClient.GetPageMedia(PageMediaRequest);
-			StateHasChanged();
-		}
+			MakeRequest();
 	}
+	private async void MakeRequest()
+	{
+		PageMediaResponse = await baseClient.GetPageMedia(PageMediaRequest);
+		render = true;
+		StateHasChanged();
+	}
+
 	private async Task FetchPageData()
 	{
 		if (PageMediaResponse.Data.Page.PageInfo.CurrentPage < PageMediaResponse.Data.Page.PageInfo.LastPage)

@@ -20,7 +20,7 @@ namespace AlmostList.Client.Models.Properties.Media
         public bool? Private { get; set; }
         public string? Notes { get; set; }
         public bool? HiddenFromStatusLists { get; set; }
-        public List<bool>? CustomLists { get; set; }
+        public List<string>? CustomLists { get; set; }
         /// <summary>
         /// Json
         /// </summary>

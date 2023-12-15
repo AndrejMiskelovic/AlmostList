@@ -1,55 +1,66 @@
 ﻿@page "/"
 @using AlmostList.Client
 @using AlmostList.Client.Models.Enums
+@using AlmostList.Client.Models.Properties.Media
 @using AlmostList.Client.Objects.Responses
+@using AlmostList.Components.Pages.Components
 @using GraphQL
 @inject NavigationManager UriHelper
 @inject BaseClient baseClient
 
-@if (@render)
+@if (render)
 {
 	<card>
 		<div class="header">
-			<img class="coverImage" src="@viewerResponse.Data.Viewer.Avatar.Medium" />
+			<img class="coverImage" src="@viewerResponse.Viewer.Avatar.Medium" />
 			<div class="headerInfo">
-				<text class="title">@viewerResponse.Data.Viewer.Name</text>
+				<text class="title">@viewerResponse.Viewer.Name</text>
 			</div>
 		</div>
 	</card>
-}
+	<button class="btn btn-primary" @onclick="Logout">Logout</button>
 
-<button class="btn btn-primary" @onclick="Login">Login with AniList</button>
+}
+@if (!render)
+{
+	<button class="btn btn-primary" @onclick="Login">Login with AniList</button>
+}
 <button class="btn btn-primary" @onclick="Calendar">Calendar</button>
 
-@code {
-	string url = "https://anilist.co/api/v2/oauth/authorize";
-	int clientId = 15602;
-	int? Id { get; set; }
-	int? type { get; set; }
-	bool render = false;
-	GraphQLResponse<ViewerResponse> viewerResponse = new GraphQLResponse<ViewerResponse>();
 
+
+
+@code {
+
+	int clientId = 15602;
+	bool render = false;
+	string? oauthToken;
+	ViewerResponse viewerResponse = new ViewerResponse();
+	MediaList mediaList = new MediaList();
+	public override async Task SetParametersAsync(ParameterView parameters)
+	{
+		string oauthToken = await SecureStorage.Default.GetAsync("oauth_token");
+		if (oauthToken != null)
+		{
+			if (baseClient.CurrentUser == null)
+			{
+				baseClient.SetToken(oauthToken);
+				var response = await baseClient.GetCurrentUser();
+			}
+			viewerResponse = baseClient.CurrentUser;
+			render = true;
+		}
+		StateHasChanged();
+	}
 
 	private void Calendar()
 	{
 		UriHelper.NavigateTo($"/Calendar");
 	}
-	private async void Login()
+	public async void Login()
 	{
-
 		try
 		{
-			// Uri uri = new Uri($"https://anilist.co/api/v2/oauth/authorize?client_id={clientId}&response_type=token");
-			// BrowserLaunchOptions options = new BrowserLaunchOptions()
-			//     {
-			//         LaunchMode = BrowserLaunchMode.SystemPreferred,
-			//         TitleMode = BrowserTitleMode.Show,
-			//         PreferredToolbarColor = Colors.Black,
-			//         PreferredControlColor = Colors.SandyBrown
-			//     };
-
-			// await Browser.Default.OpenAsync(uri, options);
-
 			WebAuthenticatorResult authResult = await WebAuthenticator.Default.AuthenticateAsync(
 				new WebAuthenticatorOptions()
 					{
@@ -59,12 +70,30 @@
 					});
 
 			baseClient.SetToken(authResult?.AccessToken);
+			await SecureStorage.Default.SetAsync("oauth_token", authResult?.AccessToken);
 
 
-			viewerResponse = await baseClient.GetCurrentUser();
+			var response = await baseClient.GetCurrentUser();
+			viewerResponse = response.Data;
 			render = true;
 			StateHasChanged();
 
+		}
+		catch (Exception ex)
+		{
+			// An unexpected error occurred. No browser may be installed on the device.
+		}
+	}
+	public async void Logout()
+	{
+		try
+		{
+			SecureStorage.Default.Remove("oauth_token");
+
+			baseClient.RemoveToken();
+			viewerResponse = null;
+			render = false;
+			StateHasChanged();
 		}
 		catch (Exception ex)
 		{

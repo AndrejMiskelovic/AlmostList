@@ -1,4 +1,5 @@
 ﻿using AlmostList.Client.Models.Enums;
+using AlmostList.Client.Models.Properties.Media;
 using AlmostList.Client.Models.Requests;
 using AlmostList.Client.Models.Responses;
 using AlmostList.Client.Objects.Requests;
@@ -12,11 +13,15 @@ namespace AlmostList.Client
     public class BaseClient
 	{
 		private GraphQLHttpClient _graphQLClient = new GraphQLHttpClient("https://graphql.anilist.co", new NewtonsoftJsonSerializer());
-		public int? CurrentUserId { get; set; }
+		public ViewerResponse? CurrentUser { get; set; }
 
 		public void SetToken(string token) 
 		{
 			_graphQLClient.HttpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+		}
+		public void RemoveToken()
+		{
+			_graphQLClient.HttpClient.DefaultRequestHeaders.Remove("Authorization");
 		}
 
 		public async Task<GraphQLResponse<ViewerResponse>> GetCurrentUser()
@@ -29,7 +34,7 @@ namespace AlmostList.Client
                 };
 
                 var response = await _graphQLClient.SendQueryAsync<ViewerResponse>(request);
-				CurrentUserId = response.Data.Viewer.Id;
+				CurrentUser = response.Data;
 				return response;
 
             }
@@ -175,13 +180,14 @@ namespace AlmostList.Client
 			}
 
 		}
-		public async Task<GraphQLResponse<PageResponse<PagedAirSchedule>>> GetPageAiringSchedule(int page, int airingAtGreater, int airingArLeasser)
+		public async Task<GraphQLResponse<PageResponse<PagedAirSchedule>>> GetPageAiringSchedule(int greater, int lesser, int? page = 1)
 		{
 			try
 			{
 				var request = new GraphQLRequest
 				{
-					Query = Queries.GenresAndTagsCollection
+					Query = Queries.PageAiringSchedule,
+					Variables = new {page = page, airingAtGreater = greater, airingAtLesser = lesser }
 				};
 
 				var response = await _graphQLClient.SendQueryAsync<PageResponse<PagedAirSchedule>>(request);
@@ -302,6 +308,23 @@ namespace AlmostList.Client
 				{
 					Query = Queries.DeleteMediaEntry,
 					Variables = new { id = id}
+				};
+
+				var response = await _graphQLClient.SendMutationAsync<Task>(request);
+			}
+			catch (Exception ex)
+			{
+				throw;
+			}
+		}
+		public async Task UpdateMediaEntry(MediaList mediaList)
+		{
+			try
+			{
+				var request = new GraphQLRequest
+				{
+					Query = Queries.UpdateMediaEntry,
+					Variables = mediaList
 				};
 
 				var response = await _graphQLClient.SendMutationAsync<Task>(request);
