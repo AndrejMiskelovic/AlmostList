@@ -2,12 +2,13 @@
 	var showClass = IsVisible ? "d-block" : "d-none";
 }
 
-<div class="toast-container p-3 @showClass" data-bs-autohide="true" data-bs-delay="5000">
-	<div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-		<div class="toast-header">
-			<button type="button" class="btn-close" aria-label="Close" @onclick="Close"></button>
+<div class="popupOverlay @showClass" @onclick="Close"></div>
+<div class="popupContainer @showClass" data-bs-autohide="true" data-bs-delay="5000">
+	<div class="popupWrapper" role="alert" aria-live="assertive" aria-atomic="true">
+		<div class="popupHeader">
+			<button type="button" class="popupClose" @onclick="Close">x</button>
 		</div>
-		<div class="toast-body">
+		<div class="popupBody">
 			@ChildContent
 		</div>
 	</div>

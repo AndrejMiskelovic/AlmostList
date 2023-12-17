@@ -18,7 +18,7 @@
 <Tabs OnTabChanged="OnTabChanged">
 	<Tab Text="Overview" Value="User">
 
-		<div class="pageMedia">
+		<div class="">
 
 			@if (@render)
 			{
@@ -29,6 +29,73 @@
 						<img class="coverImage" src="@UserReponse.Data.User.Avatar.Large" />
 						<div class="headerInfo">
 							<text class="title">@UserReponse.Data.User.Name</text>
+							@* <text class="donatorBadge">@UserReponse.Data.User.DonatorBadge</text> *@
+						</div>
+					</div>
+					<div class="userAbout">
+						@UserReponse.Data.User.About
+					</div>
+					<div class="userStatistics">
+						<div class="statsTable">
+							<div>
+								@UserReponse.Data.User.Statistics.Anime.Count
+								<label>Total Anime</label>
+							</div>
+							<div>
+								@String.Format("{0:0.00}", TimeSpan.FromMinutes(UserReponse.Data.User.Statistics.Anime.MinutesWatched).TotalDays)
+								<label>Days watched</label>
+							</div>
+							<div>
+								@UserReponse.Data.User.Statistics.Anime.EpisodesWatched
+								<label>Episodes Watched</label>
+							</div>
+						</div>
+						<div class="statsTable">
+							<div>
+								@UserReponse.Data.User.Statistics.Manga.Count
+								<label>Total Manga</label>
+							</div>
+							<div>
+								@UserReponse.Data.User.Statistics.Manga.ChaptersRead
+								<label>Chapters Read</label>
+							</div>
+							<div>
+								@UserReponse.Data.User.Statistics.Manga.VolumesRead
+								<label>Volumes Read</label>
+							</div>
+						</div>
+					</div>
+					<div class="userTitles">
+						<div class="typeName"><input type="checkbox"> Anime <div class="arrow">➤</div></div>
+						<div class="titleWrapper">
+
+							@foreach (var item in @UserReponse.Data.User.Favourites.Anime.Nodes)
+							{
+								<div class="mediaCard">
+									<img src="@item.CoverImage.Large" />
+									<div class="pageMediaInfo">
+										<div class="title">
+											@item.Title.UserPreferred
+										</div>
+									</div>
+								</div>
+							}
+						</div>
+					</div>
+					<div class="userTitles">
+						<div class="typeName"><input type="checkbox"> Manga <div class="arrow">➤</div></div>
+						<div class="titleWrapper">
+							@foreach (var item in @UserReponse.Data.User.Favourites.Manga.Nodes)
+							{
+								<div class="mediaCard">
+									<img src="@item.CoverImage.Large" />
+									<div class="pageMediaInfo">
+										<div class="title">
+											@item.Title.UserPreferred
+										</div>
+									</div>
+								</div>
+							}
 						</div>
 					</div>
 				}
@@ -36,56 +103,62 @@
 		</div>
 
 	</Tab>
+
+
 	<Tab Text="@MediaType.ANIME.GetDisplayName()" Value="@MediaType.ANIME.ToString()">
-		<div class="pageMedia">
 
 			@if (@render)
 			{
 				@foreach (var list in @UserMediaResponse.Data.MediaListCollection.Lists)
 				{
-					<div>@list.Name</div>
-					@foreach (var item in list.Entries)
-					{
-						<div class="mediaCard" @onclick="(() => OpenMedia(item.Media.Id))">
-							<img src="@item.Media.CoverImage.Large" />
-							<div class="pageMediaInfo">
-								<div class="title">
-									@item.Media.Title.UserPreferred
+					<div class="typeWrapper">
+						<div class="typeName"><input type="checkbox"> @list.Name <div class="arrow">➤</div></div>
+						<div class="typeCards">
+							@foreach (var item in list.Entries)
+							{
+								<div class="mediaCard" @onclick="(() => OpenMedia(item.Media.Id))">
+									<img src="@item.Media.CoverImage.Large" />
+									<div class="pageMediaInfo">
+										<div class="title">
+											@item.Media.Title.UserPreferred
+										</div>
+									</div>
 								</div>
-							</div>
+							}
 						</div>
-					}
+					</div>
 				}
 			}
-		</div>
+		
 	</Tab>
+
+
 	<Tab Text="@MediaType.MANGA.GetDisplayName()" Value="@MediaType.MANGA.ToString()">
-		<div class="pageMedia">
 
 			@if (@render)
 			{
-				@* <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => FetchPageData()">
-			*@
 				@foreach (var list in @UserMediaResponse.Data.MediaListCollection.Lists)
 				{
-					<div>@list.Name</div>
-					@foreach (var item in list.Entries)
-					{
-						<div class="list-group-item mediaCard" @onclick="(() => OpenMedia(item.MediaId.Value))">
-							<img src="@item.Media.CoverImage.Medium" />
-							<div class="pageMediaInfo">
-								<div class="title">
-									@item.Media.Title.UserPreferred
-								</div>
-							</div>
-						</div>
-					}
+					<div class="typeWrapper">
+						<div class="typeName"><input type="checkbox"> @list.Name <div class="arrow">➤</div></div>
+						<div class="typeCards">
 
+							@foreach (var item in list.Entries)
+							{
+								<div class="mediaCard" @onclick="(() => OpenMedia(item.MediaId.Value))">
+									<img src="@item.Media.CoverImage.Large" />
+									<div class="pageMediaInfo">
+										<div class="title">
+											@item.Media.Title.UserPreferred
+										</div>
+									</div>
+								</div>
+							}
+						</div>
+					</div>
 				}
-				@* <div id="observerTarget" /> *@
-				@* </InfiniteScroll> *@
 			}
-		</div>
+		
 	</Tab>
 </Tabs>
 
@@ -98,11 +171,11 @@
 	[Parameter]
 	public int Id { get; set; }
 
+
 	bool render = false;
 	GraphQLResponse<UserMediaResponse> UserMediaResponse = new GraphQLResponse<UserMediaResponse>();
 	PageMediaRequest PageMediaRequest = new PageMediaRequest();
 	GraphQLResponse<UserResponse> UserReponse = new GraphQLResponse<UserResponse>();
-
 
 	private void OpenMedia(int id)
 	{

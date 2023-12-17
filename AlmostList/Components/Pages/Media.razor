@@ -15,7 +15,7 @@
 @inject NavigationManager UriHelper
 
 
-@if (@render)
+@if (render)
 {
 		<div class="header">
 			<img class="bannerimage" src="@mediaResponse.Data.Media.BannerImage" />
@@ -26,7 +26,7 @@
 					<Popup @ref="popupRef">
 						<MediaEntry MediaList="@mediaList" MaxEpisodes="mediaResponse.Data.Media.Episodes"></MediaEntry>
 					</Popup>
-					<button @onclick="RedirectPage">@(mediaResponse.Data.Media.MediaListEntry == null ? "Add to List" : @mediaResponse.Data.Media.MediaListEntry.Status.GetDisplayName())</button>
+					<button @onclick="PopupClick">@(mediaResponse.Data.Media.MediaListEntry == null ? "Add to List" : @mediaResponse.Data.Media.MediaListEntry.Status.GetDisplayName())</button>
 				
 			</div>
 		</div>
@@ -57,10 +57,10 @@
 			</div>
 		</div>
 		
-		<div>Description</div>
-		<div @onclick="(() => ToggleCollapse(ref showDescription))" class="@(showDescription ? "" : "show") mediaPseudoCollapse">@((MarkupString)mediaResponse.Data.Media.Description) <div class="arrow">\/</div></div>
+		<div class="mediaInfoLabel">Description</div>
+		<div @onclick="(() => ToggleCollapse(ref showDescription))" class="@(showDescription ? "" : "show") mediaPseudoCollapse">@((MarkupString)mediaResponse.Data.Media.Description) <div class="arrow">➤</div></div>
 
-		<div>Info</div>
+		<div class="mediaInfoLabel">Info</div>
 		<div class="mediaInfo">
 			<div class="col">
 
@@ -122,7 +122,7 @@
 		</div>
 	
 
-		<div>Relations</div>
+		<div class="mediaInfoLabel">Relations</div>
 		<div class="mediaBanners">
 		<div class="mediaBannersScroll">
 
@@ -137,7 +137,7 @@
 		</div>
 		</div>
 
-		<div>Characters</div>
+		<div class="mediaInfoLabel">Characters</div>
 		<div class="mediaStaffs">
 
 			@foreach (var item in mediaResponse.Data.Media.Characters.Edges.Take(3))
@@ -151,7 +151,7 @@
 				<div class="staffMore">See more</div>
 		</div>
 			
-		<div>Staff</div>
+		<div class="mediaInfoLabel">Staff</div>
 		<div class="mediaStaffs">
 
 			@foreach (var item in mediaResponse.Data.Media.Staff.Edges.Take(3))
@@ -167,7 +167,7 @@
 		
 		@* <iframe src="@PrepareYoutubeLink()"/> *@
 
-	<div>Recommendations</div>
+	<div class="mediaInfoLabel">Recommendations</div>
 	<div class="mediaRecommendations">
 
 		<div class="mediaRecommendationsScroll">
@@ -203,12 +203,12 @@
 	public int Id { get; set; }
 	bool render = false;
 	bool showDescription = true;
-	GraphQLResponse<MediaMediaListResponse> mediaResponse = new GraphQLResponse<MediaMediaListResponse>();
+	GraphQLResponse<MediaResponse> mediaResponse = new GraphQLResponse<MediaResponse>();
 	MediaList mediaList = new MediaList();
 
 	private Popup popupRef;
 
-	private void RedirectPage()
+	private void PopupClick()
 	{
 		// Shows the popup at the center of the screen
 		popupRef.Show();

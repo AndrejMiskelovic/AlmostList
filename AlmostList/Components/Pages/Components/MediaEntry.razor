@@ -6,48 +6,81 @@
 @inject BaseClient baseClient
 
 <div>
+		<div class="popupInputGroup">
+		<div class="mediaPopupLabel">Status</div>
+		<select @bind="MediaList.Status">
+			<option disabled selected value hidden>Status</option>
+
+			@foreach (MediaListStatus format in Enum.GetValues(typeof(MediaListStatus)))
+			{
+				<option value="@format">@format.GetDisplayName()</option>
+			}
+		</select>
+		</div>
 
 
+	<div class="popupGroupedGroup">
+		<div class="popupInputGroup">
+		<div class="mediaPopupLabel">Score</div>
+		<input type="number" min="0" @bind="MediaList.Score" max="10" step="0.5" />
+		</div>
 
-
-	<select @bind="MediaList.Status">
-		<option disabled selected value hidden>Status</option>
-
-		@foreach (MediaListStatus format in Enum.GetValues(typeof(MediaListStatus)))
-		{
-			<option value="@format">@format.GetDisplayName()</option>
-		}
-	</select>
-	<input type="number" min="0" @bind="MediaList.Score" max="10" step="0.5" />
+	<div class="popupInputGroup">
+	<div class="mediaPopupLabel">Progress</div>
 	<input type="number" min="0" @bind="MediaList.Progress" max="maxEpisodes" />
+	</div>
+	</div>
 
+	<div class="popupGroupedGroup">
+	<div class="popupInputGroup">
+	<div class="mediaPopupLabel">Started At</div>
 	<InputDate ValueExpression="@(()=>startedAt)"
 			   Value="startedAt"
 			   ValueChanged="@((DateTime? value) => StartAt(value))" />
+	</div>
 
+	<div class="popupInputGroup">
+	<div class="mediaPopupLabel">Completed At</div>
 	<InputDate ValueExpression="@(()=>completedAt)"
 			   Value="completedAt"
 			   ValueChanged="@((DateTime? value) => FinishAt(value))" />
+	</div>
+	</div>
+
+	<div class="popupInputGroup">
+	<div class="mediaPopupLabel">Re-watched</div>
 	<input type="number" min="0" @bind="MediaList.Repeat" step="1" />
-	<input type="text" @bind="MediaList.Notes" />
+	</div>
+
+	<div class="popupInputGroup">
+	<div class="mediaPopupLabel">Note</div>
+	<input type="note" @bind="MediaList.Notes" />
+	</div>
 
 
 	@if (MediaList.CustomLists != null)
 	{
 		@foreach (var item in MediaList.CustomLists)
 		{
+			<div class="mediaPopupLabel">@item</div>
 			<InputCheckbox @onchange="() =>AddCustomList(item)" />
 		}
+		<div class="mediaPopupLabel">Hidden from status lists</div>
 		<input type="checkbox" @bind="MediaList.HiddenFromStatusLists" />
 	}
-	<input type="checkbox" @bind="MediaList.Private" />
+	<div class="flexpopupGroup">
 
+	<div class="mediaPopupLabel">Private</div>
+	<input type="checkbox" @bind="MediaList.Private" />
+	</div>
+
+	<div class="popupBtnGroup"> 
 	@if (MediaList.Id != null)
 	{
-		<button @onclick="Delete">Delete</button>
+			<button class ='popupBtn popupDelete' @onclick="Delete">Delete</button>
 	}
-
-	<button @onclick="Save">Save</button>
+	<button class='popupBtn' @onclick="Save">Save</button>
+	</div>
 
 
 

@@ -15,9 +15,15 @@
 
 
 <Tabs OnTabChanged="OnTabChanged">
-	<Search PageMediaRequest="PageMediaRequest"></Search>
+	<Popup @ref="popupRef">
+		<Search PageMediaRequest="PageMediaRequest"></Search>
+	</Popup>
 	<Tab Text="@MediaType.ANIME.GetDisplayName()" Value="@MediaType.ANIME.ToString()">
-		<button @onclick="() => Search(MediaType.ANIME)"> </button>
+		<div class="searchWrapper">
+			<input class="searchInput" @bind="PageMediaRequest.Search" />
+			<button @onclick="PopupClick" class="searchBtn">Filters</button>
+			<button class="searchBtn" @onclick="() => Search(MediaType.ANIME)">Search </button>
+		</div>
 		<div class="pageMedia">
 
 			@if (@render)
@@ -80,6 +86,13 @@
 	GraphQLResponse<PageResponse<PagedMedia>> PageMediaResponse = new GraphQLResponse<PageResponse<PagedMedia>>();
 	PageMediaRequest PageMediaRequest = new PageMediaRequest();
 
+	private Popup popupRef;
+
+	private void PopupClick()
+	{
+		// Shows the popup at the center of the screen
+		popupRef.Show();
+	}
 	private void Search(MediaType type)
 	{
 		PageMediaRequest.Type = type;

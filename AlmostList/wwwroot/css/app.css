@@ -5,7 +5,8 @@
     width: 100vw;
     padding: 0;
     background-color: #232629;
-    color: white;
+    color: orange;
+    user-select: none;
 }
 
 a, .btn-link {
@@ -167,6 +168,31 @@ image {
         padding-top: 10%;
     }
 
+.userTitles {
+    max-width: 100vw;
+    display: flex;
+    flex-direction: column;
+}
+
+    .userTitles .titleWrapper {
+        max-width: 100vw;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        height: auto;
+        gap: 4px;
+    }
+
+    .userTitles .mediaCard {
+        width: calc(33vw - 2px);
+        margin: 0;
+    }
+
+    .userTitles .mediaCard img {
+        object-fit: cover;
+        width: 100%;
+        height: 205px;
+    }
+
 .pageMediaInfo .title {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -223,10 +249,11 @@ image {
         position: absolute;
         top: 0;
         right: 5px;
+        transform: rotate(90deg)
     }
 
     .mediaPseudoCollapse.show .arrow {
-        transform: rotate(180deg);
+        transform: rotate(270deg);
     }
 
 button {
@@ -276,6 +303,7 @@ button {
     padding: 0px 5px;
     display: inline-flex;
     margin: 8px;
+    color: #6d8398;
 }
 
 
@@ -293,7 +321,7 @@ button {
             }
 
                 .mediaInfo .col .row div:first-child {
-                    color: white;
+                    color: orange;
                 }
 
         .mediaInfo .col:last-of-type .row div:not(:first-of-type) {
@@ -302,7 +330,7 @@ button {
         }
 
             .mediaInfo .col:last-of-type .row div:not(:first-of-type) div {
-                color: white;
+                color: #6d8398;
             }
 
 .mediaBanners {
@@ -340,11 +368,13 @@ button {
     .mediaBanners .mediaBanner .mediaBannerTitle {
         width: 100%;
         text-align: left;
+        color: white;
     }
 
     .mediaBanners .mediaBanner .mediaBannerType {
         width: 100%;
         text-align: left;
+        color: #6d8398;
     }
 
 .mediaStaffs {
@@ -477,6 +507,16 @@ button {
     margin-right: auto;
 }
 
+    .tab-container .tab {
+        width: 50vw;
+        background-color: rgba(0, 0, 0, 0.4);
+        color: orange;
+    }
+
+        .tab-container .tab:hover {
+            background-color: #232629;
+        }
+
 .tab-content {
     padding-top: 0px;
 }
@@ -484,6 +524,30 @@ button {
 #observerTarget {
     height: 1px;
 }
+
+.listWrapper {
+    position: fixed;
+    bottom: 100px;
+    transform: translateX(-50%);
+    left: 50%;
+    text-align: center;
+    color: darkorange;
+    background: rgba(0, 0, 0, 0.7);
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0px 0px 3px black;
+    outline: none;
+    padding: 0px 6px;
+    display: flex;
+    gap: 4px;
+}
+
+    .listWrapper input#listCheckbox[type=checkbox] {
+        border: 1px solid #232629;
+        background-color: #232629;
+        color: #232629;
+    }
 
 .calendarInput {
     position: fixed;
@@ -518,3 +582,270 @@ button {
         font-size: 9px;
         text-align: left
     }
+
+
+.searchWrapper {
+    display: flex;
+    width: 100vw;
+    justify-content: space-evenly;
+    padding: 8px 0;
+}
+
+.searchBtn {
+    background-color: rgba(0, 0, 0, 0.4);
+    color: orange;
+    border: none;
+    appearance: none;
+    height: 35px;
+    border-radius: 4px;
+    padding: 0px 8px;
+}
+
+    .searchBtn:active {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+
+.searchInput {
+    outline: none;
+    appearance: none;
+    border-radius: 4px;
+}
+
+.popupContainer {
+    background-color: #232629;
+    box-shadow: 0px 0px 5px black;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-70%);
+    z-index: 1;
+    max-height: 400px;
+    width: calc(100vw - 24px);
+    padding: 15px;
+}
+
+.popupOverlay {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.5);
+    width: 100vw;
+    height: 100vh;
+}
+
+
+.popupHeader {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.popupClose {
+    font-size: 20px !important;
+    color: red;
+    font-weight: 400;
+    padding: 8px !important;
+    margin: 0 !important;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    width: 40px;
+    height: 26px;
+    border-radius: 4px !important
+}
+
+.popupBody {
+    max-height: 300px;
+    margin-top: 8px;
+    margin-right: 10px;
+    padding: 0 8px 0 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+    .popupBody::-webkit-scrollbar {
+        width: 4px;
+        margin: 2px 0;
+    }
+
+    .popupBody::-webkit-scrollbar-track {
+        background: black;
+    }
+
+    .popupBody::-webkit-scrollbar-thumb {
+        background: orange;
+    }
+
+
+.popupInputGroup .mediaPopupLabel {
+    font-size: 16px;
+}
+
+.popupInputGroup input, .popupInputGroup select, .flexpopupGroup {
+    height: 24px !important;
+    font-size: 16px;
+    border-radius: 2px;
+    border: none;
+    outline: none;
+}
+
+.popupGroupedGroup {
+    display: flex;
+}
+
+    .popupGroupedGroup .popupInputGroup {
+        width: 50%;
+    }
+
+        .popupGroupedGroup .popupInputGroup:first-child {
+            padding-right: 6px;
+        }
+
+        .popupGroupedGroup .popupInputGroup:last-child {
+            padding-left: 6px;
+        }
+
+        .popupGroupedGroup .popupInputGroup input {
+            width: calc(100%);
+        }
+
+.flexpopupGroup {
+    display: flex;
+    grid-column-gap: 15px;
+}
+
+.popupBtnGroup {
+    margin-top: 4px;
+    width: 100%;
+    display: flex;
+    gap: 15px;
+}
+
+.popupBtn:first-child {
+    margin-left: auto;
+}
+
+.popupBtnGroup .popupBtn {
+    height: 30px;
+    width: 100%;
+}
+
+.typeWrapper {
+    display: grid;
+    grid-auto-columns: 1fr;
+    width: 100vw !important;
+}
+
+    .typeWrapper .typeName {
+       height: 30px;
+       text-align: center;
+       display:flex;
+       justify-content:center;
+       align-items: center;
+       background-color: rgba(0, 0, 0, 0.4);
+       gap: 10px;
+    }
+
+.typeCards {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    width: 100vw;
+}
+
+.typeName {
+    position: relative;
+}
+
+.typeName input[type=checkbox] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0;
+}
+
+.typeName .arrow {
+    transform: rotate(90deg)
+}
+
+.typeWrapper:has(.typeName input[type=checkbox]:checked) .arrow {
+    transform: rotate(270deg);
+}
+
+.typeWrapper:has(.typeName input[type=checkbox]:checked) .typeCards{
+    height: 0px;
+}
+
+.userTitles {
+    display: flex;
+    position: relative;
+}
+
+    .userTitles .typeName {
+        position: relative;
+        justify-content: center;
+        height: 35px;
+        align-items: center;
+        display: flex;
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+
+
+    .userTitles input[type=checkbox] {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        opacity: 0;
+    }
+
+    .userTitles .arrow {
+        transform: rotate(90deg)
+    }
+
+    .userTitles:has(.typeName input[type=checkbox]:checked) .arrow {
+        transform: rotate(-90deg);
+    }
+
+    .userTitles:has(.typeName input[type=checkbox]:checked) .mediaCard {
+        height: 0px;
+    }
+
+.statsTable {
+    width: calc(100vw - 16px);
+    text-align: left;
+    margin: 8px;
+    border: 1px solid #232629;
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+}
+
+.statsTable > div {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+}
+
+    .statsTable > div label {
+        font-size: 12px;
+        color: #6d8398;
+    }
+
+.mediaInfoLabel {
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.4);
+    height: 30px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    margin: 8px 0;
+}

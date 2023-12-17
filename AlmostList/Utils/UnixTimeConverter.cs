@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AlmostList.Utils
 {
-	public class UnixTmeConverter
+	public class UnixTimeConverter
 	{
 		public static DateTime ConvertFromUnixTimestamp(double timestamp)
 		{

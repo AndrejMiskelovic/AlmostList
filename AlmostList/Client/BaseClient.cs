@@ -44,7 +44,7 @@ namespace AlmostList.Client
                 throw;
             }
         }
-		public async Task<GraphQLResponse<MediaMediaListResponse>> GetMediaWithListEntry(int id)
+		public async Task<GraphQLResponse<MediaResponse>> GetMediaWithListEntry(int id)
 		{
 			try
 			{
@@ -54,7 +54,7 @@ namespace AlmostList.Client
 					Variables = new { id = id }
 				};
 
-				var response = await _graphQLClient.SendQueryAsync<MediaMediaListResponse>(request);
+				var response = await _graphQLClient.SendQueryAsync<MediaResponse>(request);
 				return response;
 
 			}

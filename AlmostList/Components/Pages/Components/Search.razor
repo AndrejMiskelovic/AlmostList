@@ -1,28 +1,31 @@
+@using AlmostList.Client.Models
 @using AlmostList.Client.Models.Enums
 @using AlmostList.Client.Models.Requests
 @using System.Collections
 @using AlmostList.Utils
 @inject IJSRuntime JS;
 <CascadingValue Value="this">
-	<input class="" @bind="PageMediaRequest.Search" />
+	<label>Format</label>
 	<select multiple @ref="_selectMediaFormat" @onchange="OnSelectionMediaFormat">
 		@foreach (MediaFormat format in Enum.GetValues(typeof(MediaFormat)).Cast<MediaFormat>().Where(role => MediaFormat.MUSIC >= role))
 		{
 			<option value="@format">@format.GetDisplayName()</option>
 		}
 	</select>
+	<label>Status</label>
  	<select multiple @ref="_selectMediaStatus" @onchange="OnSelectionMediaStatus">
 		@foreach (MediaStatus status in Enum.GetValues(typeof(MediaStatus)))
 		{
 			<option value="@status">@status.GetDisplayName()</option>
 		}
 	</select> 
-@* 	<select multiple @ref="_selectMediaStatus" @onchange="OnSelectionMediaStatus">
-		@foreach (MediaStatus status in Enum.GetValues(typeof(Med)))
+	<label>Status</label>
+	<select multiple @ref="_selectMediaStatus" @onchange="OnSelectionMediaSeason">
+		@foreach (MediaSeason status in Enum.GetValues(typeof(MediaSeason)))
 		{
 			<option value="@status">@status.GetDisplayName()</option>
 		}
-	</select> *@
+	</select>
 @* 	<select multiple @ref="_selectReference" @onchange="OnSelectionChanged">
 		@foreach (var country in Enum.GetValues(typeof(Country)))
 		{
@@ -43,12 +46,33 @@
 	//select change event.
 	private async Task OnSelectionMediaFormat(ChangeEventArgs eventArgs)
 	{
-		var selection = await GetSelections(_selectMediaFormat);
-		PageMediaRequest.FormatIn = new List<MediaFormat>();
-		PageMediaRequest.FormatIn.AddRange(selection.Select(x => (MediaFormat)Enum.Parse(typeof(MediaFormat), x)).ToList());
 
+		var selection = await GetSelections(_selectMediaStatus);
+		if (selection.Any())
+		{
+			PageMediaRequest.FormatIn = new List<MediaFormat>();
+			PageMediaRequest.FormatIn.AddRange(selection.Select(x => (MediaFormat)Enum.Parse(typeof(MediaFormat), x)).ToList());
+		}
+		else
+		{
+			PageMediaRequest.FormatIn = null;
+		}
 	}
 	private async Task OnSelectionMediaStatus(ChangeEventArgs eventArgs)
+	{
+		var selection = await GetSelections(_selectMediaStatus);
+		if (selection.Any())
+		{
+			PageMediaRequest.StatusIn = new List<MediaStatus>();
+			PageMediaRequest.StatusIn.AddRange(selection.Select(x => (MediaStatus)Enum.Parse(typeof(MediaStatus), x)).ToList());
+		}
+		else
+		{
+			PageMediaRequest.StatusIn = null;
+		}
+
+	}
+	private async Task OnSelectionMediaSeason(ChangeEventArgs eventArgs)
 	{
 		var selection = await GetSelections(_selectMediaStatus);
 		if (selection.Any())

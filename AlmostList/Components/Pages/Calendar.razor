@@ -46,7 +46,10 @@
 				   ValueChanged="@((DateTime value) => GetData(value))" />
 		@if (baseClient.CurrentUser != null)
 		{
-			<InputCheckbox DisplayName="Show only from my list" ValueExpression="@(()=> showMylist)" Value="showMylist" ValueChanged="ShowMyList" />
+			<div class="listWrapper">
+				<InputCheckbox id="listCheckbox" a ValueExpression="@(()=> showMylist)" Value="showMylist" ValueChanged="ShowMyList" />
+				<label for="listCheckbox">Show only from my list</label>
+			</div>
 		}
 	}
 </div>
@@ -72,7 +75,7 @@
 	private async Task GetData(DateTime date)
 	{
 		dateTime = date;
-		ScheduleResponse = await baseClient.GetPageAiringSchedule((int)UnixTmeConverter.ConvertToUnixTimestamp(date), (int)UnixTmeConverter.ConvertToUnixTimestamp(date.AddDays(1)));
+		ScheduleResponse = await baseClient.GetPageAiringSchedule((int)UnixTimeConverter.ConvertToUnixTimestamp(date), (int)UnixTimeConverter.ConvertToUnixTimestamp(date.AddDays(1)));
 		render = true;
 		StateHasChanged();
 	}

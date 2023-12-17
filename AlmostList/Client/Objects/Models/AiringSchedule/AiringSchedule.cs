@@ -18,11 +18,11 @@ namespace AlmostList.Client.Models.Properties.AiringSchedule
 		
 		public DateTime? GetTimeUntil()
 		{
-			return TimeUntilAiring == null ? null : UnixTmeConverter.ConvertFromUnixTimestamp(TimeUntilAiring.Value);
+			return TimeUntilAiring == null ? null : UnixTimeConverter.ConvertFromUnixTimestamp(TimeUntilAiring.Value);
 		}
 		public DateTime? GetAiringAt()
 		{
-			return AiringAt == null ? null : UnixTmeConverter.ConvertFromUnixTimestamp(AiringAt.Value);
+			return AiringAt == null ? null : UnixTimeConverter.ConvertFromUnixTimestamp(AiringAt.Value);
 		}
 	}
 }

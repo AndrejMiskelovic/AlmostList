@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.Reflection;
 
 namespace AlmostList.Utils

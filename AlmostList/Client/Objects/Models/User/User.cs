@@ -19,8 +19,8 @@ namespace AlmostList.Client.Models.Properties.User
         public bool IsBlocked { get; set; }
         public string? Bans { get; set; }
         public UserOptions? Options { get; set; }
-        public MediaListOptions? Favourites { get; set; }
-        public Favourites? MediaListOptions { get; set; }
+        public MediaListOptions? MediaListOptions { get; set; }
+        public Favourites? Favourites  { get; set; }
         public UserStatisticTypes? Statistics { get; set; }
         public int? UnreadNotificationCount { get; set; }
         public string? SiteUrl { get; set; }
