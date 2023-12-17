@@ -955,7 +955,7 @@ query ($page: Int, $id: Int, $search: String, $isBirthday: Boolean, $sort: [Char
 ";
 
 		public const string PageStaff = @"
-query ($page: Int, $id: Int, $search: String, $isBirthday: Boolean, $sort: [CharacterSort] = [FAVOURITES_DESC]) {
+query ($page: Int, $id: Int, $search: String, $isBirthday: Boolean, $sort: [StaffSort] = [FAVOURITES_DESC]) {
   Page(page: $page) {
     pageInfo {
       total
@@ -964,7 +964,7 @@ query ($page: Int, $id: Int, $search: String, $isBirthday: Boolean, $sort: [Char
       lastPage
       hasNextPage
     }
-    characters(id: $id, search: $search, isBirthday: $isBirthday, sort: $sort) {
+   staff(id: $id, search: $search, isBirthday: $isBirthday, sort: $sort) {
       id
       favourites
       name {
@@ -976,6 +976,7 @@ query ($page: Int, $id: Int, $search: String, $isBirthday: Boolean, $sort: [Char
     }
   }
 }
+
 ";
 
         public const string PageAiringSchedule = @"

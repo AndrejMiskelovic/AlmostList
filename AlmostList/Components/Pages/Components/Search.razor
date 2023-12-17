@@ -11,12 +11,12 @@
 			<option value="@format">@format.GetDisplayName()</option>
 		}
 	</select>
-	<select multiple @ref="_selectMediaStatus" @onchange="OnSelectionMediaStatus">
+ 	<select multiple @ref="_selectMediaStatus" @onchange="OnSelectionMediaStatus">
 		@foreach (MediaStatus status in Enum.GetValues(typeof(MediaStatus)))
 		{
 			<option value="@status">@status.GetDisplayName()</option>
 		}
-	</select>
+	</select> 
 @* 	<select multiple @ref="_selectMediaStatus" @onchange="OnSelectionMediaStatus">
 		@foreach (MediaStatus status in Enum.GetValues(typeof(Med)))
 		{
@@ -51,10 +51,24 @@
 	private async Task OnSelectionMediaStatus(ChangeEventArgs eventArgs)
 	{
 		var selection = await GetSelections(_selectMediaStatus);
-		PageMediaRequest.StatusIn = new List<MediaStatus>();
-		PageMediaRequest.StatusIn.AddRange(selection.Select(x => (MediaStatus)Enum.Parse(typeof(MediaStatus), x)).ToList());
+		if (selection.Any())
+		{
+			PageMediaRequest.StatusIn = new List<MediaStatus>();
+			PageMediaRequest.StatusIn.AddRange(selection.Select(x => (MediaStatus)Enum.Parse(typeof(MediaStatus), x)).ToList());
+		}
+		else
+		{
+			PageMediaRequest.StatusIn = null;
+		}
 
 	}
+	// private async Task OnSelectionEnum<T>(Func<PageMediaRequest, List<T>?> selector)
+	// {
+	// 	var selection = await GetSelections(_selectMediaStatus);
+	// 	var collection = selector.Invoke(PageMediaRequest);
+	// 	collection.AddRange(selection.Select(x => (T)Enum.Parse(typeof(T), x)).ToList());
+
+	// }
 	public async Task<HashSet<string>> GetSelections(ElementReference elementReference)
 	{
 		return (await JS.InvokeAsync<List<string>>("getSelectedValues", elementReference)).ToHashSet();

@@ -2,11 +2,11 @@
 @using System.Globalization
 
 <CascadingValue Value="this">
-	@if (!string.IsNullOrEmpty(Data))
+	@if (!string.IsNullOrEmpty(_data))
 	{
 		<div class="row">
 			<div>@Text</div>
-			<div>@Data</div>
+			<div>@_data</div>
 		</div>
 	}
 </CascadingValue>
@@ -15,5 +15,6 @@
 	[Parameter] public string? Text { get; set; }
 	[Parameter] public RenderFragment? ChildContent { get; set; }
 	string? _data { get; set; } 
-	[Parameter] public string? Data { get => _data; set { _data = value.Trim(); } }
+	[Parameter] public string? Data { get => _data; set { _data = value == null ? value : value.Trim(); } }
 }
+

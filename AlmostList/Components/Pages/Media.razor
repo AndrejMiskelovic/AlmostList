@@ -110,7 +110,7 @@
 					<div>Tags</div>
 				@foreach (var item in mediaResponse.Data.Media.Tags)
 				{
-					@* <div hidden="@item.IsMediaSpoiler ? true : @item.IsGeneralSpoiler ? true : false"> *@
+					@* TODO <div hidden="@item.IsMediaSpoiler ? true : @item.IsGeneralSpoiler ? true : false"> *@
 					<div class="mediaTags">
 						<div>@item.Name</div
 						<div>@item.Rank%</div>
@@ -228,26 +228,6 @@
 			StateHasChanged();
 		}
 	}
-	private string? imageSource;
-
-	// public Image nethod(string url)
-	// {
-	// 	Image image = new Image();
-	// 	//image.Source.FindByName(url);
-
-	// 	image.Source = new UriImageSource
-	// 	{
-	// 	    Uri = new Uri(url),
-	// 	    CacheValidity = new TimeSpan(180,0,0,0)
-	// 	};
-	// 	FileSystem.CacheDirectory.
-	// 	var newFile = Path.Combine(FileSystem.CacheDirectory, url);
-	//        var imageBytes  = File.ReadAllBytes(newFile);
-	//        imageSource = Convert.ToBase64String(imageBytes);
-	//        imageSource = string.Format("data:image/png;base64,{0}", imageSource);
-
-	// 	return image;
-	// }
 	private void OpenMedia(int id)
 	{
 		UriHelper.NavigateTo($"/Media/{id}", true);
@@ -259,6 +239,4 @@
 	{
 		return $"https://www.youtube.com/embed/{mediaResponse.Data.Media.Trailer.Id}";
 	}
-
-
 }

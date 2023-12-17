@@ -260,7 +260,7 @@ namespace AlmostList.Client
             }
 
         }
-        public async Task<GraphQLResponse<PageResponse<PagedStaff>>> GetPageStaff(BaseRequest variables)
+        public async Task<GraphQLResponse<PageResponse<PagedStaff>>> GetPageStaff(PageStaffRequest variables)
         {
             try
             {
@@ -280,7 +280,7 @@ namespace AlmostList.Client
             }
 
         }
-        public async Task<GraphQLResponse<PageResponse<PagedCharacter>>> GetPageCharacher(BaseRequest variables)
+        public async Task<GraphQLResponse<PageResponse<PagedCharacter>>> GetPageCharacher(PageCharacterRequest variables)
         {
             try
             {

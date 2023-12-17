@@ -1,4 +1,6 @@
 ﻿using AlmostList.Client.Models.Enums;
+using Android.Telephony;
+using Xamarin.Google.Crypto.Tink.Signature;
 
 namespace AlmostList.Client.Models.Requests
 {
@@ -11,9 +13,9 @@ namespace AlmostList.Client.Models.Requests
         public MediaType Type { get; set; } 
         public List<MediaSort> Sort { get; set; } = new List<MediaSort>() { MediaSort.TRENDING_DESC};
         public List<MediaFormat>? FormatIn { get; set; }
-        public List<MediaStatus>? StatusIn { get; set; }
-        public List<MediaSource>? SourceIn { get; set; }
-        public CountryCode? CountryOfOrigin { get; set; }
+        public List<MediaStatus>? StatusIn { get; set; } 
+		public List<MediaSource>? SourceIn { get; set; }
+		public CountryCode? CountryOfOrigin { get; set; }
         public MediaSeason? Season { get; set; }
         public int? SeasonYear { get; set; }
         private DateOnly? _startDateGreater { get; set; }

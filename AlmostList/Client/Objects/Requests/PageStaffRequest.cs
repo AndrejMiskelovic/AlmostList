@@ -1,4 +1,5 @@
-﻿using AlmostList.Client.Objects.Enums;
+﻿using AlmostList.Client.Models.Enums;
+using AlmostList.Client.Objects.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace AlmostList.Client.Objects.Requests
 {
-    public class BaseRequest
+    public class PageStaffRequest
     {
         public int? Page { get; set; } = 1;
         public int? Id { get; set; }
         public string? Search { get; set; }
         public bool? IsBirthday { get; set; }
-        public List<CharacterSort>? Sort { get; set; } = new List<CharacterSort>() { CharacterSort.FAVOURITES_DESC };
+        public List<StaffSort>? Sort { get; set; } = new List<StaffSort>() { StaffSort.FAVOURITES_DESC };
 
     }
 }

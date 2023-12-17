@@ -66,14 +66,13 @@
 	</Tab>
 </Tabs>
 
-
-
+@* <cache enabled="true">
+	Current Time Inside Cache Tag Helper: @DateTime.Now
+</cache>
+ *@
 
 
 @code {
-
-
-
 	[Parameter]
 	public int search { get; set; }
 	string? searchText = null;
