@@ -18,9 +18,9 @@
 			</div>
 		</div>
 	</card>
-	<br/>
-	<br/>
-	<br/>
+	<br />
+	<br />
+	<br />
 	<button class="btn btn-primary" @onclick="Logout">Logout</button>
 
 }
@@ -42,18 +42,22 @@
 
 	public override async Task SetParametersAsync(ParameterView parameters)
 	{
-		string oauthToken = await SecureStorage.Default.GetAsync("oauth_token");
-		if (oauthToken != null)
+		if (viewerResponse.Viewer == null)
 		{
-			if (baseClient.CurrentUser == null)
+
+			string oauthToken = await SecureStorage.Default.GetAsync("oauth_token");
+			if (oauthToken != null)
 			{
-				baseClient.SetToken(oauthToken);
-				var response = await baseClient.GetCurrentUser();
+				if (baseClient.CurrentUser == null)
+				{
+					baseClient.SetToken(oauthToken);
+					var response = await baseClient.GetCurrentUser();
+				}
+				viewerResponse = baseClient.CurrentUser;
+				render = true;
 			}
-			viewerResponse = baseClient.CurrentUser;
-			render = true;
+			StateHasChanged();
 		}
-		StateHasChanged();
 	}
 
 	private void Calendar()

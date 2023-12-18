@@ -8,3 +8,11 @@ window.getSelectedValues = function (sel) {
     }
     return results;
 };
+window.scrollToTop = () => {
+    const element = document.documentElement;
+    element.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth"
+    });
+};

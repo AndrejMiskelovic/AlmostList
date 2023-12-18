@@ -223,7 +223,7 @@
 				mediaList = mediaResponse.Data.Media.MediaListEntry;
 			}
 			mediaList.MediaId = mediaResponse.Data.Media.Id;
-			mediaList.UserId = baseClient.CurrentUser.Viewer.Id;
+			mediaList.UserId = baseClient.CurrentUser == null ? null : baseClient.CurrentUser.Viewer.Id;
 			render = true;
 			StateHasChanged();
 		}

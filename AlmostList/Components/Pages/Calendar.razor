@@ -6,6 +6,7 @@
 @using GraphQL
 @inject BaseClient baseClient
 @inject NavigationManager UriHelper
+@inject IJSRuntime JS
 
 
 <div class="pageMedia">
@@ -14,7 +15,7 @@
 
 		@foreach (var item in ScheduleResponse.Data.Page.AiringSchedules)
 		{
-			@if (showMylist && item.Media.MediaListEntry == null)
+			@if (showMylist && item.Media?.MediaListEntry == null || item.Media?.IsAdult == true)
 			{
 				continue;
 			}
@@ -78,6 +79,7 @@
 		ScheduleResponse = await baseClient.GetPageAiringSchedule((int)UnixTimeConverter.ConvertToUnixTimestamp(date), (int)UnixTimeConverter.ConvertToUnixTimestamp(date.AddDays(1)));
 		render = true;
 		StateHasChanged();
+		// JS.InvokeVoidAsync("scrollToTop", null);
 	}
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
