@@ -21,12 +21,12 @@
 			<img class="bannerimage" src="@mediaResponse.Data.Media.BannerImage" />
 			<img class="coverImage" src="@mediaResponse.Data.Media.CoverImage.ExtraLarge" />
 			<div class="headerInfo">
-				<text class="title">@mediaResponse.Data.Media.Title.English </text>
+				<text class="title">@mediaResponse.Data.Media.Title.UserPreferred </text>
 
 					<Popup @ref="popupRef">
 						<MediaEntry MediaList="@mediaList" MaxEpisodes="mediaResponse.Data.Media.Episodes"></MediaEntry>
 					</Popup>
-					<button @onclick="PopupClick">@(mediaResponse.Data.Media.MediaListEntry == null ? "Add to List" : @mediaResponse.Data.Media.MediaListEntry.Status.GetDisplayName())</button>
+					<button class='button' @onclick="PopupClick">@(mediaResponse.Data.Media.MediaListEntry == null ? "Add to List" : @mediaResponse.Data.Media.MediaListEntry.Status.GetDisplayName())</button>
 				
 			</div>
 		</div>
@@ -40,25 +40,31 @@
 			<div class="scoreCard">
 				<labal>Score</labal>
 				<div class="row">
-					<div class="scoreLable">Average</div>
+					<div class="scoreLable">Average:</div>
 					<div class="score">@mediaResponse.Data.Media.AverageScore</div>
 				</div>
 				<div class="row">
-					<div class="scoreLable">Mean</div>
+					<div class="scoreLable">Mean:</div>
 					<div class="score">@mediaResponse.Data.Media.MeanScore</div>
 				</div>
 			</div>
 
 			<div class="scoreCard">
-				@mediaResponse.Data.Media.Format.GetDisplayName()
-				@mediaResponse.Data.Media.Episodes Episodes
+				@mediaResponse.Data.Media.Format.GetDisplayName() 	  
+				@if (mediaResponse.Data.Media.Episodes != null)
+				{
+					Concatinate(new string[] { mediaResponse.Data.Media.Episodes.ToString(), "Episodes" });
+				}
 				@mediaResponse.Data.Media.SeasonYear
 				@mediaResponse.Data.Media.Season
 			</div>
 		</div>
 		
-		<div class="mediaInfoLabel">Description</div>
-		<div @onclick="(() => ToggleCollapse(ref showDescription))" class="@(showDescription ? "" : "show") mediaPseudoCollapse">@((MarkupString)mediaResponse.Data.Media.Description) <div class="arrow">➤</div></div>
+		@if(mediaResponse.Data.Media.Description != null)
+		{
+			<div class="mediaInfoLabel">Description</div>
+			<div @onclick="(() => ToggleCollapse(ref showDescription))" class="@(showDescription ? "description" : "description show") mediaPseudoCollapse">@((MarkupString)mediaResponse.Data.Media.Description) <div class="arrow">➤</div></div>
+		}
 
 		<div class="mediaInfoLabel">Info</div>
 		<div class="mediaInfo">
@@ -88,7 +94,7 @@
 				
 				<TextMediaInfoRow Data="@mediaResponse.Data.Media.Popularity.ToString()" Text="Popularity"/>   
 				
-				@if (!mediaResponse.Data.Media.IsFavouriteBlocked)
+				@if (mediaResponse.Data.Media.IsFavouriteBlocked)
 				{
 					<TextMediaInfoRow Data="@mediaResponse.Data.Media.Favourites.ToString()" Text="Favourites"/> 
 				}
@@ -98,9 +104,9 @@
 				
 				<TextMediaInfoRowArray Data="@mediaResponse.Data.Media.Genres" Text="Genres"/> 
 
-				<TextMediaInfoRow Data="@mediaResponse.Data.Media.Title.Romaji.ToString()" Text="Romaji"/>
-				<TextMediaInfoRow Data="@mediaResponse.Data.Media.Title.English.ToString()" Text="English"/>
-				<TextMediaInfoRow Data="@mediaResponse.Data.Media.Title.Native.ToString()" Text="Native"/>
+				<TextMediaInfoRow Data="@mediaResponse.Data.Media.Title.Romaji" Text="Romaji"/>
+				<TextMediaInfoRow Data="@mediaResponse.Data.Media.Title.English" Text="English"/>
+				<TextMediaInfoRow Data="@mediaResponse.Data.Media.Title.Native" Text="Native"/>
 				
 				<TextMediaInfoRowArray Data="@mediaResponse.Data.Media.Synonyms" Text="Synonyms"/> 
 
@@ -145,7 +151,7 @@
 				<div class="mediaStaff">
 					<img src="@item.Node.Image.Large" />
 					<div>@item.Node.Name.UserPreferred</div>	
-					<div>@item.Role.GetDisplayName()</div>	
+					<div class="role">@item.Role.GetDisplayName()</div>	
 				</div>
 			}
 				<div class="staffMore">See more</div>
@@ -159,7 +165,7 @@
 				<div class="mediaStaff">
 					<img src="@item.Node.Image.Large" />
 					<div>@item.Node.Name.UserPreferred</div>	
-					<div>@item.Role</div>	
+					<div class="role">@item.Role</div>	
 				</div>
 			}
 				<div class="staffMore">See more</div>

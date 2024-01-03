@@ -10,7 +10,7 @@ namespace AlmostList.Client.Models.Requests
         public int? StatusVersion { get; set; } = 2;
         public int? SourceVersion { get; set; } = 2;
         public string? Search { get; set; }
-        public MediaType Type { get; set; } 
+        public MediaType? Type { get; set; } 
         public List<MediaSort> Sort { get; set; } = new List<MediaSort>() { MediaSort.TRENDING_DESC};
         public List<MediaFormat>? FormatIn { get; set; }
         public List<MediaStatus>? StatusIn { get; set; } 
@@ -20,14 +20,14 @@ namespace AlmostList.Client.Models.Requests
         public int? SeasonYear { get; set; }
         private DateOnly? _startDateGreater { get; set; }
         private DateOnly? _startDateLesser { get; set; }
-        public bool? IsAdult { get; set; } = false;
-        public bool? OnList { get; set; }
+        public bool IsAdult { get; set; } = false;
+        public bool OnList { get; set; }
         public List<string>? GenreIn { get; set; }
-        public List<string>? GenreNotIn { get; set; }
-        public int? MinimumTagRank { get; set; }
-        public List<string>? TagIn { get; set; }
-        public List<string>? TagNotIn { get; set; }
-        public List<int>? LicensedByIdIn { get; set; }
+        public List<string>? GenreNotIn { get; set; } = new List<string>() { "Ecchi" };
+		public int? MinimumTagRank { get; set; }
+        public List<string>? TagIn { get; set; } 
+		public List<string>? TagNotIn { get; set; } = new List<string>() { "Nudity" };
+		public List<int>? LicensedByIdIn { get; set; }
         public int? EpisodesGreater { get; set; }
         public int? EpisodesLesser { get; set; }
         public int? DurationGreater { get; set; }

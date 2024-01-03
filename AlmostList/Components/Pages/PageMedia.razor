@@ -16,7 +16,7 @@
 
 <Tabs OnTabChanged="OnTabChanged">
 	<Popup @ref="popupRef">
-		<Search PageMediaRequest="PageMediaRequest"></Search>
+		<Search PageMediaRequest="PageMediaRequest" GenresAndTags="TagsAndGenresResponse.Data"></Search>
 	</Popup>
 	<Tab Text="@MediaType.ANIME.GetDisplayName()" Value="@MediaType.ANIME.ToString()">
 		<div class="searchWrapper">
@@ -47,7 +47,13 @@
 		</div>
 
 	</Tab>
+
 	<Tab Text="@MediaType.MANGA.GetDisplayName()" Value="@MediaType.MANGA.ToString()">
+		<div class="searchWrapper">
+			<input class="searchInput" @bind="PageMediaRequest.Search" />
+			<button @onclick="PopupClick" class="searchBtn">Filters</button>
+			<button class="searchBtn" @onclick="() => Search(MediaType.MANGA)">Search </button>
+		</div>
 		<div class="pageMedia">
 
 			@if (@render)
@@ -72,11 +78,6 @@
 	</Tab>
 </Tabs>
 
-@* <cache enabled="true">
-	Current Time Inside Cache Tag Helper: @DateTime.Now
-</cache>
- *@
-
 
 @code {
 	[Parameter]
@@ -84,6 +85,7 @@
 	string? searchText = null;
 	bool render = false;
 	GraphQLResponse<PageResponse<PagedMedia>> PageMediaResponse = new GraphQLResponse<PageResponse<PagedMedia>>();
+	GraphQLResponse<GenresAndTagsResponse> TagsAndGenresResponse = new GraphQLResponse<GenresAndTagsResponse>();
 	PageMediaRequest PageMediaRequest = new PageMediaRequest();
 
 	private Popup popupRef;
@@ -98,7 +100,7 @@
 		PageMediaRequest.Type = type;
 		PageMediaRequest.Page = 1;
 		render = false;
-		MakeRequest();
+		MediaRequest();
 	}
 	private void OpenMedia(int id)
 	{
@@ -110,18 +112,26 @@
 		PageMediaRequest = new PageMediaRequest();
 		PageMediaRequest.Type = tab == null ? MediaType.ANIME : (MediaType)Enum.Parse(typeof(MediaType), tab.Value);
 		render = false;
-		MakeRequest();
+		MediaRequest();
 	}
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		if (firstRender)
-			MakeRequest();
+		{
+			TagAndGenresRequest();
+			PageMediaRequest.Type = MediaType.ANIME;
+			MediaRequest();
+		}
 	}
-	private async void MakeRequest()
+	private async void MediaRequest()
 	{
 		PageMediaResponse = await baseClient.GetPageMedia(PageMediaRequest);
 		render = true;
 		StateHasChanged();
+	}
+	private async void TagAndGenresRequest()
+	{
+		TagsAndGenresResponse = await baseClient.GetGenresAndTagsCollection();
 	}
 
 	private async Task FetchPageData()

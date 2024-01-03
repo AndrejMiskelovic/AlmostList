@@ -7,6 +7,7 @@ using AlmostList.Client.Objects.Responses;
 using GraphQL;
 using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.Newtonsoft;
+using System.Net;
 
 namespace AlmostList.Client
 {
@@ -17,11 +18,13 @@ namespace AlmostList.Client
 
 		public void SetToken(string token) 
 		{
-			_graphQLClient.HttpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+			if(!_graphQLClient.HttpClient.DefaultRequestHeaders.Contains("Authorization"))
+				_graphQLClient.HttpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 		}
-		public void RemoveToken()
+		public void RemoveTokenAndUser()
 		{
 			_graphQLClient.HttpClient.DefaultRequestHeaders.Remove("Authorization");
+			CurrentUser = null;
 		}
 
 		public async Task<GraphQLResponse<ViewerResponse>> GetCurrentUser()

@@ -48,7 +48,7 @@
 		@if (baseClient.CurrentUser != null)
 		{
 			<div class="listWrapper">
-				<InputCheckbox id="listCheckbox" a ValueExpression="@(()=> showMylist)" Value="showMylist" ValueChanged="ShowMyList" />
+				<InputCheckbox id="listCheckbox" ValueExpression="@(()=> showMylist)" Value="showMylist" ValueChanged="ShowMyList" />
 				<label for="listCheckbox">Show only from my list</label>
 			</div>
 		}
@@ -88,8 +88,6 @@
 		{
 			dateTime = DateTime.Now.Date;
 			GetData(dateTime);
-
 		}
-
 	}
 }

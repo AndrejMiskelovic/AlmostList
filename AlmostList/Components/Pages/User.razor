@@ -1,4 +1,4 @@
-﻿@page "/User/{Id:int}"
+﻿@page "/User/{Id:int?}"
 
 @using AlmostList.Client
 @using AlmostList.Client.Models
@@ -14,14 +14,13 @@
 @inject NavigationManager UriHelper
 
 
+@if (Id != null)
+{
+	<Tabs OnTabChanged="OnTabChanged">
+		<Tab Text="Overview" Value="User">
 
-<Tabs OnTabChanged="OnTabChanged">
-	<Tab Text="Overview" Value="User">
+			<div class="">
 
-		<div class="">
-
-			@if (@render)
-			{
 				@if (@render)
 				{
 					<div class="header">
@@ -99,13 +98,12 @@
 						</div>
 					</div>
 				}
-			}
-		</div>
+			</div>
 
-	</Tab>
+		</Tab>
 
 
-	<Tab Text="@MediaType.ANIME.GetDisplayName()" Value="@MediaType.ANIME.ToString()">
+		<Tab Text="@MediaType.ANIME.GetDisplayName()" Value="@MediaType.ANIME.ToString()">
 
 			@if (@render)
 			{
@@ -129,11 +127,11 @@
 					</div>
 				}
 			}
-		
-	</Tab>
+
+		</Tab>
 
 
-	<Tab Text="@MediaType.MANGA.GetDisplayName()" Value="@MediaType.MANGA.ToString()">
+		<Tab Text="@MediaType.MANGA.GetDisplayName()" Value="@MediaType.MANGA.ToString()">
 
 			@if (@render)
 			{
@@ -158,10 +156,14 @@
 					</div>
 				}
 			}
-		
-	</Tab>
-</Tabs>
 
+		</Tab>
+	</Tabs>
+}
+else
+{
+	<div>Ops... Something went wrong</div>
+}
 
 
 
@@ -169,7 +171,7 @@
 @code {
 
 	[Parameter]
-	public int Id { get; set; }
+	public int? Id { get; set; }
 
 
 	bool render = false;

@@ -2,33 +2,139 @@
 @using AlmostList.Client
 @using AlmostList.Client.Models.Enums
 @using AlmostList.Client.Models.Properties.Media
+@using AlmostList.Client.Models.Requests
+@using AlmostList.Client.Models.Responses
 @using AlmostList.Client.Objects.Responses
 @using AlmostList.Components.Pages.Components
 @using GraphQL
 @inject NavigationManager UriHelper
 @inject BaseClient baseClient
 
+
 @if (render)
 {
 	<card>
-		<div class="header">
-			<img class="coverImage" src="@viewerResponse.Viewer.Avatar.Medium" />
+		<div class="main header">
+			<img class="coverImage" src="@baseClient.CurrentUser.Viewer.Avatar.Medium" />
 			<div class="headerInfo">
-				<text class="title">@viewerResponse.Viewer.Name</text>
+				<text class="title">@baseClient.CurrentUser.Viewer.Name</text>
 			</div>
 		</div>
 	</card>
 	<br />
 	<br />
 	<br />
-	<button class="btn btn-primary" @onclick="Logout">Logout</button>
-
+	<div class="activityBtn">
+		<button class="btn btn-primary" @onclick="Logout">Logout</button>
+		<button class="btn btn-primary" @onclick="Calendar">Calendar</button>
+	</div>
 }
 @if (!render)
 {
-	<button class="btn btn-primary" @onclick="Login">Login with AniList</button>
+	<div class="activityBtn login">
+		<button class="btn btn-primary" @onclick="Login">Login with AniList</button>
+		<button class="btn btn-primary" @onclick="Calendar">Calendar</button>
+	</div>
 }
-<button class="btn btn-primary" @onclick="Calendar">Calendar</button>
+
+@if (RenderAnimeTrending)
+{
+	<div class="mainPageCarouselWrapper">
+		<div class="mediaInfoLabel">Newly Added Anime</div>
+		<div class="mediaBanners">
+			<div class="mediaBannersScroll">
+
+				@foreach (var item in PageMediaResponseAnimeTrending.Data.Page.Media)
+				{
+					<div class="mediaBanner" @onclick="(() => OpenMedia(item.Id))">
+						<div class="overlay" style="background-color: @item.CoverImage.Color">
+							<img src="@item.BannerImage" />
+							<div class="inception">
+								<img src="@item.CoverImage.ExtraLarge" />
+							</div>
+							<div class="mediaBannerTitle"> @item.Title.UserPreferred</div>
+						</div>
+						<div class="mediaBannerType"> @((MarkupString)item.Description)</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+}
+@if (RenderMangaTrending)
+{
+	<div class="mainPageCarouselWrapper">
+		<div class="mediaInfoLabel">Newly Added Anime</div>
+		<div class="mediaBanners">
+			<div class="mediaBannersScroll">
+
+				@foreach (var item in PageMediaResponseMangaTrending.Data.Page.Media)
+				{
+					<div class="mediaBanner" @onclick="(() => OpenMedia(item.Id))">
+						<div class="overlay" style="background-color: @item.CoverImage.Color">
+							<img src="@item.BannerImage" />
+							<div class="inception">
+								<img src="@item.CoverImage.ExtraLarge" />
+							</div>
+							<div class="mediaBannerTitle"> @item.Title.UserPreferred</div>
+						</div>
+						<div class="mediaBannerType"> @((MarkupString)item.Description)</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+}
+@if (RenderNewAddedAnime)
+{
+	<div class="mainPageCarouselWrapper">
+		<div class="mediaInfoLabel">Newly Added Anime</div>
+		<div class="mediaBanners">
+			<div class="mediaBannersScroll">
+
+				@foreach (var item in PageMediaResponseNewAddedAnime.Data.Page.Media)
+				{
+					<div class="mediaBanner" @onclick="(() => OpenMedia(item.Id))">
+						<div class="overlay" style="background-color: @item.CoverImage.Color">
+							<img src="@item.BannerImage" />
+							<div class="inception">
+								<img src="@item.CoverImage.ExtraLarge" />
+							</div>
+							<div class="mediaBannerTitle"> @item.Title.UserPreferred</div>
+						</div>
+						<div class="mediaBannerType"> @((MarkupString)item.Description)</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+}
+@if (RenderNewAddedManga)
+{
+	<div class="mainPageCarouselWrapper">
+		<div class="mediaInfoLabel">Newly Added Anime</div>
+		<div class="mediaBanners">
+			<div class="mediaBannersScroll">
+
+				@foreach (var item in PageMediaResponseNewAddedManga.Data.Page.Media)
+				{
+					<div class="mediaBanner" @onclick="(() => OpenMedia(item.Id))">
+						<div class="overlay" style="background-color: @item.CoverImage.Color">
+							<img src="@item.BannerImage" />
+							<div class="inception">
+								<img src="@item.CoverImage.ExtraLarge" />
+							</div>
+							<div class="mediaBannerTitle"> @item.Title.UserPreferred</div>
+						</div>
+						<div class="mediaBannerType"> @((MarkupString)item.Description)</div>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+}
+
+
 
 
 
@@ -37,29 +143,80 @@
 
 	int clientId = 15602;
 	bool render = false;
+	bool RenderAnimeTrending = false;
+	bool RenderMangaTrending = false;
+	bool RenderNewAddedAnime = false;
+	bool RenderNewAddedManga = false;
 	string? oauthToken;
-	ViewerResponse viewerResponse = new ViewerResponse();
+
+	GraphQLResponse<PageResponse<PagedMedia>> PageMediaResponseAnimeTrending = new GraphQLResponse<PageResponse<PagedMedia>>();
+	GraphQLResponse<PageResponse<PagedMedia>> PageMediaResponseMangaTrending = new GraphQLResponse<PageResponse<PagedMedia>>();
+	GraphQLResponse<PageResponse<PagedMedia>> PageMediaResponseNewAddedAnime = new GraphQLResponse<PageResponse<PagedMedia>>();
+	GraphQLResponse<PageResponse<PagedMedia>> PageMediaResponseNewAddedManga = new GraphQLResponse<PageResponse<PagedMedia>>();
 
 	public override async Task SetParametersAsync(ParameterView parameters)
 	{
-		if (viewerResponse.Viewer == null)
+		string? oauthToken = await SecureStorage.Default.GetAsync("oauth_token");
+		if (!string.IsNullOrEmpty(oauthToken))
 		{
-
-			string oauthToken = await SecureStorage.Default.GetAsync("oauth_token");
-			if (oauthToken != null)
+			if (baseClient.CurrentUser == null)
 			{
-				if (baseClient.CurrentUser == null)
-				{
-					baseClient.SetToken(oauthToken);
-					var response = await baseClient.GetCurrentUser();
-				}
-				viewerResponse = baseClient.CurrentUser;
-				render = true;
+				baseClient.SetToken(oauthToken);
+				await baseClient.GetCurrentUser();
 			}
+
+			render = true;
 			StateHasChanged();
 		}
-	}
 
+		AnimeTrending();
+		MangaTrending();
+		NewAddedAnime();
+		NewAddedManga();
+
+	}
+	private void OpenMedia(int id)
+	{
+		UriHelper.NavigateTo($"/Media/{id}");
+	}
+	private async void AnimeTrending()
+	{
+		PageMediaRequest pageMediaRequest = new PageMediaRequest();
+		pageMediaRequest.Type = MediaType.ANIME;
+
+		PageMediaResponseAnimeTrending = await baseClient.GetPageMedia(pageMediaRequest);
+		RenderAnimeTrending = true;
+		StateHasChanged();
+	}
+	private async void MangaTrending()
+	{
+		PageMediaRequest pageMediaRequest = new PageMediaRequest();
+		pageMediaRequest.Type = MediaType.MANGA;
+
+		PageMediaResponseMangaTrending = await baseClient.GetPageMedia(pageMediaRequest);
+		RenderMangaTrending = true;
+		StateHasChanged();
+	}
+	private async void NewAddedAnime()
+	{
+		PageMediaRequest pageMediaRequest = new PageMediaRequest();
+		pageMediaRequest.Type = MediaType.ANIME;
+		pageMediaRequest.Sort = new List<MediaSort> { MediaSort.ID_DESC };
+
+		PageMediaResponseNewAddedAnime = await baseClient.GetPageMedia(pageMediaRequest);
+		RenderNewAddedAnime = true;
+		StateHasChanged();
+	}
+	private async void NewAddedManga()
+	{
+		PageMediaRequest pageMediaRequest = new PageMediaRequest();
+		pageMediaRequest.Type = MediaType.MANGA;
+		pageMediaRequest.Sort = new List<MediaSort> { MediaSort.ID_DESC };
+
+		PageMediaResponseNewAddedManga = await baseClient.GetPageMedia(pageMediaRequest);
+		RenderNewAddedManga = true;
+		StateHasChanged();
+	}
 	private void Calendar()
 	{
 		UriHelper.NavigateTo($"/Calendar");
@@ -80,8 +237,7 @@
 			await SecureStorage.Default.SetAsync("oauth_token", authResult?.AccessToken);
 
 
-			var response = await baseClient.GetCurrentUser();
-			viewerResponse = response.Data;
+			await baseClient.GetCurrentUser();
 			render = true;
 			StateHasChanged();
 
@@ -97,8 +253,7 @@
 		{
 			SecureStorage.Default.Remove("oauth_token");
 
-			baseClient.RemoveToken();
-			viewerResponse = null;
+			baseClient.RemoveTokenAndUser();
 			render = false;
 			StateHasChanged();
 		}

@@ -98,6 +98,15 @@ image {
     position: relative;
 }
 
+    .header .button {
+        border: 1px solid orange !important;
+        box-shadow: 0px 0px 5px orange;
+    }
+
+.main.header .title {
+    margin-top: 175px;
+}
+
 .coverImage {
     position: absolute;
     top: 50px;
@@ -115,6 +124,7 @@ image {
     height: 130px;
     margin-left: 140px;
     font-size: 20px;
+    color: white;
 }
 
 .pageMedia {
@@ -187,11 +197,11 @@ image {
         margin: 0;
     }
 
-    .userTitles .mediaCard img {
-        object-fit: cover;
-        width: 100%;
-        height: 205px;
-    }
+        .userTitles .mediaCard img {
+            object-fit: cover;
+            width: 100%;
+            height: 205px;
+        }
 
 .pageMediaInfo .title {
     display: -webkit-box;
@@ -282,12 +292,18 @@ button {
     display: inline-flex;
     flex-direction: column;
     margin-bottom: auto;
+    color: orange;
 }
+
+    .scoreCard .row {
+        color: white;
+    }
 
 .episodeRow {
     display: block;
     width: 100vw;
     margin: 8px;
+    color: #6d8398;
 }
 
 .infoRow {
@@ -349,6 +365,8 @@ button {
         display: flex;
         align-items: center;
         flex-direction: column;
+        text-align: center;
+        line-height: 1;
     }
 
     .mediaBanners .mediaBannersScroll {
@@ -367,13 +385,11 @@ button {
 
     .mediaBanners .mediaBanner .mediaBannerTitle {
         width: 100%;
-        text-align: left;
-        color: white;
+        margin-top: 5px;
     }
 
     .mediaBanners .mediaBanner .mediaBannerType {
         width: 100%;
-        text-align: left;
         color: #6d8398;
     }
 
@@ -389,8 +405,8 @@ button {
         width: calc(33% - 40px);
         max-width: calc(33% - 40px);
         display: flex;
-        align-items: center;
         flex-direction: column;
+        text-align: center;
         margin: 0px 4px;
     }
 
@@ -414,6 +430,14 @@ button {
     line-height: 1;
     font-size: 14px;
 }
+
+    .mediaStaff > div {
+        margin-top: 5px;
+    }
+
+    .mediaStaff .role {
+        color: #6d8398;
+    }
 
 .mediaRecommendations {
     display: flex;
@@ -738,13 +762,13 @@ button {
 }
 
     .typeWrapper .typeName {
-       height: 30px;
-       text-align: center;
-       display:flex;
-       justify-content:center;
-       align-items: center;
-       background-color: rgba(0, 0, 0, 0.4);
-       gap: 10px;
+        height: 30px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.4);
+        gap: 10px;
     }
 
 .typeCards {
@@ -757,23 +781,23 @@ button {
     position: relative;
 }
 
-.typeName input[type=checkbox] {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    opacity: 0;
-}
+    .typeName input[type=checkbox] {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        opacity: 0;
+    }
 
-.typeName .arrow {
-    transform: rotate(90deg)
-}
+    .typeName .arrow {
+        transform: rotate(90deg)
+    }
 
 .typeWrapper:has(.typeName input[type=checkbox]:checked) .arrow {
     transform: rotate(270deg);
 }
 
-.typeWrapper:has(.typeName input[type=checkbox]:checked) .typeCards{
+.typeWrapper:has(.typeName input[type=checkbox]:checked) .typeCards {
     height: 0px;
 }
 
@@ -824,19 +848,18 @@ button {
     display: flex;
 }
 
-.statsTable > div {
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-
-    justify-content: center;
-    align-items: center;
-}
-
-    .statsTable > div label {
-        font-size: 12px;
-        color: #6d8398;
+    .statsTable > div {
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
+
+        .statsTable > div label {
+            font-size: 12px;
+            color: #6d8398;
+        }
 
 .mediaInfoLabel {
     width: 100vw;
@@ -849,3 +872,127 @@ button {
     color: white;
     margin: 8px 0;
 }
+
+.description {
+    color: orange !important;
+}
+
+    .description.show {
+        color: #6d8398 !important;
+    }
+
+.activityBtn {
+    gap: 15px;
+    display: flex;
+    margin: 0 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center
+}
+
+    .activityBtn .btn {
+        width: 100%;
+    }
+
+    .activityBtn.login {
+        margin: auto 10px;
+        height: 200px;
+    }
+
+        .activityBtn.login .btn {
+            height: 40px;
+        }
+
+.formWrapper {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    gap: 0px 10px;
+}
+
+    .formWrapper * {
+        width: 100%;
+        text-align: end;
+        justify-self: flex-start;
+        margin-bottom: 10px;
+    }
+
+        .formWrapper *:not(label) {
+            height: 25px;
+            text-align: start;
+            outline: none;
+        }
+
+
+    .formWrapper #listCheckbox {
+        width: auto;
+        margin-right: auto;
+    }
+
+    .formWrapper .center {
+        text-align: start;
+    }
+
+.mainPageCarouselWrapper .mediaBanners .mediaBannersScroll .mediaBanner {
+    margin: 0 8px;
+    min-width: 80vw;
+    width: 80vw;
+    max-width: 80vw;
+    overflow: hidden;
+    padding-bottom: 8px;
+    background-color: black;
+}
+
+    .mainPageCarouselWrapper .mediaBanners .mediaBannersScroll .mediaBanner .overlay {
+        min-width: 100%;
+        width: 100%;
+        max-width: 100%;
+        position: relative
+    }
+
+        .mainPageCarouselWrapper .mediaBanners .mediaBannersScroll .mediaBanner .overlay > img {
+            object-fit: scale-down;
+            height: 230px;
+            width: auto;
+            max-height: 100%;
+            transform: translateX(-35%);
+        }
+
+        .mainPageCarouselWrapper .mediaBanners .mediaBannersScroll .mediaBanner .overlay .inception > img {
+            position: absolute;
+            width: 120px;
+            height: 230px;
+            bottom: 10px;
+            left: 10px;
+            z-index: 2;
+        }
+
+        .mainPageCarouselWrapper .mediaBanners .mediaBannersScroll .mediaBanner .overlay .mediaBannerTitle {
+            position: absolute;
+            bottom: 0;
+            font-size: 16px;
+            color: orange;
+            font-family: sans-serif;
+            font-weight: 450;
+            width: 100%;
+            height: 80%;
+            display: flex;
+            align-self: center;
+            text-align: start;
+            padding: 0 0 0 145px;
+            background: linear-gradient(0deg, rgba(0,0,0,0.79) 30%, rgba(0,0,0,0.4) 80%, transparent);
+            padding-top: 25%;
+        }
+
+    .mainPageCarouselWrapper .mediaBanners .mediaBannersScroll .mediaBanner .mediaBannerType {
+        height: 120px;
+        text-align: left;
+        background-color: black;
+        font-size: 14px;
+        padding: 8px;
+        display: -webkit-box;
+        -webkit-line-clamp: 8;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }

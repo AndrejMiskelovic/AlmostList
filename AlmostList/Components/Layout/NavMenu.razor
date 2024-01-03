@@ -5,5 +5,13 @@
 <div class="navbar">
 	<a @onclick='() => UriHelper.NavigateTo("/")'>Home</a>
 	<a @onclick='() => UriHelper.NavigateTo("/PageMedia")'>Search</a>
-	<a @onclick='() => UriHelper.NavigateTo($"/User/{baseClient.CurrentUser.Viewer.Id}")'>Profile</a>
+	<a @onclick='() => OpenProfile()'>Profile</a>
 </div>
+
+@code{
+	private void OpenProfile()
+	{
+		int? id = baseClient.CurrentUser == null ? null : baseClient.CurrentUser.Viewer.Id;
+		UriHelper.NavigateTo($"/User/{id}");
+	}
+}

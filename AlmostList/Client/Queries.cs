@@ -563,6 +563,7 @@ query (  $page:Int,
         native
         userPreferred
       }
+      description
       countryOfOrigin
       type
       format
@@ -577,10 +578,12 @@ query (  $page:Int,
       }
       genres
       source(version:$sourceVersion)
+      bannerImage
       coverImage {
         extraLarge
         large
         medium
+        color
       }
       averageScore
       meanScore

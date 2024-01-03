@@ -2,90 +2,147 @@
 @using AlmostList.Client.Models.Enums
 @using AlmostList.Client.Models.Requests
 @using System.Collections
+@using AlmostList.Client.Models.Responses
 @using AlmostList.Utils
 @inject IJSRuntime JS;
-<CascadingValue Value="this">
-	<label>Format</label>
-	<select multiple @ref="_selectMediaFormat" @onchange="OnSelectionMediaFormat">
-		@foreach (MediaFormat format in Enum.GetValues(typeof(MediaFormat)).Cast<MediaFormat>().Where(role => MediaFormat.MUSIC >= role))
-		{
-			<option value="@format">@format.GetDisplayName()</option>
-		}
-	</select>
-	<label>Status</label>
- 	<select multiple @ref="_selectMediaStatus" @onchange="OnSelectionMediaStatus">
-		@foreach (MediaStatus status in Enum.GetValues(typeof(MediaStatus)))
-		{
-			<option value="@status">@status.GetDisplayName()</option>
-		}
-	</select> 
-	<label>Season</label>
-	<select @bind="PageMediaRequest.Season">
-		<option selected value="">Any</option>
-		@foreach (MediaSeason status in Enum.GetValues(typeof(MediaSeason)))
-		{
-			<option value="@status">@status.GetDisplayName()</option>
-		}
-	</select>
-@* 	<select multiple @ref="_selectReference" @onchange="OnSelectionChanged">
-		@foreach (var country in Enum.GetValues(typeof(Country)))
-		{
 
-			<option value="@country">@country</option>
-		}
-	</select> *@
+
+<CascadingValue Value="this">
+	<div class="formWrapper">
+		<label>Sort:</label>
+		<select multiple @ref="_selectMediaSort" @onchange="OnSelectionMediaSort">
+			@foreach (MediaSort sort in Enum.GetValues(typeof(MediaSort)))
+			{
+				<option value="@sort">@sort.GetDisplayName()</option>
+			}
+		</select>
+		<label>Format:</label>
+		<select multiple @ref="_selectMediaFormat" @onchange="OnSelectionMediaFormat">
+			@foreach (MediaFormat format in Enum.GetValues(typeof(MediaFormat)).Cast<MediaFormat>().Where(role => MediaFormat.MUSIC >= role))
+			{
+				<option value="@format">@format.GetDisplayName()</option>
+			}
+		</select>
+		<label>Status:</label>
+		<select multiple @ref="_selectMediaStatus" @onchange="OnSelectionMediaStatus">
+			@foreach (MediaStatus status in Enum.GetValues(typeof(MediaStatus)))
+			{
+				<option value="@status">@status.GetDisplayName()</option>
+			}
+		</select>
+		<label>Source:</label>
+		<select multiple @ref="_selectMediaSource" @onchange="OnSelectionMediaStatus">
+			@foreach (MediaSource source in Enum.GetValues(typeof(MediaSource)))
+			{
+				<option value="@source">@source.GetDisplayName()</option>
+			}
+		</select>
+		<label>Season:</label>
+		<select @bind="PageMediaRequest.Season">
+			<option selected value="">Any</option>
+			@foreach (MediaSeason season in Enum.GetValues(typeof(MediaSeason)))
+			{
+				<option value="@season">@season.GetDisplayName()</option>
+			}
+		</select>
+		<label>Country Of Origin:</label>
+		<select @bind="PageMediaRequest.Season">
+			<option selected value="">Any</option>
+			@foreach (CountryCode countryCode in Enum.GetValues(typeof(CountryCode)))
+			{
+				<option value="@countryCode">@countryCode.GetDisplayName()</option>
+			}
+		</select>
+		<label for="listCheckbox">Hide My List:</label>
+		<input type="checkbox" id="listCheckbox" @bind="PageMediaRequest.OnList" />
+		@* <InputCheckbox id="listCheckbox" ValueExpression="@(()=> PageMediaRequest.OnList)" Value="PageMediaRequest.OnList" /> *@
+		@*
+		<label>Hide My List</label>
+		<InputCheckbox id="listCheckbox" ValueExpression="@(()=> PageMediaRequest.OnList)" Value="PageMediaRequest.OnList" />
+		*@
+		<label class="center">Realese Years: </label> <div></div>
+		<input type="number" placeholder="From" />
+		<input type="number" placeholder="To" />
+		<label class="center">Episodes:</label><div></div>
+		<input type="number" placeholder="From" />
+		<input type="number" placeholder="To" />
+	</div>
 </CascadingValue>
 
-@code {
+		@code {
 
-	[Parameter]
-	public PageMediaRequest PageMediaRequest { get; set; } = new PageMediaRequest();
+			[Parameter]
+			public PageMediaRequest PageMediaRequest { get; set; }
+			[Parameter]
+			public GenresAndTagsResponse GenresAndTags { get; set; }
 
-	private ElementReference _selectMediaFormat;
-	private ElementReference _selectMediaStatus;
-	private ElementReference _selectMediaSeason;
+			private ElementReference _selectMediaFormat;
+			private ElementReference _selectMediaStatus;
+			private ElementReference _selectMediaSort;
+			private ElementReference _selectMediaSource;
 
-	//select change event.
-	private async Task OnSelectionMediaFormat(ChangeEventArgs eventArgs)
-	{
-
-		var selection = await GetSelections(_selectMediaFormat);
-		if (selection.Any())
-		{
+			private async Task OnSelectionMediaFormat(ChangeEventArgs eventArgs)
+			{
+			var selection = await GetSelections(_selectMediaFormat);
+			if (selection.Any())
+			{
 			PageMediaRequest.FormatIn = new List<MediaFormat>();
 			PageMediaRequest.FormatIn.AddRange(selection.Select(x => (MediaFormat)Enum.Parse(typeof(MediaFormat), x)).ToList());
-		}
-		else
-		{
+			}
+			else
+			{
 			PageMediaRequest.FormatIn = null;
-		}
-	}
-	private async Task OnSelectionMediaStatus(ChangeEventArgs eventArgs)
-	{
-		var selection = await GetSelections(_selectMediaStatus);
-		if (selection.Any())
-		{
+			}
+			}
+			private async Task OnSelectionMediaSource(ChangeEventArgs eventArgs)
+			{
+			var selection = await GetSelections(_selectMediaSource);
+			if (selection.Any())
+			{
+			PageMediaRequest.SourceIn = new List<MediaSource>();
+			PageMediaRequest.SourceIn.AddRange(selection.Select(x => (MediaSource)Enum.Parse(typeof(MediaSource), x)).ToList());
+			}
+			else
+			{
+			PageMediaRequest.StatusIn = null;
+			}
+			}
+			private async Task OnSelectionMediaStatus(ChangeEventArgs eventArgs)
+			{
+			var selection = await GetSelections(_selectMediaStatus);
+			if (selection.Any())
+			{
 			PageMediaRequest.StatusIn = new List<MediaStatus>();
 			PageMediaRequest.StatusIn.AddRange(selection.Select(x => (MediaStatus)Enum.Parse(typeof(MediaStatus), x)).ToList());
-		}
-		else
-		{
+			}
+			else
+			{
 			PageMediaRequest.StatusIn = null;
+			}
+			}
+			private async Task OnSelectionMediaSort(ChangeEventArgs eventArgs)
+			{
+			var selection = await GetSelections(_selectMediaSort);
+			if (selection.Any())
+			{
+			PageMediaRequest.Sort = new List<MediaSort>();
+			PageMediaRequest.Sort.AddRange(selection.Select(x => (MediaSort)Enum.Parse(typeof(MediaSort), x)).ToList());
+			}
+			else
+			{
+			PageMediaRequest.StatusIn = null;
+			}
+			}
+			// private async Task OnSelectionEnum<T>(Func<PageMediaRequest, List<T>?> selector)
+			// {
+			// 	var selection = await GetSelections(_selectMediaStatus);
+			// 	var collection = selector.Invoke(PageMediaRequest);
+			// 	collection.AddRange(selection.Select(x => (T)Enum.Parse(typeof(T), x)).ToList());
+
+			// }
+			public async Task<HashSet<string>> GetSelections(ElementReference elementReference)
+			{
+			return (await JS.InvokeAsync<List<string>>("getSelectedValues", elementReference)).ToHashSet();
+			}
+
 		}
-
-	}
-	// private async Task OnSelectionEnum<T>(Func<PageMediaRequest, List<T>?> selector)
-	// {
-	// 	var selection = await GetSelections(_selectMediaStatus);
-	// 	var collection = selector.Invoke(PageMediaRequest);
-	// 	collection.AddRange(selection.Select(x => (T)Enum.Parse(typeof(T), x)).ToList());
-
-	// }
-	public async Task<HashSet<string>> GetSelections(ElementReference elementReference)
-	{
-		return (await JS.InvokeAsync<List<string>>("getSelectedValues", elementReference)).ToHashSet();
-	}
-
-
-
-}
