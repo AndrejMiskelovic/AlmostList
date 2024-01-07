@@ -703,6 +703,7 @@ button {
 
 
 .popupInputGroup .mediaPopupLabel {
+    position: relative;
     font-size: 16px;
 }
 
@@ -739,12 +740,23 @@ button {
     grid-column-gap: 15px;
 }
 
-.popupBtnGroup {
-    margin-top: 4px;
-    width: 100%;
-    display: flex;
-    gap: 15px;
-}
+    .flexpopupGroup label {
+        width: 60%;
+        text-overflow: ellipsis;
+        overflow:hidden;
+        white-space: nowrap;
+        justify-content: flex-start;
+    }
+    .flexpopupGroup input {
+        width: 20px;
+    }
+
+    .popupBtnGroup {
+        margin-top: 4px;
+        width: 100%;
+        display: flex;
+        gap: 15px;
+    }
 
 .popupBtn:first-child {
     margin-left: auto;
@@ -995,4 +1007,21 @@ button {
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+.favoriteIcon {
+    margin-left: 260px;
+    margin-top: -25px;
+    display: flex;
+    align-self: center;
+    background: url('../heart.svg');
+    background-repeat: no-repeat;
+    background-size: 25px;
+    width: 25px;
+    height: 25px;
+    filter: saturate(0) brightness(4);
+}
+
+    .favoriteIcon.favorited {
+        filter: none;
     }

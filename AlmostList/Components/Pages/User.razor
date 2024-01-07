@@ -70,7 +70,7 @@
 
 							@foreach (var item in @UserReponse.Data.User.Favourites.Anime.Nodes)
 							{
-								<div class="mediaCard">
+								<div class="mediaCard" @onclick="(() => OpenMedia(item.Id))">
 									<img src="@item.CoverImage.Large" />
 									<div class="pageMediaInfo">
 										<div class="title">
@@ -86,7 +86,7 @@
 						<div class="titleWrapper">
 							@foreach (var item in @UserReponse.Data.User.Favourites.Manga.Nodes)
 							{
-								<div class="mediaCard">
+								<div class="mediaCard" @onclick="(() => OpenMedia(item.Id))">
 									<img src="@item.CoverImage.Large" />
 									<div class="pageMediaInfo">
 										<div class="title">

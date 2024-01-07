@@ -24,7 +24,7 @@
 				<text class="title">@mediaResponse.Data.Media.Title.UserPreferred </text>
 
 					<Popup @ref="popupRef">
-						<MediaEntry MediaList="@mediaList" MaxEpisodes="mediaResponse.Data.Media.Episodes"></MediaEntry>
+						<MediaEntry MediaList="@mediaList" Type="mediaResponse.Data.Media.Type" IsFavorite="mediaResponse.Data.Media.IsFavourite" MaxEpisodes="mediaResponse.Data.Media.Episodes"></MediaEntry>
 					</Popup>
 					<button class='button' @onclick="PopupClick">@(mediaResponse.Data.Media.MediaListEntry == null ? "Add to List" : @mediaResponse.Data.Media.MediaListEntry.Status.GetDisplayName())</button>
 				
@@ -214,9 +214,20 @@
 
 	private Popup popupRef;
 
-	private void PopupClick()
+	private async void PopupClick()
 	{
-		// Shows the popup at the center of the screen
+		if(mediaResponse.Data.Media.MediaListEntry != null)
+		{
+			var entry = await baseClient.GetMediaListEntry(Id, baseClient.CurrentUser.Viewer.Id);
+			mediaList = entry.Data.MediaList;
+		}
+		else if(baseClient.CurrentUser != null)
+		{
+			mediaList.CustomLists = mediaResponse.Data.Media.Type == Client.Models.Enums.MediaType.ANIME ? baseClient.CurrentUser.Viewer.MediaListOptions.AnimeList.CustomLists.ToDictionary(x=> x, x => false) : baseClient.CurrentUser.Viewer.MediaListOptions.MangaList.CustomLists.ToDictionary(x=> x, x => false);
+			mediaList.MediaId = Id;
+			mediaList.UserId = baseClient.CurrentUser.Viewer.Id;
+		}
+
 		popupRef.Show();
 	}
 	protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -224,12 +235,6 @@
 		if (firstRender)
 		{
 			mediaResponse = await baseClient.GetMediaWithListEntry(Id);
-			if(mediaResponse.Data.Media.MediaListEntry != null)
-			{
-				mediaList = mediaResponse.Data.Media.MediaListEntry;
-			}
-			mediaList.MediaId = mediaResponse.Data.Media.Id;
-			mediaList.UserId = baseClient.CurrentUser == null ? null : baseClient.CurrentUser.Viewer.Id;
 			render = true;
 			StateHasChanged();
 		}

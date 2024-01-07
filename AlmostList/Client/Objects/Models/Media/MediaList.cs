@@ -1,5 +1,6 @@
 ﻿using AlmostList.Client.Models.Enums;
 using AlmostList.Client.Models.Properties.Common;
+using System.Text.Json.Serialization;
 
 namespace AlmostList.Client.Models.Properties.Media
 {
@@ -20,7 +21,7 @@ namespace AlmostList.Client.Models.Properties.Media
         public bool? Private { get; set; }
         public string? Notes { get; set; }
         public bool? HiddenFromStatusLists { get; set; }
-        public List<string>? CustomLists { get; set; }
+        public Dictionary<string, bool>? CustomLists { get; set; }
         /// <summary>
         /// Json
         /// </summary>

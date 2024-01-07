@@ -4,8 +4,11 @@
 @using AlmostList.Client.Models.Properties.Media
 @using AlmostList.Utils
 @inject BaseClient baseClient
+@inject NavigationManager UriHelper
 
 <div>
+
+
 	<div class="popupInputGroup">
 		<div class="mediaPopupLabel">Status</div>
 		<select @bind="MediaList.Status">
@@ -16,7 +19,9 @@
 				<option value="@format">@format.GetDisplayName()</option>
 			}
 		</select>
+		<div class="favoriteIcon @(IsFavorite ? "favorited" : "")" @onclick="() => AddToFavorite()"></div>
 	</div>
+
 
 	<div class="popupGroupedGroup">
 		<div class="popupInputGroup">
@@ -61,16 +66,22 @@
 	{
 		@foreach (var item in MediaList.CustomLists)
 		{
-			<div class="mediaPopupLabel">@item</div>
-			<InputCheckbox @onchange="() =>AddCustomList(item)" />
+			<div class="flexpopupGroup">
+				<label for="@item.Key" class="mediaPopupLabel">@item.Key</label>
+				<input type="checkbox" id="@item.Key" checked="@item.Value" @onchange="() =>AddCustomList(item.Key)" />
+			</div>
 		}
-		<div class="mediaPopupLabel">Hidden from status lists</div>
-		<input type="checkbox" @bind="MediaList.HiddenFromStatusLists" />
+		<div class="flexpopupGroup">
+
+			<label for="hidden" class="mediaPopupLabel">Hidden from status lists</label>
+			<input type="checkbox" id="hidden" @bind="MediaList.HiddenFromStatusLists" />
+		</div>
 	}
 	<div class="flexpopupGroup">
 
-		<div class="mediaPopupLabel">Private</div>
-		<input type="checkbox" @bind="MediaList.Private" />
+		<label for="private" class="mediaPopupLabel">Private</label>
+		<input type="checkbox" id="private" @bind="MediaList.Private" />
+
 	</div>
 
 	<div class="popupBtnGroup">
@@ -90,6 +101,10 @@
 	private DateTime? completedAt { get; set; }
 	[Parameter]
 	public int? MaxEpisodes { get; set; }
+	[Parameter]
+	public bool IsFavorite { get; set; }
+	[Parameter]
+	public MediaType? Type { get; set; }
 
 	[Parameter]
 	public MediaList? MediaList { get; set; }
@@ -132,25 +147,32 @@
 	private void AddCustomList(string list)
 	{
 		if (MediaList.CustomLists == null)
-			MediaList.CustomLists = new List<string>();
+			MediaList.CustomLists = new Dictionary<string, bool>();
 
-		if (MediaList.CustomLists.Any(x => x == list))
-			MediaList.CustomLists.Add(list);
-		else
-			MediaList.CustomLists.Remove(list);
-
-		if (MediaList.CustomLists.Count == 0)
-			MediaList.CustomLists = null;
+		MediaList.CustomLists[list] = !(MediaList.CustomLists[list]);
 	}
 	private async Task Delete()
 	{
 		await baseClient.DeleteMediaEntry(MediaList.Id.Value);
+		UriHelper.NavigateTo($"/Media/{MediaList.MediaId}", true);
 	}
 	private async Task Save()
 	{
 		await baseClient.UpdateMediaEntry(MediaList);
-		StateHasChanged();
+		UriHelper.NavigateTo($"/Media/{MediaList.MediaId}", true);
 
+	}
+	private async Task AddToFavorite()
+	{
+		IsFavorite = !IsFavorite;
+		if (Type.HasValue)
+		{
+			if (Type == MediaType.ANIME)
+				await baseClient.UpdateMediaFavoriteAnime(MediaList.MediaId);
+			if (Type == MediaType.MANGA)
+				await baseClient.UpdateMediaFavoriteManga(MediaList.MediaId);
+		}
+		StateHasChanged();
 	}
 }
 

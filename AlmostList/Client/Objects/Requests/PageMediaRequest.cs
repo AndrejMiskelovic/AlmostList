@@ -20,8 +20,8 @@ namespace AlmostList.Client.Models.Requests
         public int? SeasonYear { get; set; }
         private DateOnly? _startDateGreater { get; set; }
         private DateOnly? _startDateLesser { get; set; }
-        public bool IsAdult { get; set; } = false;
-        public bool OnList { get; set; }
+        public bool? IsAdult { get; set; } = false;
+        public bool? OnList { get; set; }
         public List<string>? GenreIn { get; set; }
         public List<string>? GenreNotIn { get; set; } = new List<string>() { "Ecchi" };
 		public int? MinimumTagRank { get; set; }
@@ -50,7 +50,8 @@ namespace AlmostList.Client.Models.Requests
             }
             set
             {
-                DateOnly.TryParse(value, out DateOnly date);
+                value = "01/01/"+value;
+				DateOnly.TryParse(value, out DateOnly date);
                 _startDateGreater = date.AddDays(-1);
             }
         }
@@ -58,11 +59,12 @@ namespace AlmostList.Client.Models.Requests
         {
             get
             {
-                return _startDateLesser == null ? null : _startDateLesser.Value.ToString("yyyyMMdd");
+                return _startDateLesser == null ? null : _startDateLesser.Value.ToString("yyyy");
             }
             set
             {
-                DateOnly.TryParse(value, out DateOnly date);
+				value = "01/01/" + value;
+				DateOnly.TryParse(value, out DateOnly date);
                 _startDateLesser = date.AddDays(1);
             }
         }

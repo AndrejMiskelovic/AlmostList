@@ -15,10 +15,11 @@
 
 
 <Tabs OnTabChanged="OnTabChanged">
-	<Popup @ref="popupRef">
-		<Search PageMediaRequest="PageMediaRequest" GenresAndTags="TagsAndGenresResponse.Data"></Search>
-	</Popup>
+
 	<Tab Text="@MediaType.ANIME.GetDisplayName()" Value="@MediaType.ANIME.ToString()">
+		<Popup @ref="popupRef">
+			<Search PageMediaRequest="PageMediaRequest" GenresAndTags="TagsAndGenresResponse.Data"></Search>
+		</Popup>
 		<div class="searchWrapper">
 			<input class="searchInput" @bind="PageMediaRequest.Search" />
 			<button @onclick="PopupClick" class="searchBtn">Filters</button>
@@ -49,6 +50,9 @@
 	</Tab>
 
 	<Tab Text="@MediaType.MANGA.GetDisplayName()" Value="@MediaType.MANGA.ToString()">
+		<Popup @ref="popupRef">
+			<Search PageMediaRequest="PageMediaRequest" GenresAndTags="TagsAndGenresResponse.Data"></Search>
+		</Popup>
 		<div class="searchWrapper">
 			<input class="searchInput" @bind="PageMediaRequest.Search" />
 			<button @onclick="PopupClick" class="searchBtn">Filters</button>

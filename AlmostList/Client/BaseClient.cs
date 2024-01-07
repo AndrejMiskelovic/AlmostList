@@ -322,12 +322,47 @@ namespace AlmostList.Client
 		}
 		public async Task UpdateMediaEntry(MediaList mediaList)
 		{
+			MediaEntryUpdate mediaEntryUpdate = MediaListToMediaEntryUpdate.Convert(mediaList);
 			try
 			{
 				var request = new GraphQLRequest
 				{
 					Query = Queries.UpdateMediaEntry,
-					Variables = mediaList
+					Variables = mediaEntryUpdate
+				};
+
+				var response = await _graphQLClient.SendMutationAsync<Task>(request);
+			}
+			catch (Exception ex)
+			{
+				throw;
+			}
+		}
+		public async Task UpdateMediaFavoriteAnime(int? animeId)
+		{
+			try
+			{
+				var request = new GraphQLRequest
+				{
+					Query = Queries.UpdateFavoriteMedia,
+					Variables = new { animeId = animeId}
+				};
+
+				var response = await _graphQLClient.SendMutationAsync<Task>(request);
+			}
+			catch (Exception ex)
+			{
+				throw;
+			}
+		}
+		public async Task UpdateMediaFavoriteManga(int? mangaId)
+		{
+			try
+			{
+				var request = new GraphQLRequest
+				{
+					Query = Queries.UpdateFavoriteMedia,
+					Variables = new { mangaId = mangaId }
 				};
 
 				var response = await _graphQLClient.SendMutationAsync<Task>(request);

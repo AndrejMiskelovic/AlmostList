@@ -1,8 +1,8 @@
 ﻿namespace AlmostList.Client
 {
 	public class Queries
-    {
-        public const string Media = @"
+	{
+		public const string Media = @"
 query ($id:Int, $statusVersion:Int, $sourceVersion:Int, $relationTypeVersion: Int) {
     Media(id:$id) {
         id
@@ -418,28 +418,6 @@ query ($id:Int, $statusVersion:Int, $sourceVersion:Int, $relationTypeVersion: In
             userId
             mediaId
             status
-            score
-            progress
-            progressVolumes
-            repeat
-            priority
-            private
-            notes
-            hiddenFromStatusLists
-            customLists
-            advancedScores
-            startedAt {
-                year
-                month
-                day
-            }
-            completedAt {
-                year
-                month
-                day
-            }
-            updatedAt
-            createdAt
         }
     }
 }";
@@ -476,7 +454,7 @@ query ($userId:Int, $mediaId:Int) {
     }
 }";
 
-        public const string PageMedia = @"
+		public const string PageMedia = @"
 query (  $page:Int,
   $statusVersion:Int,
   $sourceVersion: Int,
@@ -844,7 +822,7 @@ query ($mediaType: ExternalLinkMediaType, $type: ExternalLinkType) {
   }
 }";
 
-        public const string GenresAndTagsCollection = @"
+		public const string GenresAndTagsCollection = @"
 query {
   genres: GenreCollection
   tags: MediaTagCollection {
@@ -982,7 +960,7 @@ query ($page: Int, $id: Int, $search: String, $isBirthday: Boolean, $sort: [Staf
 
 ";
 
-        public const string PageAiringSchedule = @"
+		public const string PageAiringSchedule = @"
 query($page: Int,
   $airingAtGreater: Int,
   $airingAtLesser: Int
@@ -1036,7 +1014,7 @@ query($page: Int,
   }
 }";
 
-        public const string Viewer = @"
+		public const string Viewer = @"
 query {
   Viewer {
     id
@@ -1068,10 +1046,28 @@ query {
     moderatorRoles
     siteUrl
     createdAt
+ mediaListOptions {
+      scoreFormat
+      rowOrder
+      animeList {
+        customLists
+        sectionOrder
+        splitCompletedSectionByFormat
+        advancedScoring
+        advancedScoringEnabled
+      }
+      mangaList {
+        customLists
+        sectionOrder
+        splitCompletedSectionByFormat
+        advancedScoring
+        advancedScoringEnabled
+      }
+    }
   }
 }";
 
-        public const string DeleteMediaEntry = @"
+		public const string DeleteMediaEntry = @"
 mutation ($id: Int) {
     DeleteMediaListEntry(id: $id) {
         deleted
@@ -1225,5 +1221,36 @@ mutation ($titleLanguage:UserTitleLanguage,
     createdAt
   }
 }";
+
+        public const string UpdateFavoriteMedia = @"
+mutation ($animeId: Int, $mangaId: Int, $characterId: Int, $staffId: Int, $studioId: Int) {
+  ToggleFavourite(animeId: $animeId, mangaId: $mangaId, characterId: $characterId, staffId: $staffId, studioId: $studioId) {
+    anime {
+      pageInfo {
+        total
+      }
     }
+    manga {
+      pageInfo {
+        total
+      }
+    }
+    characters {
+      pageInfo {
+        total
+      }
+    }
+    staff {
+      pageInfo {
+        total
+      }
+    }
+    studios {
+      pageInfo {
+        total
+      }
+    }
+  }
+}";
+	}
 }

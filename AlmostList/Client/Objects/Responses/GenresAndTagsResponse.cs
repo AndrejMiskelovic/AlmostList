@@ -11,6 +11,6 @@ namespace AlmostList.Client.Models.Responses
     public class GenresAndTagsResponse
     {
         public List<string>? Genres { get; set; }
-        public List<MediaTag>? MediaTags { get; set; }
+        public List<MediaTag>? Tags { get; set; }
     }
 }
