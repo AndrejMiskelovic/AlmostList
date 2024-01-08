@@ -99,9 +99,9 @@
 		@if (baseClient.CurrentUser != null)
 		{
 			<label for="hideList">Hide My List:</label>
-			<input type="checkbox" id="hideList" checked="@_hideList" @oninput="SetBoolTrueOrNull" />
+			<input type="checkbox" id="hideList" checked="@_hideList" @oninput="SetBoolFalseOrNull" />
 			<label for="showList">Show Only My List:</label>
-			<input type="checkbox" id="showList" checked="@_showList" @onchange="() => SetBoolFalseOrNull()" />
+			<input type="checkbox" id="showList" checked="@_showList" @onchange="SetBoolTrueOrNull" />
 		}
 		<label class="center">Realese Years: </label> <div></div>
 		<input type="number" @bind="PageMediaRequest.StartDateGreater" placeholder="From" />
@@ -207,18 +207,18 @@
 	}
 	private void SetBoolTrueOrNull()
 	{
-		_hideList = !_hideList;
+		_showList = !_showList;
 		PageMediaRequest.OnList = PageMediaRequest.OnList == null ? true : PageMediaRequest.OnList == false ? true : (bool?)null;
 		if (_hideList)
-			_showList = false;
+			_hideList = false;
 	}
 
 	private void SetBoolFalseOrNull()
 	{
-		_showList = !_showList;
+		_hideList = !_hideList;
 		PageMediaRequest.OnList = PageMediaRequest.OnList == null ? false : PageMediaRequest.OnList == true ? false : (bool?)null;
 		if (_showList)
-			_hideList = false;
+			_showList = false;
 	}
 	// private async Task OnSelectionEnum<T>(Func<PageMediaRequest, List<T>?> selector)
 	// {
