@@ -203,14 +203,15 @@ namespace AlmostList.Client
 			}
 
 		}
-		public async Task<GraphQLResponse<PageResponse<PagedMedia>>> GetPageMedia(PageMediaRequest variables)
+		public async Task<GraphQLResponse<PageResponse<PagedMedia>>> GetPageMedia(PageMediaRequestViewModel variables)
 		{
 			try
 			{
+				PageMediaRequest pageMediaRequest = PageMediaRequest.Convert(variables);
 				var request = new GraphQLRequest
 				{
 					Query = Queries.PageMedia,
-					Variables = variables,
+					Variables = pageMediaRequest,
 				};
 
 				var response = await _graphQLClient.SendQueryAsync<PageResponse<PagedMedia>>(request);
@@ -322,7 +323,7 @@ namespace AlmostList.Client
 		}
 		public async Task UpdateMediaEntry(MediaList mediaList)
 		{
-			MediaEntryUpdate mediaEntryUpdate = MediaListToMediaEntryUpdate.Convert(mediaList);
+			MediaEntryUpdate mediaEntryUpdate = MediaEntryUpdate.Convert(mediaList);
 			try
 			{
 				var request = new GraphQLRequest

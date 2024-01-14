@@ -12,71 +12,71 @@ namespace AlmostList.Client.Models.Enums
 		TITLE_ROMAJI,
 		[Display(Name = "Title Romaji Descending")]
 		TITLE_ROMAJI_DESC,
-		[Display(Name = "TITLE_ENGLISH")]
+		[Display(Name = "Title English")]
 		TITLE_ENGLISH,
-		[Display(Name = "TITLE_ENGLISH_DESC")]
+		[Display(Name = "Title English Descending")]
 		TITLE_ENGLISH_DESC,
-		[Display(Name = "TITLE_NATIVE")]
+		[Display(Name = "Title Native")]
 		TITLE_NATIVE,
-		[Display(Name = "TITLE_NATIVE_DESC")]
+		[Display(Name = "Title Native Descending")]
 		TITLE_NATIVE_DESC,
-		[Display(Name = "TYPE")]
+		[Display(Name = "Type")]
 		TYPE,
-		[Display(Name = "TYPE_DESC")]
+		[Display(Name = "Type Descending")]
 		TYPE_DESC,
-		[Display(Name = "FORMAT")]
+		[Display(Name = "Format")]
 		FORMAT,
-		[Display(Name = "FORMAT_DESC")]
+		[Display(Name = "Format Descending")]
 		FORMAT_DESC,
-		[Display(Name = "START_DATE")]
+		[Display(Name = "Start Date")]
 		START_DATE,
-		[Display(Name = "START_DATE_DESC")]
+		[Display(Name = "Start Date Descending")]
 		START_DATE_DESC,
-		[Display(Name = "END_DATE")]
+		[Display(Name = "End Date")]
 		END_DATE,
-		[Display(Name = "END_DATE_DESC")]
+		[Display(Name = "End Date Descending")]
 		END_DATE_DESC,
-		[Display(Name = "SCORE")]
+		[Display(Name = "Score")]
 		SCORE,
-		[Display(Name = "SCORE_DESC")]
+		[Display(Name = "Score Descending")]
 		SCORE_DESC,
-		[Display(Name = "POPULARITY")]
+		[Display(Name = "Popularity")]
 		POPULARITY,
-		[Display(Name = "POPULARITY_DESC")]
+		[Display(Name = "Popularity Descending")]
 		POPULARITY_DESC,
-		[Display(Name = "TRENDING")]
+		[Display(Name = "Trending")]
 		TRENDING,
-		[Display(Name = "TRENDING_DESC")]
+		[Display(Name = "Trending Descending")]
 		TRENDING_DESC,
-		[Display(Name = "EPISODES")]
+		[Display(Name = "Episodes")]
 		EPISODES,
-		[Display(Name = "EPISODES_DESC")]
+		[Display(Name = "Episodes Descending")]
 		EPISODES_DESC,
-		[Display(Name = "DURATION")]
+		[Display(Name = "Duration")]
 		DURATION,
-		[Display(Name = "DURATION_DESC")]
+		[Display(Name = "Duration Descending")]
 		DURATION_DESC,
-		[Display(Name = "STATUS")]
+		[Display(Name = "Status")]
 		STATUS,
-		[Display(Name = "STATUS_DESC")]
+		[Display(Name = "Status Descending")]
 		STATUS_DESC,
-		[Display(Name = "CHAPTERS")]
+		[Display(Name = "Chapters")]
 		CHAPTERS,
-		[Display(Name = "CHAPTERS_DESC")]
+		[Display(Name = "Chapters Descending")]
 		CHAPTERS_DESC,
-		[Display(Name = "VOLUMES")]
+		[Display(Name = "Volumes")]
 		VOLUMES,
-		[Display(Name = "VOLUMES_DESC")]
+		[Display(Name = "Volumes Descending")]
 		VOLUMES_DESC,
-		[Display(Name = "UPDATED_AT")]
+		[Display(Name = "Updated At")]
 		UPDATED_AT,
-		[Display(Name = "UPDATED_AT_DESC")]
+		[Display(Name = "Updated At Descending")]
 		UPDATED_AT_DESC,
-		[Display(Name = "SEARCH_MATCH")]
+		[Display(Name = "Search Match")]
 		SEARCH_MATCH,
-		[Display(Name = "FAVOURITES")]
+		[Display(Name = "Favourites")]
 		FAVOURITES,
-		[Display(Name = "FAVOURITES_DESC")]
+		[Display(Name = "Favourites Descending")]
 		FAVOURITES_DESC
 	}
 }

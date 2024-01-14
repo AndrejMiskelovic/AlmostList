@@ -26,7 +26,17 @@
 					<Popup @ref="popupRef">
 						<MediaEntry MediaList="@mediaList" Type="mediaResponse.Data.Media.Type" IsFavorite="mediaResponse.Data.Media.IsFavourite" MaxEpisodes="mediaResponse.Data.Media.Episodes"></MediaEntry>
 					</Popup>
-					<button class='button' @onclick="PopupClick">@(mediaResponse.Data.Media.MediaListEntry == null ? "Add to List" : @mediaResponse.Data.Media.MediaListEntry.Status.GetDisplayName())</button>
+					@if(baseClient.CurrentUser != null)
+					{
+						<button class='button' @onclick="PopupClick">@(mediaResponse.Data.Media.MediaListEntry == null ? "Add to List" : @mediaResponse.Data.Media.MediaListEntry.Status.GetDisplayName())</button>		
+					}
+					else
+					{
+						<button class='button' @onclick="() => popupRef2.Show()">Add to List</button>		
+						<Popup @ref="popupRef2">
+							<div>You need to be logged in to add it to your list</div>
+						</Popup>
+					}
 				
 			</div>
 		</div>
@@ -116,12 +126,10 @@
 					<div>Tags</div>
 				@foreach (var item in mediaResponse.Data.Media.Tags)
 				{
-					@* TODO <div hidden="@item.IsMediaSpoiler ? true : @item.IsGeneralSpoiler ? true : false"> *@
 					<div class="mediaTags">
 						<div>@item.Name</div
 						<div>@item.Rank%</div>
 					</div>
-					@* </div> *@
 				}
 				</div>
 			</div>
@@ -213,6 +221,7 @@
 	MediaList mediaList = new MediaList();
 
 	private Popup popupRef;
+	private Popup popupRef2;
 
 	private async void PopupClick()
 	{

@@ -31,10 +31,7 @@ namespace AlmostList.Client.Objects.Requests
 		public int? CreatedAt { get; set; }
 		public Media? Media { get; set; }
 		public User? User { get; set; }
-	}
 
-	public static class MediaListToMediaEntryUpdate
-	{
 		public static MediaEntryUpdate Convert(MediaList mediaList)
 		{
 			MediaEntryUpdate mediaEntryUpdate = new MediaEntryUpdate();
@@ -69,5 +66,4 @@ namespace AlmostList.Client.Objects.Requests
 			return mediaEntryUpdate;
 		}
 	}
-
 }

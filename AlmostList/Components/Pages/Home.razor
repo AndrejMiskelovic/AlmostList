@@ -181,8 +181,9 @@
 	}
 	private async void AnimeTrending()
 	{
-		PageMediaRequest pageMediaRequest = new PageMediaRequest();
+		PageMediaRequestViewModel pageMediaRequest = new PageMediaRequestViewModel();
 		pageMediaRequest.Type = MediaType.ANIME;
+		pageMediaRequest.Sort = new List<MediaSort>() { MediaSort.TRENDING_DESC };
 
 		PageMediaResponseAnimeTrending = await baseClient.GetPageMedia(pageMediaRequest);
 		RenderAnimeTrending = true;
@@ -190,8 +191,9 @@
 	}
 	private async void MangaTrending()
 	{
-		PageMediaRequest pageMediaRequest = new PageMediaRequest();
+		PageMediaRequestViewModel pageMediaRequest = new PageMediaRequestViewModel();
 		pageMediaRequest.Type = MediaType.MANGA;
+		pageMediaRequest.Sort = new List<MediaSort>() { MediaSort.TRENDING_DESC };
 
 		PageMediaResponseMangaTrending = await baseClient.GetPageMedia(pageMediaRequest);
 		RenderMangaTrending = true;
@@ -199,7 +201,7 @@
 	}
 	private async void NewAddedAnime()
 	{
-		PageMediaRequest pageMediaRequest = new PageMediaRequest();
+		PageMediaRequestViewModel pageMediaRequest = new PageMediaRequestViewModel();
 		pageMediaRequest.Type = MediaType.ANIME;
 		pageMediaRequest.Sort = new List<MediaSort> { MediaSort.ID_DESC };
 
@@ -209,7 +211,7 @@
 	}
 	private async void NewAddedManga()
 	{
-		PageMediaRequest pageMediaRequest = new PageMediaRequest();
+		PageMediaRequestViewModel pageMediaRequest = new PageMediaRequestViewModel();
 		pageMediaRequest.Type = MediaType.MANGA;
 		pageMediaRequest.Sort = new List<MediaSort> { MediaSort.ID_DESC };
 

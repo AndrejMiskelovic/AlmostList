@@ -103,9 +103,11 @@
 			<label for="showList">Show Only My List:</label>
 			<input type="checkbox" id="showList" checked="@_showList" @onchange="SetBoolTrueOrNull" />
 		}
-		<label class="center">Realese Years: </label> <div></div>
-		<input type="number" @bind="PageMediaRequest.StartDateGreater" placeholder="From" />
-		<input type="number" @bind="PageMediaRequest.StartDateLesser" placeholder="To" />
+		<label class="center">Realese Date: </label> <div></div>
+		<div class="center">From </div> 
+		<input type="date" @bind="PageMediaRequest.StartDateGreater" placeholder="From" />
+		<div class="center">To </div> 
+		<input type="date" @bind="PageMediaRequest.StartDateLesser" placeholder="To" />
 		<label class="center">Episodes:</label><div></div>
 		<input type="number" @bind="PageMediaRequest.EpisodesGreater" placeholder="From" />
 		<input type="number" @bind="PageMediaRequest.EpisodesLesser" placeholder="To" />
@@ -114,7 +116,7 @@
 @code {
 
 	[Parameter]
-	public PageMediaRequest PageMediaRequest { get; set; }
+	public PageMediaRequestViewModel PageMediaRequest { get; set; }
 	[Parameter]
 	public GenresAndTagsResponse GenresAndTags { get; set; }
 
