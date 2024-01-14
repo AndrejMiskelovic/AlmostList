@@ -23,7 +23,7 @@ namespace AlmostList.Client.Models.Properties.Staff
         public string? BloodType { get; set; }
         public bool IsFavourite { get; set; }
         public bool IsFavouriteBlocked { get; set; }
-        public bool SiteUrl { get; set; }
+        public string? SiteUrl { get; set; }
         public Connection<MediaEdge, Media.Media>? StaffMedia { get; set; }
         public Connection<CharacterEdge, Character.Character>? Characters { get; set; }
         public Connection<MediaEdge, Media.Media>? CharacterMedia { get; set; }
