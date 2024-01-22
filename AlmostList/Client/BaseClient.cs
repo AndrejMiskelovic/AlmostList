@@ -41,10 +41,10 @@ namespace AlmostList.Client
 				return response;
 
             }
-            catch (Exception ex)
+            catch
             {
-
-                throw;
+				return null;
+               
             }
         }
 		public async Task<GraphQLResponse<MediaResponse>> GetMediaWithListEntry(int id)
@@ -64,7 +64,7 @@ namespace AlmostList.Client
 			catch (Exception ex)
 			{
 
-				throw;
+				return null;
 			}
 		}
 		public async Task<GraphQLResponse<MediaResponse>> GetMedia(int id)
@@ -103,7 +103,7 @@ namespace AlmostList.Client
 			catch (Exception ex)
 			{
 
-				throw;
+				return null;
 			}
 
 		}
@@ -122,7 +122,7 @@ namespace AlmostList.Client
 			}
 			catch (Exception ex)
 			{
-				throw;
+				return null;
 			}
 		}
 		public async Task<GraphQLResponse<UserMediaResponse>> GetUserMedia(MediaType type, int? id, string? name = null)
@@ -140,7 +140,7 @@ namespace AlmostList.Client
 			}
 			catch (Exception ex)
 			{
-				throw;
+				return null;
 			}
 		}
 
@@ -179,7 +179,7 @@ namespace AlmostList.Client
 			catch (Exception ex)
 			{
 
-				throw;
+				return null;
 			}
 
 		}
@@ -199,7 +199,7 @@ namespace AlmostList.Client
 			catch (Exception ex)
 			{
 
-				throw;
+				return null;
 			}
 
 		}
@@ -220,8 +220,8 @@ namespace AlmostList.Client
 			catch (Exception ex)
 			{
 
-				throw;
-            }
+				return null;
+			}
 
 		}
         public async Task<GraphQLResponse<PageResponse<PagedStudio>>> GetPageStudio(PageStudioRequest variables)
@@ -318,7 +318,6 @@ namespace AlmostList.Client
 			}
 			catch (Exception ex)
 			{
-				throw;
 			}
 		}
 		public async Task UpdateMediaEntry(MediaList mediaList)
@@ -336,7 +335,7 @@ namespace AlmostList.Client
 			}
 			catch (Exception ex)
 			{
-				throw;
+			
 			}
 		}
 		public async Task UpdateMediaFavoriteAnime(int? animeId)
@@ -353,7 +352,7 @@ namespace AlmostList.Client
 			}
 			catch (Exception ex)
 			{
-				throw;
+				//throw;
 			}
 		}
 		public async Task UpdateMediaFavoriteManga(int? mangaId)
@@ -370,7 +369,7 @@ namespace AlmostList.Client
 			}
 			catch (Exception ex)
 			{
-				throw;
+				//throw;
 			}
 		}
 

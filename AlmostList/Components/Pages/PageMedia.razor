@@ -15,7 +15,6 @@
 
 
 <Tabs OnTabChanged="OnTabChanged">
-
 	<Tab Text="@MediaType.ANIME.GetDisplayName()" Value="@MediaType.ANIME.ToString()">
 		<Popup @ref="popupRef">
 			<Search PageMediaRequest="PageMediaRequest" GenresAndTags="TagsAndGenresResponse.Data"></Search>
@@ -125,6 +124,7 @@
 			TagAndGenresRequest();
 			PageMediaRequestViewModel InitialRequest = new PageMediaRequestViewModel();
 			InitialRequest.Type = MediaType.ANIME;
+			PageMediaRequest.Type = MediaType.ANIME;
 			InitialRequest.Sort = new List<MediaSort>() { MediaSort.TRENDING_DESC };
 			MediaRequest(InitialRequest);
 		}
@@ -138,6 +138,13 @@
 	private async void TagAndGenresRequest()
 	{
 		TagsAndGenresResponse = await baseClient.GetGenresAndTagsCollection();
+		if (TagsAndGenresResponse != null)
+		{
+			TagsAndGenresResponse.Data.Genres.Remove("Hentai");
+			TagsAndGenresResponse.Data.Genres.Remove("Ecchi");
+
+			TagsAndGenresResponse.Data.Tags.RemoveAll(x => x.IsAdult == true);
+		}
 	}
 
 	private async Task FetchPageData()

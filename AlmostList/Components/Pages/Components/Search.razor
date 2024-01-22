@@ -58,7 +58,7 @@
 			}
 		</select>
 		<label>Country Of Origin:</label>
-		<select @bind="PageMediaRequest.Season">
+		<select @bind="PageMediaRequest.CountryOfOrigin">
 			<option selected value="">Any</option>
 			@foreach (CountryCode countryCode in Enum.GetValues(typeof(CountryCode)))
 			{
@@ -183,7 +183,7 @@
 	}
 	private async Task OnSelectionMediaGenre(ChangeEventArgs eventArgs)
 	{
-		var selection = await GetSelections(_selectMediaSort);
+		var selection = await GetSelections(_selectMediaGenres);
 		if (selection.Any())
 		{
 			PageMediaRequest.GenreIn = new List<string>();
@@ -196,7 +196,7 @@
 	}
 	private async Task OnSelectionMediaTag(ChangeEventArgs eventArgs)
 	{
-		var selection = await GetSelections(_selectMediaSort);
+		var selection = await GetSelections(_selectMediaTags);
 		if (selection.Any())
 		{
 			PageMediaRequest.TagIn = new List<string>();
